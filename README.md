@@ -11,7 +11,7 @@ git clone https://github.com/DCC-CC4401/2025-1-CC4401-grupo-12
 cd 2025-1-CC4401-grupo-12
 ```
 
-2. Set up virtual environment using **Python 3.10.17**.
+2. Set up virtual environment using [**Python 3.10.17**](https://www.python.org/downloads/release/python-31017/).
 
 - For Windows:
 ```
