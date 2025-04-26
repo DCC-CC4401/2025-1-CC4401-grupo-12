@@ -11,12 +11,12 @@ git clone https://github.com/DCC-CC4401/2025-1-CC4401-grupo-12
 cd 2025-1-CC4401-grupo-12
 ```
 
-2. Set up virtual environment using [**Python 3.10.17**](https://www.python.org/downloads/release/python-31017/).
+2. Set up virtual environment using [**Python 3.10.11**](https://www.python.org/downloads/release/python-31011/).
 
 - For Windows:
 ```
 py -3.10 -m venv env
-.\env\bin\activate
+.\env\Scripts\activate
 python -m pip install -r requirements.txt
 ```
 
