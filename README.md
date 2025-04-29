@@ -26,6 +26,16 @@ python3.10 -m venv env
 source env/bin/activate
 python -m pip install -r requirements.txt
 ```
+- For MacOs:
+
+To switch between Python's versions, we have to set up pyenv. Instructions on: [**Install Python with pyenv**](https://mac.install.guide/python/install-pyenv ).
+
+```
+pyenv global 3.10
+python -m venv env
+source env/bin/activate
+python -m pip install -r requirements.txt
+```
 
 3. Make migrations.
 ```
