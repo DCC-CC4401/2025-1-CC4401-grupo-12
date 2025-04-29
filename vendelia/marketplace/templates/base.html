@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="esp">
+<head>
+    <!-- codificacion de caracteres de la pagina -->
+    <meta charset="UTF-8">
+     <!-- Titulo -->
+    <title>{% block title %}{% endblock title %}</title>
+    <!-- Link a el archivo de css -->
+    <link rel="stylesheet" href="{% static 'styles.css' %}">
+
+</head>
+<body>
+    <header>
+        <nav>
+            {% if request.user.is_authenticated %}
+                <a href="{% url 'logout' %}">Logout</a>
+            {% endif %}
+        </nav>
+    </header>
+
+    <!-- Mostrar mensajes si es que ocurre un error, por ejemplo mala contraseña-->
+    {% if messages %}
+        <div class="alerts">
+            {% for message in messages %}
+            <!-- display de los mensajes en un loop -->
+                <div class="alert">{{ message }}</div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    <!-- Contenido -->
+    {% block content %}{% endblock content %}
+
+    <!-- Pie de pagina (copyright de Vendelia aunque esta no sea una marca registrada) -->
+    <footer>
+        <p>© 2025 Vendelia. All rights reserved.</p>
+    </footer>
+</body>
+</html>

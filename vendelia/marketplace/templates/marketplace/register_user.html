@@ -1,15 +1,22 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <title>Registro</title>
-    </head>
+{% extends 'base.html' %}
 
-    <body>
-        <form action="", method="post">
+{% block title %}
+    Registro de Usuario
+{% endblock %}
+
+{% block content %}
+    <!-- Container de para el Form -->
+    <div class="form-container">
+        <h2>Crea tu cuenta</h2>
+        
+        <!-- Registro del usuario -->
+        <form action="" method="post" class="register-form">
             {% csrf_token %}
-            {{ register_user_form.as_p }}
+            <!-- Rendering the los forms.py -->
+            {{ register_user_form.as_p }}       
             
-            <button name="userAdd" type="submit">Enviar</button>
+            <!-- Botton de Registrarse-->
+            <button name="userAdd" type="submit" class="submit-btn">Enviar</button>
         </form>
-    </body>
-</html>
+    </div>
+{% endblock %}

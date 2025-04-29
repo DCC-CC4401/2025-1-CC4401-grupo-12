@@ -1,0 +1,54 @@
+/* Ensure the page takes the full height */
+body {
+    height: 100vh;
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: linear-gradient(135deg, #6a11cb, #2575fc); /* Optional background gradient */
+}
+
+/* Container to center the form */
+.form-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    flex-direction: column;
+}
+
+/* Box around the form */
+.register-form {
+    background-color: white;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 400px; /* Adjust the width as necessary */
+}
+
+/* Add space between form fields */
+.register-form p {
+    margin-bottom: 15px;
+}
+
+/* Button styling */
+.submit-btn {
+    background-color: #2575fc;
+    color: white;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 5px;
+    width: 100%;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+/* Button hover effect */
+.submit-btn:hover {
+    background-color: #6a11cb;
+}
+
+/* Styling for the heading */
+h2 {
+    text-align: center;
+    margin-bottom: 20px;
+}
