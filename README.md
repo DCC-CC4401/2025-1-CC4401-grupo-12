@@ -25,9 +25,6 @@ python -m pip install -r requirements.txt
 python3.10 -m venv env
 source env/bin/activate
 python -m pip install -r requirements.txt
-
-# Add executable permissions to Reset dev tool
-chmod +x vendelia/scripts/reset.sh
 ```
 - For MacOS:
 
@@ -51,10 +48,7 @@ python manage.py migrate
 python manage.py runserver
 ```
 
-### Dev tools
-Inside the `vendelia/scripts` folder reside some scripts than help ease some common routines while working on the application, there are both (equivalent) Bash and Bat scripts, use the version you need accordingly.
+### Development tools
+Inside the `vendelia/scripts` folder reside some scripts than help ease some common routines while working on the application, you can use the following syntax to get help from any script: `python script_file.py --help`.
 
 1. Reset: This deletes the migrations and DB, also can be used to create a test super user.
-
-    * `scripts/reset.sh`: Runs the delete operations.
-    * `scripts/reset.sh -a`: In addition to deletion, create a test superuser with `username: admin` and `password: admin`.
