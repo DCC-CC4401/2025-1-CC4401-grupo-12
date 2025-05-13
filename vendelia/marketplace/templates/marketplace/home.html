@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Explora productos</title>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="logo">Vendelia</div>
+        <nav class="nav">
+            <a href="#" class="nav-link">Inicio</a>
+            <a href="#" class="nav-link">Publicar</a>
+            <a href="#" class="nav-link">Mi cuenta</a>
+            <a href="#" class="login-button">Ingresar</a>
+        </nav>
+    </header>
+
+    <!-- Contenido principal -->
+    <main class="main-content">
+        <h1 class="main-title">Explora productos</h1>
+
+        <!-- Filtros de categoría -->
+        <div class="category-list">
+            <span class="category-item active">Todos</span>
+            <span class="category-item">Electrónica</span>
+            <span class="category-item">Hogar</span>
+            <span class="category-item">Ropa</span>
+            <span class="category-item">Deporte</span>
+            <!-- Selector para más categorías -->
+            <select class="category-select" name="otra_categoria">
+                <option disabled selected>Otro</option>
+                <option value="libros">Libros</option>
+                <option value="juguetes">Juguetes</option>
+                <option value="instrumentos">Instrumentos musicales</option>
+                <option value="herramientas">Herramientas</option>
+                <option value="antiguedades">Antigüedades</option>
+            </select>
+        </div>
+
+        <!-- Lista de productos -->
+        <section class="product-section">
+            <h2 class="section-title">Productos recientes</h2>
+            <div class="product-list">
+                <!-- Producto 1 -->
+                <div class="product-card">
+                    <div class="product-icon">🚲</div>
+                    <h3 class="product-title">Bicicleta urbana</h3>
+                    <p class="product-description">Ligera, ideal para ciudad.</p>
+                    <p class="product-price">$80.000</p>
+                    <a href="#" class="product-button">Ver</a>
+                </div>
+
+                <!-- Producto 2 -->
+                <div class="product-card">
+                    <div class="product-icon">📱</div>
+                    <h3 class="product-title">Smartphone</h3>
+                    <p class="product-description">Samsung A52, buen estado.</p>
+                    <p class="product-price">$120.000</p>
+                    <a href="#" class="product-button">Ver</a>
+                </div>
+
+                <!-- Producto 3 -->
+                <div class="product-card">
+                    <div class="product-icon">💺</div>
+                    <h3 class="product-title">Silla de oficina</h3>
+                    <p class="product-description">Ergonómica, poco uso.</p>
+                    <p class="product-price">$35.000</p>
+                    <a href="#" class="product-button">Ver</a>
+                </div>
+            </div>
+        </section>
+    </main>
+</body>
+</html>
