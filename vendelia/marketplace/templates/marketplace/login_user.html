@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Login
+{% endblock %}
+
+{% block content %}
+    <!-- Login form container -->
+    <div class="form-container">
+        <h2>Login</h2>
+        
+        <form action="" method="post" class="form-box">
+            {% csrf_token %}
+            
+            <!-- Render form fields as paragraphs -->
+            {{ login_user_form.as_p }}
+            
+            <!-- Forgot password link (optional) -->
+            <div class="forgot-password">
+                <a href="#">Forgot password?</a>
+            </div>
+            
+            <!-- Submit button -->
+            <button name="loginSubmit" type="submit" class="submit-btn">Login</button>
+        </form>
+        
+        <!-- Alternative Sign Up Option -->
+        <div class="signup-option">
+            <p>Or Sign Up Using</p>
+            <div class="social-icons">
+                <a href="#"><img src="{% static 'google-icon.png' %}" alt="Google" class="social-icon"></a>
+            </div>
+        </div>
+    </div>
+{% endblock %}
