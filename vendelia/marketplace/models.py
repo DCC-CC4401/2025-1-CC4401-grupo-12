@@ -12,10 +12,11 @@ from django.db import models
 
 class Product(models.Model):
 
-    name = models.CharField()
-    description = models.TextField() #Chequear con el equipo
-    price = models.IntegerField() 
-    photos = models.ImageField(upload_to='')
-    
+    name = models.CharField(max_length=250)                                               # Varchar
+    description = models.TextField(blank=True)                                            # Chequear con el equipo
+    price = models.IntegerField(max_digits=10)                                            # Max. price 9.999.999.999
+    photos = models.ImageField(upload_to='')                                              # Image to show the product
+    category = models.ForeignKey(Categoria, default="general", on_delete=models.CASCADE)  # Foreign key (hay que crear categorias)
+
     def __str__(self):
-        return self.name
+        return self.name                                                                  # Name to be shown when called
