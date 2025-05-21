@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ product.name }}</title>
+</head>
+<body>
+    <h1>Producto</h1>
+
+    <div>
+        <h2>Fotos Producto</h2>
+        <img src="{{ product.photos.url }}" alt="{{ product.name }}">
+        <img src="{{ product.photos.url }}" alt="{{ product.name }}">
+        <img src="{{ product.photos.url }}" alt="{{ product.name }}">
+    </div>         
+
+    <h2>Nombre</h2>
+    <p>{{ product.name }}</p>
+
+    <h2>Precio</h2>
+    <p>${{ product.price }}</p>
+    
+    <h2>Categoría</h2>
+    <p>{{ product.category }}</p>
+
+    <h2>Descripción</h2>
+    <p>{{ product.description }}</p>
+    
+    <img src="{{ product.photos.url }}" alt="{{ product.name }}">
+</body>
+</html>
