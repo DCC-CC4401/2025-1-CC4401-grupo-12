@@ -3,7 +3,7 @@ body {
     height: 100vh;
     margin: 0;
     font-family: Arial, sans-serif;
-    background: linear-gradient(135deg, #6a11cb, #2575fc);
+    background: linear-gradient(135deg, #008000, #008000);
 }
 
 .form-container {
@@ -29,7 +29,7 @@ body {
 }
 
 .submit-btn {
-    background-color: #2575fc;
+    background-color: #008000;
     color: white;
     padding: 12px 20px;
     border: none;
@@ -40,5 +40,5 @@ body {
 }
 
 .submit-btn:hover {
-    background-color: #6a11cb;
+    background-color: #008000;
 }
