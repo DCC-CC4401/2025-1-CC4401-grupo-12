@@ -13,3 +13,8 @@ URL_PATH_INDEX = 'marketplace/index.html'
 URL_NAME_REGISTER_USER = 'register'
 URL_PATTERN_REGISTER_USER = 'register/'
 URL_PATH_REGISTER_USER = 'marketplace/register_user.html'
+
+URL_NAME_LOGIN = 'login'
+URL_PATTERN_LOGIN = 'login/'
+URL_PATH_LOGIN = 'marketplace/login_user.html'
+

@@ -46,3 +46,7 @@ def register_user(request: HttpRequest):
                 template_name=URL_PATH_REGISTER_USER,
                 context={'register_user_form': register_user_form}
             )
+
+def login_user(request):
+    #Rendering of the template
+    return render(request, 'marketplace/login_user.html')
