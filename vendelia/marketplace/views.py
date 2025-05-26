@@ -1,15 +1,18 @@
 from django.shortcuts import render, redirect
-from forms import ProductForm
+from forms import ProductRegisterForm
 
 # Create your views here.
 
+#login required to do this
 def register_product(request):
     if request.method == 'POST':
-        form = ProductForm(request.POST, request.FILES)
+        form = ProductRegisterForm(request.POST, request.FILES)
         if form.is_valid():
-            form.save()
-            return redirect('product_view') #tengo q ver esto
+            product = form.save(commit=False)
+            product.owner = request.user
+            product.save()
     else:
-        form = ProductForm()
-    return render(request, 'register_product.html', {'form': form})
+        form = ProductRegisterForm()
+
+    return render(request, 'products/register_product.html', {'form': form})
 
