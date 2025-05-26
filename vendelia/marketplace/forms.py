@@ -42,3 +42,20 @@ class UserRegisterForm(UserCreationForm):
             raise forms.ValidationError('El número debe consistir de solo dígitos.')
         
         return phone_number
+    
+    # City validator
+    # Must be a string of length between 4 and 30.
+    # 
+    # Appropiate lenght taken from wikidata with this query:
+    # SELECT ?item ?itemLabel (STRLEN(?itemLabel) AS ?labelLength) WHERE {
+    # ?item wdt:P31 wd:Q25412763.
+    # SERVICE wikibase:label { bd:serviceParam wikibase:language "[AUTO_LANGUAGE],en". }
+    # }
+    def clean_city(self):
+        city = self.cleaned_data.get('city')
+        if len(city) < 4 or len(city) > 30:
+            raise forms.ValidationError('La ciudad debe tener entre 4 a 30 caracteres.')
+        if not city.isalpha():
+            raise forms.ValidationError('La ciudad solo puede contener letras.')
+        
+        return city
