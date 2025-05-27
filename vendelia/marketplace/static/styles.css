@@ -1,11 +1,11 @@
-/* General body style */
+
 body {
     background: #fff;
     font-family: 'Inter', Arial, sans-serif;
     margin: 0;
 }
 
-/* Header styles (if in base.html or adjust as needed) */
+/* Header styles  */
 .header {
     display: flex;
     justify-content: space-between;
