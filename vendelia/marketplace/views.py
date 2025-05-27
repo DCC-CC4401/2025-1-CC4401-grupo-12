@@ -64,3 +64,7 @@ def register_product(request):
 def product_detail(request, product_id):
     product = get_object_or_404(Product, id=product_id)
     return render(request, 'product_detail.html', {'product': product})
+
+def login_user(request):
+    #Rendering of the template
+    return render(request, 'marketplace/login_user.html')

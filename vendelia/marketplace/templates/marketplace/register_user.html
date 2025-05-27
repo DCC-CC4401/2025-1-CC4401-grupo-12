@@ -1,15 +1,19 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <title>Registro</title>
-    </head>
+{% extends 'base.html' %}
 
-    <body>
-        <form action="", method="post">
-            {% csrf_token %}
-            {{ register_user_form.as_p }}
-            
-            <button name="userAdd" type="submit">Enviar</button>
-        </form>
-    </body>
-</html>
+{% block title %}
+    Regístrate en Vendelia
+{% endblock %}
+
+{% block content %}
+<div class="register-wrapper">
+    <div class="info-box">
+        <h2>Únete a Vendelia</h2>
+        <p>Crea tu cuenta para comprar y vender de forma sencilla.</p>
+    </div>
+    <form method="post" class="register-form">
+        {% csrf_token %}
+        {{ register_user_form.as_p }}
+        <button type="submit" class="submit-btn">Crear cuenta</button>
+    </form>
+</div>
+{% endblock %}
