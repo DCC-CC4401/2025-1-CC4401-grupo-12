@@ -1,6 +1,6 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
-from .models import User
+from .models import User, Product
 
 class UserRegisterForm(UserCreationForm):
     class Meta:
@@ -61,13 +61,13 @@ class UserRegisterForm(UserCreationForm):
         return city
 
       
-class ProductRegisterForm(UserCreationForm):
+class ProductRegisterForm(forms.ModelForm):
     class Meta:
         model = Product
-        fields = ['name', 'description', 'price', 'photos']
+        fields = ['product_name', 'description', 'price', 'photos']
 
         # Custom field label overrides
-        labels = {'name': 'Nombre',
+        labels = {'product_name': 'Nombre',
                   'description': 'Descripción',
                   'price': 'Precio',
                   'photos': 'Fotos'
@@ -77,22 +77,32 @@ class ProductRegisterForm(UserCreationForm):
     # Description can't have more than 255 characters
     def clean_description(self):
         description = self.cleaned_data.get('description')
+        print('clean description')
         if description and (len(description)>255):
-            raise forms.ValidationError('La descripción debe tener hasta 255 caracteres')    
+            print('La descripción debe tener hasta 255 caracteres')
+            raise forms.ValidationError('La descripción debe tener hasta 255 caracteres')
+        
         return description
     
     # Price validator:
     # The price can't be negative
     def clean_price(self):
         price = self.cleaned_data.get('price')
+        print('clean price')
         if price<0 and price is not None:
+            print('El precio no puede ser negativo')
             raise forms.ValidationError('El precio no puede ser negativo')
+        
         return price
     
-    # Name validator:
-    # The product needs a name. It can't be empty
-    def clean_name(self):
-        name = self.cleaned_data.get('name')
-        if name is None:
-            raise forms.ValidationError("El nombre del producto es obligatorio.")
-        return name
+    # # Product name validator:
+    # # The product needs a name. It can't be empty
+    # def clean_product_name(self):
+    #     product_name = self.cleaned_data.get('product_name')
+    #     # print('clean product name')
+    #     # # if product_name is None:
+    #     # if product_name == "":
+    #     #     print('El nombre del producto es obligatorio')
+    #     #     raise forms.ValidationError("El nombre del producto es obligatorio.")
+        
+    #     return product_name

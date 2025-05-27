@@ -2,8 +2,6 @@ from django.db import models
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import AbstractUser
 
-from categorias.models import Categoria
-
 # This model represents all the Users in Vendelia
 # Fields:   username:       name of the user in the application (unique)
 #           email:          email address of the user in the application (unique)
@@ -23,6 +21,12 @@ class User(AbstractUser):
     last_name = models.CharField(max_length=32)
     city = models.CharField(max_length=32)
 
+
+# Model that represents every product category
+# Work in progress
+class Categoria(models.Model):
+    name = models.CharField(max_length=254)
+
     
 # This model represents all the Products in Vendalia
 # Fields:    name:           name of the product in the application (unique)
@@ -32,7 +36,7 @@ class User(AbstractUser):
 #            owner:          the user that owns the published product
 #            categories:     name of the categories that classifiy the new product
 class Product(models.Model):
-    product_name = models.CharField(null=True)
+    product_name = models.CharField(max_length=255)
     description = models.TextField(blank=True)
     price = models.IntegerField() 
     photos = models.ImageField(upload_to='product_images/', null=True, blank=True)
@@ -40,5 +44,4 @@ class Product(models.Model):
     owner = models.ForeignKey(User, blank=True, null=True, on_delete=models.CASCADE)
     
     def __str__(self):
-        return f"{self.name} - $ {self.price}"
-      
+        return f"{self.product_name} - $ {self.price}"
