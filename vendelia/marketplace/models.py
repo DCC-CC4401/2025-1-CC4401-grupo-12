@@ -1,5 +1,8 @@
 from django.db import models
+from django.contrib.auth import get_user_model
 from django.contrib.auth.models import AbstractUser
+
+from categorias.models import Categoria
 
 # This model represents all the Users in Vendelia
 # Fields:   username:       name of the user in the application (unique)
@@ -26,15 +29,16 @@ class User(AbstractUser):
 #            description:    text with a description of the product. Max length of 255 characters.
 #            price:          price of the product in integers
 #            photos:         pictures of the product
-#
-
+#            owner:          the user that owns the published product
+#            categories:     name of the categories that classifiy the new product
 class Product(models.Model):
-
-    name = models.CharField(max_length=250)                                               # Varchar
-    description = models.TextField(blank=True)                                            # Chequear con el equipo
-    price = models.IntegerField(max_digits=10)                                            # Max. price 9.999.999.999
-    photos = models.ImageField(upload_to='')                                              # Image to show the product
-    category = models.ForeignKey(Categoria, default="general", on_delete=models.CASCADE)  # Foreign key (hay que crear categorias)
-
+    product_name = models.CharField(null=True)
+    description = models.TextField(blank=True)
+    price = models.IntegerField() 
+    photos = models.ImageField(upload_to='product_images/', null=True, blank=True)
+    category = models.ForeignKey(Categoria, default="general", on_delete=models.CASCADE)
+    owner = models.ForeignKey(User, blank=True, null=True, on_delete=models.CASCADE)
+    
     def __str__(self):
-        return self.name                                                                  # Name to be shown when called
+        return f"{self.name} - $ {self.price}"
+      
