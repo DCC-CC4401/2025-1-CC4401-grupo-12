@@ -18,5 +18,7 @@ from django.urls import path, include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+  
+    # Add all marketplace app URLs
     path('', include('marketplace.urls'))
-]  
+]

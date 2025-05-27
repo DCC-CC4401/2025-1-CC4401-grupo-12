@@ -1,7 +1,26 @@
 from django.urls import path
 from . import views
 
+# Constant imports
+from .constants import URL_PATTERN_INDEX, URL_NAME_INDEX
+from .constants import URL_PATTERN_REGISTER_USER, URL_NAME_REGISTER_USER
+
+# Register all marketplace URLS here
 urlpatterns = [
-    path('register/', views.register_product, name= 'register_product'),
+    # Marketplace index
+    path(
+        route=URL_PATTERN_INDEX, 
+        view=views.index, 
+        name=URL_NAME_INDEX
+    ),
+
+    # User register form
+    path(
+        route=URL_PATTERN_REGISTER_USER, 
+        view=views.register_user,
+        name=URL_NAME_REGISTER_USER
+    ),
+  
+    path('register/', views.register_product, name='register_product'),
     path('product/<int:product_id>/', views.product_detail, name='product_detail')
-]  
+]
