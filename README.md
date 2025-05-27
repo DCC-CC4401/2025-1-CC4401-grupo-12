@@ -26,6 +26,7 @@ python3.10 -m venv env
 source env/bin/activate
 python -m pip install -r requirements.txt
 ```
+
 - For MacOs:
 
 To switch between Python's versions, we have to set up pyenv. Instructions on: [**Install Python with pyenv**](https://mac.install.guide/python/install-pyenv ).
@@ -48,3 +49,8 @@ python manage.py migrate
 ```
 python manage.py runserver
 ```
+
+### Development tools
+Inside the `vendelia/scripts` folder reside some scripts than help ease some common routines while working on the application, you can use the following syntax to get help from any script: `python script_file.py --help`.
+
+1. Reset: This deletes the migrations and DB, also can be used to create a test super user.
