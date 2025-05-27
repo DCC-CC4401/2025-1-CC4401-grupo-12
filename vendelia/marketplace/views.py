@@ -60,7 +60,7 @@ def register_product(request):
     else:
         form = ProductRegisterForm()
 
-    return render(request, 'products/register_product.html', {'form': form})
+    return render(request, 'marketplace/register_product.html', {'form': form})
 
 
 def product_detail(request, product_id):

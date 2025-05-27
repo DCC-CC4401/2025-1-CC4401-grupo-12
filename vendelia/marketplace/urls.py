@@ -1,5 +1,6 @@
 from django.urls import path
 from . import views
+from django.contrib.auth.views import LogoutView
 
 # Constant imports
 from .constants import URL_PATTERN_INDEX, URL_NAME_INDEX
@@ -37,5 +38,6 @@ urlpatterns = [
     ),
 
     path('product/<int:product_id>/', views.product_detail, name='product_detail'),
-    path('', views.home, name='home')
+    path('', views.home, name='home'),
+    path('logout/', LogoutView.as_view(next_page=URL_PATTERN_LOGIN), name='logout')
 ]
