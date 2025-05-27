@@ -72,17 +72,6 @@ class ProductRegisterForm(forms.ModelForm):
                   'price': 'Precio',
                   'photos': 'Fotos'
         }
-
-    # Description validator:
-    # Description can't have more than 255 characters
-    def clean_description(self):
-        description = self.cleaned_data.get('description')
-        print('clean description')
-        if description and (len(description)>255):
-            print('La descripción debe tener hasta 255 caracteres')
-            raise forms.ValidationError('La descripción debe tener hasta 255 caracteres')
-        
-        return description
     
     # Price validator:
     # The price can't be negative
@@ -95,14 +84,3 @@ class ProductRegisterForm(forms.ModelForm):
         
         return price
     
-    # # Product name validator:
-    # # The product needs a name. It can't be empty
-    # def clean_product_name(self):
-    #     product_name = self.cleaned_data.get('product_name')
-    #     # print('clean product name')
-    #     # # if product_name is None:
-    #     # if product_name == "":
-    #     #     print('El nombre del producto es obligatorio')
-    #     #     raise forms.ValidationError("El nombre del producto es obligatorio.")
-        
-    #     return product_name

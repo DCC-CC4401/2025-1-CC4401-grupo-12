@@ -1,34 +1,19 @@
-<!DOCTYPE html>
-        <html lang="en">
-        <head>
-           <meta charset="UTF-8">
-           <title>Registro Nuevo Producto</title>
-        </head>
-        <body>
-           <h1> Registrar un nuevo producto</h1>
-           <form method="post" enctype="multipart/form-data">
-               {% csrf_token %}
-               <div>
-                    <label for="product_name">Nombre del producto</label>
-                    <input type="text" id=product_name required>
-               </div>
+{% extends 'base.html' %}
 
-               <div>
-                    <label for="description">Descripción</label>
-                    <input type="text" id="description" name="description" required>
-               </div>
+{% block title %}
+     Publica tu producto en la app
+{% endblock %}
 
-               <div>
-                    <label for="price">Precio</label>
-                    <input type="number" id="price" name="price">
-               </div>
-
-               <div>
-                    <label for="photos">Fotos del producto</label>
-                    <input type="file" name="foto" id="photos" accept="image/*">
-               </div>
-
-                <button type="submit">Subir nuevo producto</button>
-           </form>
-        </body>
-        </html>
+{% block content %}
+<div class="register-wrapper">
+     <div class="info-box">
+          <h2>Ingresa tu nuevo producto</h2>
+          <p>Llena los datos.</p>
+     </div>
+     <form method="post" enctype="multipart/form-data" class="register-form">
+          {% csrf_token %}
+          {{ form.as_p }}
+          <button type="submit" class="submit-btn">Publicar producto</button>
+     </form>
+</div>
+{% endblock %}

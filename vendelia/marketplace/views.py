@@ -53,13 +53,14 @@ def register_product(request):
     if request.method == 'POST':
         form = ProductRegisterForm(request.POST, request.FILES)
         if form.is_valid():
-            product = form.save(commit=False)
-            product.owner = request.user
-            product.save()
+            new_product = form.save()
+            if request.user.is_authenticated:
+                new_product.owner = request.user
+                new_product.save()
     else:
         form = ProductRegisterForm()
 
-    return render(request, 'products/register_product.html', {'form': form})
+    return render(request, 'marketplace/register_product.html', {'form': form})
 
 
 def product_detail(request, product_id):
