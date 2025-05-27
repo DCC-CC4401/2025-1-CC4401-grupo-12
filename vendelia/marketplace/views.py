@@ -1,5 +1,8 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpRequest
+
+from forms import ProductForm
+from models import Product
 
 from .forms import UserRegisterForm
 
@@ -46,6 +49,21 @@ def register_user(request: HttpRequest):
                 template_name=URL_PATH_REGISTER_USER,
                 context={'register_user_form': register_user_form}
             )
+
+def register_product(request):
+    if request.method == 'POST':
+        form = ProductForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            return redirect('product_view') #tengo q ver esto
+    else:
+        form = ProductForm()
+    return render(request, 'register_product.html', {'form': form})
+
+
+def product_detail(request, product_id):
+    product = get_object_or_404(Product, id=product_id)
+    return render(request, 'product_detail.html', {'product': product})
 
 def login_user(request):
     #Rendering of the template
