@@ -10,7 +10,7 @@
           <h2>Ingresa tu nuevo producto</h2>
           <p>Llena los datos.</p>
      </div>
-     <form method="post" class="register-form">
+     <form method="post" enctype="multipart/form-data" class="register-form">
           {% csfr_token %}
           {{ product_register-form.as_p }}
           <button type="submit" class="submit-btn">Publicar</button>

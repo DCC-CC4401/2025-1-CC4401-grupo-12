@@ -34,13 +34,13 @@ class Categoria(models.Model):
 #            price:          price of the product in integers
 #            photos:         pictures of the product
 #            owner:          the user that owns the published product
-#            categories:     name of the categories that classifiy the new product
+#            categories:     name of the categories that classifiy the new product (work in progress)
 class Product(models.Model):
     product_name = models.CharField(max_length=255)
-    description = models.TextField(blank=True)
+    description = models.TextField(max_length=255, blank=True)
     price = models.IntegerField() 
     photos = models.ImageField(upload_to='product_images/', null=True, blank=True)
-    category = models.ForeignKey(Categoria, default="general", on_delete=models.CASCADE)
+    #category = models.ForeignKey(Categoria, default="general", on_delete=models.CASCADE)
     owner = models.ForeignKey(User, blank=True, null=True, on_delete=models.CASCADE)
     
     def __str__(self):

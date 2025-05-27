@@ -72,17 +72,6 @@ class ProductRegisterForm(forms.ModelForm):
                   'price': 'Precio',
                   'photos': 'Fotos'
         }
-
-    # Description validator:
-    # Description can't have more than 255 characters
-    def clean_description(self):
-        description = self.cleaned_data.get('description')
-        print('clean description')
-        if description and (len(description)>255):
-            print('La descripción debe tener hasta 255 caracteres')
-            raise forms.ValidationError('La descripción debe tener hasta 255 caracteres')
-        
-        return description
     
     # Price validator:
     # The price can't be negative
