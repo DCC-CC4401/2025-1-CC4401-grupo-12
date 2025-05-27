@@ -1,10 +1,8 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpRequest
 
-from forms import ProductForm, ProductRegisterForm
-from models import Product
-
-from .forms import UserRegisterForm
+from .models import Product
+from .forms import UserRegisterForm, ProductRegisterForm
 
 # Constant imports
 from .constants import GET, POST
@@ -40,7 +38,7 @@ def register_user(request: HttpRequest):
         if register_user_form.is_valid():
             # TODO verify+clean inputs
             new_user = register_user_form.save()
-            return redirect(f'/{URL_NAME_INDEX}')
+            return redirect('/')
         
         # Otherwise, return to the register user form
         else:

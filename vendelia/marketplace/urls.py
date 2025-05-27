@@ -21,6 +21,7 @@ urlpatterns = [
         view=views.register_user,
         name=URL_NAME_REGISTER_USER
     ),
+
     #- User login form
     path(
         route=URL_PATTERN_LOGIN,
@@ -28,6 +29,7 @@ urlpatterns = [
         name= URL_NAME_LOGIN
     ),
   
-    path('register/', views.register_product, name='register_product'),
-    path('product/<int:product_id>/', views.product_detail, name='product_detail')
+    path('register_product/', views.register_product, name='register_product'),
+    path('product/<int:product_id>/', views.product_detail, name='product_detail'),
+    path('', views.home, name='home')
 ]
