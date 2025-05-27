@@ -95,14 +95,3 @@ class ProductRegisterForm(forms.ModelForm):
         
         return price
     
-    # # Product name validator:
-    # # The product needs a name. It can't be empty
-    # def clean_product_name(self):
-    #     product_name = self.cleaned_data.get('product_name')
-    #     # print('clean product name')
-    #     # # if product_name is None:
-    #     # if product_name == "":
-    #     #     print('El nombre del producto es obligatorio')
-    #     #     raise forms.ValidationError("El nombre del producto es obligatorio.")
-        
-    #     return product_name
