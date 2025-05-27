@@ -20,4 +20,7 @@ urlpatterns = [
         view=views.register_user,
         name=URL_NAME_REGISTER_USER
     ),
+  
+    path('register/', views.register_product, name='register_product'),
+    path('product/<int:product_id>/', views.product_detail, name='product_detail')
 ]
