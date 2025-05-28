@@ -139,3 +139,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Make the user system of Vendelia use the marketplace.User model
 AUTH_USER_MODEL = 'marketplace.User'
+
+AUTHENTICATION_BACKENDS = [
+    'marketplace.backends.EmailBackend'
+]
