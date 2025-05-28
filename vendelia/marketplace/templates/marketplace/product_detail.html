@@ -1,20 +1,23 @@
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <title>{{ product.name }}</title>
-    <link rel="stylesheet" type="text/css" href="static/marketplace/style.css">
+    <!-- <link rel="stylesheet" type="text/css" href="static/marketplace/style.css"> -->
+    <link rel="stylesheet" href="{% static 'marketplace/style.css' %}">
 </head>
 <body>
     <div class="product-container">
         <h1>Producto</h1>
 
-        <img class="product-image" src="{{ product.photos.url }}" alt="{{ product.name }}">
-        <img class="product-image" src="{{ product.photos.url }}" alt="{{ product.name }}">
-        <img class="product-image" src="{{ product.photos.url }}" alt="{{ product.name }}">
+        <img class="product-image" src="{{ product.photos.url }}" alt="{{ product.product_name }}">
+        <img class="product-image" src="{{ product.photos.url }}" alt="{{ product.product_name }}">
+        <img class="product-image" src="{{ product.photos.url }}" alt="{{ product.product_name }}">
 
         <h2 class="product-name">Nombre</h2>
-        <p>{{ product.name }}</p>
+        <p>{{ product.product_name }}</p>
 
         <h2>Precio</h2>
         <p class="product-price">${{ product.price }}</p>
