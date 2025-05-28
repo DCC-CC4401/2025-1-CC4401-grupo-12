@@ -24,7 +24,7 @@ urlpatterns = [
         name=URL_NAME_REGISTER_USER
     ),
 
-    #- User login form
+    # User login form
     path(
         route=URL_PATTERN_LOGIN,
         view=views.login_user,

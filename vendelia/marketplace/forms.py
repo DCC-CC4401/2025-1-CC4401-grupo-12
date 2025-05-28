@@ -1,5 +1,7 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth import authenticate
+from django.core.exceptions import ValidationError
 from .models import User, Product
 
 class UserRegisterForm(UserCreationForm):
@@ -83,4 +85,29 @@ class ProductRegisterForm(forms.ModelForm):
             raise forms.ValidationError('El precio no puede ser negativo')
         
         return price
+
+# Form to authenticate the user with email and password
+class EmailAuthenticationForm(forms.Form):
+    email = forms.EmailField(label="Correo electrónico", max_length=254)
+    password = forms.CharField(label="Contraseña", strip=False, widget=forms.PasswordInput)
+
+    def __init__(self, request=None, *args, **kwargs):
+        self.request = request
+        super().__init__(*args, **kwargs)
+        self.user = None
+
+    def clean(self):
+        clean_data = super().clean()
+        email = clean_data.get('email')
+        password = clean_data.get('password')
+
+        if email and password:
+            self.user = authenticate(request=self.request, username=email, password=password)
+            if self.user is None:
+                raise ValidationError("Correo o contraseña inválidos")
+            
+        return clean_data
+    
+    def get_user(self):
+        return self.user
     

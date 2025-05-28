@@ -1,13 +1,14 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpRequest
+from django.contrib.auth import login
 
 from .models import Product
-from .forms import UserRegisterForm, ProductRegisterForm
+from .forms import UserRegisterForm, ProductRegisterForm, EmailAuthenticationForm
 
 # Constant imports
 from .constants import GET, POST
 from .constants import URL_PATH_INDEX, URL_NAME_INDEX
-from .constants import URL_PATH_REGISTER_USER
+from .constants import URL_PATH_REGISTER_USER, URL_PATH_LOGIN
 
 # Marketplace app views
 
@@ -71,6 +72,26 @@ def home(request):
     return render(request, 'marketplace/home.html')
   
 def login_user(request):
-    #Rendering of the template
-    return render(request, 'marketplace/login_user.html')
+    # GET Request: Shows the login form to the user
+    if request.method == GET:
+        login_user_form = EmailAuthenticationForm()
+
+        return render(
+            request=request,
+            template_name=URL_PATH_LOGIN,
+            context={'login_user_form': login_user_form}
+        )
+    
+    # POST Request: Process the user login form
+    if request.method == POST:
+        login_user_form = EmailAuthenticationForm(request=request, data=request.POST)
+
+        # If the form is valid, redirects the user to index
+        if login_user_form.is_valid():
+            user = login_user_form.get_user()
+            login(request, user)
+            return redirect('/')
+        # If not, return to the login user form
+        else:
+            return render(request, URL_PATH_LOGIN, {'login_user_form': login_user_form})
   
