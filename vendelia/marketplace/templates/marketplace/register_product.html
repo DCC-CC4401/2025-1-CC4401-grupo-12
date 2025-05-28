@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block title %}
+     Publica tu producto en la app
+{% endblock %}
+
+{% block content %}
+<div class="register-wrapper">
+     <div class="info-box">
+          <h2>Ingresa tu nuevo producto</h2>
+          <p>Llena los datos.</p>
+     </div>
+     <form method="post" enctype="multipart/form-data" class="register-form">
+          {% csrf_token %}
+          {{ form.as_p }}
+          <button type="submit" class="submit-btn">Publicar producto</button>
+     </form>
+</div>
+{% endblock %}

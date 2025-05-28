@@ -172,3 +172,19 @@ cython_debug/
 
 # PyPI configuration file
 .pypirc
+
+
+###############################
+# Vendelia project specifics
+
+# Reset Superuser credentials
+/vendelia/scripts/reset.json
+
+# Avoid pushing migrations
+marketplace/migrations/*
+!marketplace/migrations/__init__.py
+!marketplace/migrations/**/
+
+
+# Uploaded media
+/vendelia/images/*
