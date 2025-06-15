@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Mis Compras
+{% endblock %}
+
+{% block content %}
+<main class="main-content">
+    <h1 class="main-title">Mis Compras</h1>
+
+    <section class="product-section">
+        <h2 class="section-title">Productos adquiridos</h2>
+
+        <div class="product-list">
+            {% for compra in compras %}
+                <div class="product-card">
+                    <div class="product-icon">🛒</div>
+                    <h3 class="product-title">{{ compra.producto.product_name }}</h3>
+                    <p class="product-description">{{ compra.producto.description }}</p>
+                    <p class="product-price">${{ compra.producto.price }}</p>
+
+                    <div class="product-contact">
+                        <p><strong>Vendedor:</strong> {{ compra.producto.owner.first_name }} {{ compra.producto.owner.last_name }}</p>
+                        <p><strong>Email:</strong> {{ compra.producto.owner.email }}</p>
+                        <p><strong>Teléfono:</strong> {{ compra.producto.owner.phone_number }}</p>
+                    </div>
+
+                    <a href="{% url 'product_detail' compra.producto.id %}" class="product-button">Ver detalles</a>
+                </div>
+            {% empty %}
+                <p>No has realizado ninguna compra todavía.</p>
+            {% endfor %}
+        </div>
+    </section>
+</main>
+{% endblock %}

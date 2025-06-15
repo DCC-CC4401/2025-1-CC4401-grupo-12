@@ -45,3 +45,12 @@ class Product(models.Model):
     
     def __str__(self):
         return f"{self.product_name} - $ {self.price}"
+    
+class Compra(models.Model):
+    comprador = models.ForeignKey(User, on_delete=models.CASCADE)
+    producto = models.ForeignKey(Product, on_delete=models.CASCADE)
+    fecha = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.comprador.username} compró {self.producto.product_name}"
+

@@ -3,6 +3,7 @@ from django.http import HttpRequest
 from django.contrib.auth import login
 
 from .models import Product
+from .models import Compra
 from .forms import UserRegisterForm, ProductRegisterForm, EmailAuthenticationForm
 
 # Constant imports
@@ -95,3 +96,9 @@ def login_user(request):
         else:
             return render(request, URL_PATH_LOGIN, {'login_user_form': login_user_form})
   
+def mis_compras(request):
+    if request.user.is_authenticated:
+        compras = Compra.objects.filter(comprador=request.user).select_related('producto')
+        return render(request, 'marketplace/mis_compras.html', {'compras': compras})
+    else:
+        return redirect('login')  # o la URL que corresponda
