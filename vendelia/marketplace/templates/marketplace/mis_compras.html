@@ -5,35 +5,38 @@ Mis Compras
 {% endblock %}
 
 {% block content %}
-<main class="main-content" style="max-width: 900px; margin: 2rem auto; padding: 1rem; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">
+<main class="main-content">
 
-    <h1 style="text-align: center; color: #2c3e50; margin-bottom: 1rem;">Mis Compras</h1>
+    <h1 class="mis-compras-title">Mis Compras</h1>
 
     <section class="product-section">
-        <h2 style="color: #34495e; border-bottom: 2px solid #2980b9; padding-bottom: 0.5rem; margin-bottom: 1rem;">Productos adquiridos</h2>
+        <h2 class="section-title">Productos adquiridos</h2>
 
-        <div class="product-list" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem;">
+        <div class="product-list">
             {% for compra in compras %}
-                <article class="product-card" style="border: 1px solid #ddd; border-radius: 8px; padding: 1rem; box-shadow: 0 2px 6px rgba(0,0,0,0.1); background-color: #fff;">
-                    <div style="font-size: 2rem; text-align: center; margin-bottom: 0.5rem;">🛒</div>
-                    <h3 style="color: #2980b9; margin-bottom: 0.3rem;">{{ compra.producto.product_name }}</h3>
-                    <p style="color: #555; font-size: 0.95rem; margin-bottom: 0.5rem;">{{ compra.producto.description }}</p>
-                    <p style="font-weight: bold; color: #27ae60; margin-bottom: 1rem;">${{ compra.producto.price }}</p>
+                <article class="product-card">
+                    <div class="product-icon">🛒</div>
+                    <h3 class="product-title">{{ compra.producto.product_name }}</h3>
+                    <p class="product-description">{{ compra.producto.description }}</p>
+                    <p class="product-price">${{ compra.producto.price }}</p>
 
-                    <div class="product-contact" style="font-size: 0.9rem; color: #444; margin-bottom: 1rem;">
+                    <div class="product-contact">
                         <p><strong>Vendedor:</strong> {{ compra.producto.owner.first_name }} {{ compra.producto.owner.last_name }}</p>
-                        <p><strong>Email:</strong> <a href="mailto:{{ compra.producto.owner.email }}" style="color: #2980b9; text-decoration: none;">{{ compra.producto.owner.email }}</a></p>
-                        <p><strong>Teléfono:</strong> <a href="tel:{{ compra.producto.owner.phone_number }}" style="color: #2980b9; text-decoration: none;">{{ compra.producto.owner.phone_number }}</a></p>
+                        <p><strong>Email:</strong>
+                            <a href="mailto:{{ compra.producto.owner.email }}">{{ compra.producto.owner.email }}</a>
+                        </p>
+                        <p><strong>Teléfono:</strong>
+                            <a href="tel:{{ compra.producto.owner.phone_number }}">{{ compra.producto.owner.phone_number }}</a>
+                        </p>
                     </div>
 
-                    <a href="{% url 'product_detail' compra.producto.id %}" style="display: inline-block; text-align: center; padding: 0.5rem 1rem; background-color: #2980b9; color: white; border-radius: 4px; text-decoration: none; transition: background-color 0.3s ease;">
-                        Ver detalles
-                    </a>
+                    <a class="product-button" href="{% url 'product_detail' compra.producto.id %}">Ver detalles</a>
                 </article>
             {% empty %}
-                <p style="text-align: center; color: #7f8c8d; font-size: 1.1rem;">No has realizado ninguna compra todavía.</p>
+                <p class="empty-message">No has realizado ninguna compra todavía.</p>
             {% endfor %}
         </div>
     </section>
+
 </main>
 {% endblock %}
