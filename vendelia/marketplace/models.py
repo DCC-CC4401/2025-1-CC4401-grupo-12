@@ -20,6 +20,8 @@ class User(AbstractUser):
     first_name = models.CharField(max_length=32)
     last_name = models.CharField(max_length=32)
     city = models.CharField(max_length=32)
+    is_banned = models.BooleanField(default=False)
+
 
 
 # Model that represents every product category

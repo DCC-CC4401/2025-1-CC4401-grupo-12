@@ -1,6 +1,10 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpRequest
 from django.contrib.auth import login
+from django.http import HttpResponseForbidden
+from .decorators import bloquear_baneados
+
+
 
 from .models import Product
 from .models import Compra
@@ -52,6 +56,10 @@ def register_user(request: HttpRequest):
 
 #login required to do this
 def register_product(request):
+
+    if request.user.is_authenticated and request.user.is_banned:
+        return HttpResponseForbidden("Tu cuenta ha sido baneada. No puedes registrar productos.")
+
     if request.method == 'POST':
         form = ProductRegisterForm(request.POST, request.FILES)
         if form.is_valid():
@@ -98,6 +106,9 @@ def login_user(request):
   
 def mis_compras(request):
     if request.user.is_authenticated:
+        if request.user.is_banned:
+            return HttpResponseForbidden("Tu cuenta ha sido baneada. No puedes ver tus compras.")
+        
         compras = Compra.objects.filter(comprador=request.user).select_related('producto')
         return render(request, 'marketplace/mis_compras.html', {'compras': compras})
     else:
