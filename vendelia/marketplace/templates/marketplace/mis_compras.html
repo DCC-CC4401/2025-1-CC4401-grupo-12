@@ -23,14 +23,30 @@ Mis Compras
                     <div class="product-contact">
                         <p><strong>Vendedor:</strong> {{ compra.producto.owner.first_name }} {{ compra.producto.owner.last_name }}</p>
                         <p><strong>Email:</strong>
-                            <a href="mailto:{{ compra.producto.owner.email }}">{{ compra.producto.owner.email }}</a>
+                            <a href="mailto:{{ compra.producto.owner.email }}?subject=Interesado en tu producto {{ compra.producto.product_name }}">
+                                {{ compra.producto.owner.email }}
+                            </a>
                         </p>
                         <p><strong>Teléfono:</strong>
                             <a href="tel:{{ compra.producto.owner.phone_number }}">{{ compra.producto.owner.phone_number }}</a>
                         </p>
                     </div>
 
-                    <a class="product-button" href="{% url 'product_detail' compra.producto.id %}">Ver detalles</a>
+                    <div class="product-actions" style="display: flex; gap: 0.5rem; flex-wrap: wrap; margin-top: 1rem;">
+                        <a class="product-button" href="{% url 'product_detail' compra.producto.id %}">Ver detalles</a>
+
+                        <!-- Botón de contacto por email -->
+                        <a class="product-button" style="background-color: #3498db; color: white;" 
+                           href="mailto:{{ compra.producto.owner.email }}?subject=Interesado en tu producto {{ compra.producto.product_name }}">
+                            Contactar por Email
+                        </a>
+
+                        <!-- Botón de contacto por WhatsApp -->
+                        <a class="product-button" style="background-color: #25D366; color: white;" target="_blank"
+                           href="https://wa.me/51{{ compra.producto.owner.phone_number }}?text=Hola%2C%20estoy%20interesado%20en%20tu%20producto%20{{ compra.producto.product_name }}">
+                            WhatsApp
+                        </a>
+                    </div>
                 </article>
             {% empty %}
                 <p class="empty-message">No has realizado ninguna compra todavía.</p>
