@@ -359,3 +359,20 @@ body {
 .register-link a:hover {
     text-decoration: underline;
 }
+
+.logout-btn {
+    display: inline-block;
+    background-color: #e8f7ee;
+    color: #13c35d;
+    text-decoration: none;
+    padding: 8px 18px;
+    font-size: 1rem;
+    transition: all 0.2s;
+    font-weight: 600;
+}
+
+.logout-btn:hover{
+    background-color: #13c35d;
+    color: #fff;
+    text-decoration: none;
+}
