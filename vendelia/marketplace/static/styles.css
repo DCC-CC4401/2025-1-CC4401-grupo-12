@@ -153,7 +153,7 @@ body {
 .product-button:hover {
     background: #119c4b;
 }
-=======
+
 .register-wrapper {
     max-width: 400px;
     margin: 60px auto;
@@ -360,19 +360,22 @@ body {
     text-decoration: underline;
 }
 
+/*
+ Style fot the logout button
+*/
 .logout-btn {
-    display: inline-block;
     background-color: #e8f7ee;
     color: #13c35d;
-    text-decoration: none;
-    padding: 8px 18px;
-    font-size: 1rem;
-    transition: all 0.2s;
+    padding: 10px 18px;
+    border: none;
+    border-radius: 999px;
     font-weight: 600;
+    font-size: 1rem;
+    text-decoration: none;
+    transition: background 0.2s, color 0.2s;
 }
 
 .logout-btn:hover{
     background-color: #13c35d;
     color: #fff;
-    text-decoration: none;
 }
