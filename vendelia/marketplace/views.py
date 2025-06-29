@@ -58,6 +58,7 @@ def register_product(request):
             if request.user.is_authenticated:
                 new_product.owner = request.user
                 new_product.save()
+                return redirect('home')
     else:
         form = ProductRegisterForm()
 
