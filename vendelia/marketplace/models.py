@@ -32,14 +32,18 @@ class Categoria(models.Model):
 # Fields:    name:           name of the product in the application (unique)
 #            description:    text with a description of the product. Max length of 255 characters.
 #            price:          price of the product in integers
-#            photos:         pictures of the product
+#            photo1:         picture 1 of the product
+#            photo2:         picture 2 of the product
+#            photo3:         picture 3 of the product
 #            owner:          the user that owns the published product
 #            categories:     name of the categories that classifiy the new product (work in progress)
 class Product(models.Model):
     product_name = models.CharField(max_length=255)
     description = models.TextField(max_length=255, blank=True)
     price = models.IntegerField() 
-    photos = models.ImageField(upload_to='product_images/', null=True, blank=True)
+    photo1 = models.ImageField(upload_to='product_images/', null=True, blank=True)
+    photo2 = models.ImageField(upload_to='product_images/', null=True, blank=True)
+    photo3 = models.ImageField(upload_to='product_images/', null=True, blank=True)
     #category = models.ForeignKey(Categoria, default="general", on_delete=models.CASCADE)
     owner = models.ForeignKey(User, blank=True, null=True, on_delete=models.CASCADE)
     
