@@ -5,16 +5,31 @@
 <head>
     <meta charset="UTF-8">
     <title>{{ product.name }}</title>
-    <!-- <link rel="stylesheet" type="text/css" href="static/marketplace/style.css"> -->
     <link rel="stylesheet" href="{% static 'marketplace/style.css' %}">
 </head>
 <body>
     <div class="product-container">
         <h1>Producto</h1>
 
-        <img class="product-image" src="{{ product.photos.url }}" alt="{{ product.product_name }}">
-        <img class="product-image" src="{{ product.photos.url }}" alt="{{ product.product_name }}">
-        <img class="product-image" src="{{ product.photos.url }}" alt="{{ product.product_name }}">
+        <div class="product-images-container"> 
+            {% if product.photo1 %}
+            <div class="product-image-wrapper">  
+                <img class="product-image" src="{{ product.photo1.url }}" alt="{{ product.product_name }}">
+            </div>
+            {% endif %}
+            
+            {% if product.photo2 %}
+            <div class="product-image-wrapper">
+                <img class="product-image" src="{{ product.photo2.url }}" alt="{{ product.product_name }}">
+            </div>
+            {% endif %}
+            
+            {% if product.photo3 %}
+            <div class="product-image-wrapper">
+                <img class="product-image" src="{{ product.photo3.url }}" alt="{{ product.product_name }}">
+            </div>
+            {% endif %}
+        </div>
 
         <h2 class="product-name">Nombre</h2>
         <p>{{ product.product_name }}</p>
