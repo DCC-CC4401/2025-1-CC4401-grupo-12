@@ -66,13 +66,15 @@ class UserRegisterForm(UserCreationForm):
 class ProductRegisterForm(forms.ModelForm):
     class Meta:
         model = Product
-        fields = ['product_name', 'description', 'price', 'photos']
+        fields = ['product_name', 'description', 'price', 'photo1', 'photo2', 'photo3']
 
         # Custom field label overrides
         labels = {'product_name': 'Nombre',
                   'description': 'Descripción',
                   'price': 'Precio',
-                  'photos': 'Fotos'
+                  'photo1': 'Foto 1',
+                  'photo2': 'Foto 2',
+                  'photo3': 'Foto 3'
         }
     
     # Price validator:
