@@ -27,18 +27,34 @@ Explora productos
         </select>
     </div>
 
-<!-- 🔍 Filtro por ciudad -->
-<form method="get">
-    <label for="ciudad">Filtrar por ciudad:</label>
-    <select name="ciudad" id="ciudad" onchange="this.form.submit()">
-        <option value="">-- Todas --</option>
-        {% for ciudad in ciudades %}
-            <option value="{{ ciudad }}" {% if ciudad == ciudad_seleccionada %}selected{% endif %}>
-                {{ ciudad }}
-            </option>
-        {% endfor %}
-    </select>
-</form>
+    <!-- Search bar -->
+    <div class="search-bar">
+        <form method="get" class="product-search-form" action="{% url 'search_product' %}">
+            <!-- {% csrf_token %} -->
+            <div class="search-input-container">
+                {{ product_search_form.query }}
+                <button type="submit" class="search-btn">
+                    <!-- Inline Lens SVG icon here -->
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-4.35-4.35M17 10a7 7 0 11-14 0 7 7 0 0114 0z" />
+                    </svg>
+                </button>
+            </div>
+        </form>
+    </div>
+
+      <!-- 🔍 Filtro por ciudad -->
+      <form method="get">
+          <label for="ciudad">Filtrar por ciudad:</label>
+          <select name="ciudad" id="ciudad" onchange="this.form.submit()">
+              <option value="">-- Todas --</option>
+              {% for ciudad in ciudades %}
+                  <option value="{{ ciudad }}" {% if ciudad == ciudad_seleccionada %}selected{% endif %}>
+                      {{ ciudad }}
+                  </option>
+              {% endfor %}
+          </select>
+      </form>
 
 <!-- 🛍️ Lista dinámica de productos -->
 <section class="product-section">
