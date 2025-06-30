@@ -67,10 +67,11 @@ class UserRegisterForm(UserCreationForm):
 class ProductRegisterForm(forms.ModelForm):
     class Meta:
         model = Product
-        fields = ['product_name', 'description', 'price', 'photo1', 'photo2', 'photo3']
+        fields = ['product_name', 'category', 'description', 'price', 'photo1', 'photo2', 'photo3']
 
         # Custom field label overrides
         labels = {'product_name': 'Nombre',
+                  'category': 'Categoría',
                   'description': 'Descripción',
                   'price': 'Precio',
                   'photo1': 'Foto 1',
@@ -118,6 +119,15 @@ class ProductRegisterForm(forms.ModelForm):
                                         f"Tamaño actual: {round(photo.size/1024/1024, 2)} MB")
         
         return photo
+    
+    # Category validator
+    # The product must have a valid category selected
+    def clean_category(self):
+        category = self.cleaned_data.get('category')
+        if category is None:
+            raise forms.ValidationError("Debe seleccionar una categoría.")
+        
+        return category
 
             
 # Form to authenticate the user with email and password

@@ -23,9 +23,11 @@ class User(AbstractUser):
 
 
 # Model that represents every product category
-# Work in progress
 class Categoria(models.Model):
     name = models.CharField(max_length=254)
+
+    def __str__(self):
+        return str(self.name)
 
     
 # This model represents all the Products in Vendalia
@@ -46,7 +48,7 @@ class Product(models.Model):
     photo1 = models.ImageField(upload_to='product_images/', null=True, blank=True)
     photo2 = models.ImageField(upload_to='product_images/', null=True, blank=True)
     photo3 = models.ImageField(upload_to='product_images/', null=True, blank=True)
-    #category = models.ForeignKey(Categoria, default="general", on_delete=models.CASCADE)
+    category = models.ForeignKey(Categoria, on_delete=models.CASCADE, blank=False)
     owner = models.ForeignKey(User, blank=True, null=True, on_delete=models.CASCADE)
     is_sold = models.BooleanField(default=False)
     

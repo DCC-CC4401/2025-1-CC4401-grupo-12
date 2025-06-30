@@ -31,6 +31,7 @@ urlpatterns = [
         name= URL_NAME_LOGIN
     ),
   
+    # Product register form (new item to sell)
     path(
         route=URL_PATTERN_REGISTER_PRODUCT, 
         view=views.register_product, 
