@@ -66,19 +66,46 @@ if args.admin:
         with open(RESET_DATA_PATH, 'r', encoding='utf-8') as fp:
             reset_data = json.load(fp)
             admin_username = reset_data['username']
+            admin_email = reset_data['email']
             admin_password = reset_data['password']
+            admin_phone_number = reset_data["phone_number"]
+            admin_first_name = reset_data["first_name"]
+            admin_last_name = reset_data["last_name"]
+            admin_city = reset_data["city"]
     else:
         print('Credentials file not found, please enter new superuser credentials.')
         admin_username = input('Username: ')
+        admin_email = input("E-mail: ")
         admin_password = input('Password: ')
+        admin_phone_number = input("Phone number: ")
+        admin_first_name = input("First name: ")
+        admin_last_name = input("Last name: ")
+        admin_city = input("City: ")
+        
 
-        reset_data = {'username': admin_username, 'password': admin_password}
+        reset_data = {
+            'username': admin_username, 
+            'email': admin_email,
+            'password': admin_password,
+            'phone_number': admin_phone_number,
+            'first_name': admin_first_name,
+            'last_name': admin_last_name,
+            'city': admin_city
+            }
+        
         with open(RESET_DATA_PATH, 'w', encoding='utf-8') as fp:
             json.dump(reset_data, fp)
 
     # Saves the new superuser
     User = get_user_model()
     User.objects.create_superuser(
-        admin_username, 'admin@admin.admin', admin_password)
+        username=admin_username,
+        email=admin_email,
+        password=admin_password,
+        phone_number=admin_phone_number,
+        first_name=admin_first_name,
+        last_name=admin_last_name,
+        city=admin_city
+    )
 
 print('Operation completed.')

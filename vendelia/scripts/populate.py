@@ -96,10 +96,7 @@ if args.products:
         dummy_file_data = dummy_file.read()
 
     products_without_images = Product.objects.filter(photo1='', photo2='', photo3='')
-    print('n', products_without_images.count())
     for product in products_without_images:
         dummy_file_obj = File(io.BytesIO(dummy_file_data), name='dummy.jpg')
         product.photo1 = dummy_file_obj
         product.save()
-        # product.photo1.save('dummy.jpg', dummy_file_obj, save=True)
-
