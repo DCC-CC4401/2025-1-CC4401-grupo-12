@@ -5,6 +5,7 @@ from django.core.exceptions import ValidationError
 from .models import User, Product
 import re
 
+
 class UserRegisterForm(UserCreationForm):
     class Meta:
         model = User
@@ -81,31 +82,27 @@ class ProductRegisterForm(forms.ModelForm):
     def clean_price(self):
         price = self.cleaned_data.get('price')
         if price<0 and price is not None:
-            raise forms.ValidationError('El precio no puede ser negativo')
-        
+            raise forms.ValidationError('El precio no puede ser negativo.')
         return price
     
     # Name validator
-    # The name can't contain only empty spaces or the characters #, $ y %
+    # The name can't contain only empty spaces or the characters #, $, % y /
     def clean_product_name(self):
-        product_name = self.cleaned_data.get('product_name')
+        product_name = self.cleaned_data.get('product_name', '')
         if not product_name.strip():
-            raise forms.ValidationError("El nombre no puede contener solo espacios")
-        if re.search(r"[#$%]", product_name):
-            raise forms.ValidationError("El nombre contiene caracteres no válidos (#, $, %)")
+            raise forms.ValidationError("El nombre no puede contener solo espacios.")
+        if re.search(r"[#$%/]", product_name):
+            raise forms.ValidationError("El nombre contiene caracteres no válidos (#, $, %, /).")
         return product_name
     
     # Description validator
-    # The description can´t be made of only empty spaces
-    # Also, the description can't have the folllowing characters: #, $ y %
+    # The description can´t contain only empty spaces
     def clean_description(self):
-        description = self.cleaned_data.get('description')
+        description = self.cleaned_data.get('description', '')
         if not description.strip():
-            raise forms.ValidationError("La descripción no puede sólo contener espacios en blanco")
-        if re.search(r"[#$%]", description):
-            raise forms.ValidationError("")
+            raise forms.ValidationError("La descripción no puede sólo contener espacios en blanco.")
         return description
-
+    
 
 # Form to authenticate the user with email and password
 class EmailAuthenticationForm(forms.Form):
