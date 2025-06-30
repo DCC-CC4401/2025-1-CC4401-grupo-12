@@ -99,8 +99,6 @@ def product_detail(request, product_id):
     product = get_object_or_404(Product, id=product_id)
     return render(request, 'marketplace/product_detail.html', {'product': product})
 
-#def home(request):
-#    return render(request, 'marketplace/home.html')
  
 def home(request):
     ciudad = request.GET.get('ciudad', '')
@@ -113,6 +111,7 @@ def home(request):
     ciudades_disponibles = User.objects.values_list('city', flat=True).distinct()
     
     return render(request, 'marketplace/home.html', {
+        'product_search_form': ProductSearchForm(),
         'productos': productos,
         'ciudades': ciudades_disponibles,
         'ciudad_seleccionada': ciudad
