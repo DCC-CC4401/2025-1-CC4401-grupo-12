@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Búsqueda de productos
+{% endblock %}
+
+{% block content %}
+<main class="main-content">
+
+    <h2>Resultados de búsqueda</h2>
+
+    {% if query %}
+    <p>Mostrando resultados para: "<strong>{{ query }}</strong>"</p>
+    {% endif %}
+
+    {% if products %}
+    <ul class="product-list">
+        {% for product in products %}
+        <li class="product-item">
+            <h3>{{ product.product_name }}</h3>
+            <p>Precio: ${{ product.price }}</p>
+            {% if product.photo1 %}
+            <img src="{{ product.photo1.url }}" alt="{{ product.product_name }}">
+            {% endif %}
+        </li>
+        {% endfor %}
+    </ul>
+    {% else %}
+    <p>No se encontraron productos que coincidan con tu búsqueda.</p>
+    {% endif %}
+
+</main>
+{% endblock %}

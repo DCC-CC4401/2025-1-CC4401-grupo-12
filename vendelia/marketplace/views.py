@@ -3,12 +3,12 @@ from django.http import HttpRequest
 from django.contrib.auth import login
 
 from .models import Product
-from .forms import UserRegisterForm, ProductRegisterForm, EmailAuthenticationForm
+from .forms import UserRegisterForm, ProductRegisterForm, EmailAuthenticationForm, ProductSearchForm
 
 # Constant imports
 from .constants import GET, POST
 from .constants import URL_PATH_INDEX, URL_NAME_INDEX
-from .constants import URL_PATH_REGISTER_USER, URL_PATH_LOGIN
+from .constants import URL_PATH_REGISTER_USER, URL_PATH_LOGIN, URL_PATH_SEARCH_PRODUCT
 
 # Marketplace app views
 
@@ -51,7 +51,7 @@ def register_user(request: HttpRequest):
 
 #login required to do this
 def register_product(request):
-    if request.method == 'POST':
+    if request.method == POST:
         form = ProductRegisterForm(request.POST, request.FILES)
         if form.is_valid():
             new_product = form.save()
@@ -70,7 +70,15 @@ def product_detail(request, product_id):
     return render(request, 'marketplace/product_detail.html', {'product': product})
 
 def home(request):
-    return render(request, 'marketplace/home.html')
+    if request.method == GET:
+        product_search_form = ProductSearchForm()
+        return render(
+            request=request,
+            template_name='marketplace/home.html',
+            context={
+                'product_search_form': product_search_form
+                }
+            )
   
 def login_user(request):
     # GET Request: Shows the login form to the user
@@ -96,3 +104,53 @@ def login_user(request):
         else:
             return render(request, URL_PATH_LOGIN, {'login_user_form': login_user_form})
   
+# Product search 
+def search_product(request: HttpRequest):
+    products = Product.objects.none()
+    query = ""
+
+    if request.method == GET:
+        pass
+
+    if request.method == POST:
+        product_search_form = ProductSearchForm(data=request.POST)
+        if product_search_form.is_valid():
+            query = product_search_form.cleaned_data['query']
+
+            # Exact match/contained query in product name and description
+            results_1 = Product.objects.filter(product_name__iexact=query)
+            results_2 = Product.objects.filter(product_name__icontains=query)
+            results_3 = Product.objects.filter(description__iexact=query)
+            results_4 = Product.objects.filter(description__icontains=query)
+
+            # Add results that contain any word of the query in the name or description
+            query_words = query.strip().split(' ')
+            results_5 = Product.objects.none()
+            for word in query_words:
+                results_5 |= Product.objects.filter(product_name__icontains=word)
+
+            # Add results that contain any word of the query as its category
+            results_6 = Product.objects.none()
+            for word in query_words:
+                results_6 = Product.objects.filter(category__name__icontains=word)
+
+            # Combine unique results
+            seen_ids = set()
+            combined = []
+            for query_set in [results_1, results_2, results_3, results_4, results_5, results_6]:
+                for product in query_set:
+                    if product.id not in seen_ids:
+                        combined.append(product)
+                        seen_ids.add(product.id)
+
+            products = combined
+
+
+    return render(
+        request=request,
+        template_name=URL_PATH_SEARCH_PRODUCT,
+        context = {
+            'query': query,
+            'products': products
+        }
+    )

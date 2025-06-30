@@ -6,7 +6,8 @@ from django.contrib.auth.views import LogoutView
 from .constants import URL_PATTERN_INDEX, URL_NAME_INDEX
 from .constants import URL_PATTERN_REGISTER_USER, URL_NAME_REGISTER_USER
 from .constants import URL_PATTERN_LOGIN, URL_NAME_LOGIN
-from .constants import URL_NAME_REGISTER_PRODUCT, URL_PATTERN_REGISTER_PRODUCT
+from .constants import URL_PATTERN_REGISTER_PRODUCT, URL_NAME_REGISTER_PRODUCT
+from .constants import URL_PATTERN_SEARCH_PRODUCT, URL_NAME_SEARCH_PRODUCT
 
 # Register all marketplace URLS here
 urlpatterns = [
@@ -40,5 +41,12 @@ urlpatterns = [
 
     path('product/<int:product_id>/', views.product_detail, name='product_detail'),
     path('', views.home, name='home'),
-    path('logout/', LogoutView.as_view(next_page=URL_PATTERN_LOGIN), name='logout')
+    path('logout/', LogoutView.as_view(next_page=URL_PATTERN_LOGIN), name='logout'),
+
+    # Product search
+    path(
+        route=URL_PATTERN_SEARCH_PRODUCT,
+        view=views.search_product,
+        name=URL_NAME_SEARCH_PRODUCT
+    )
 ]
