@@ -3,14 +3,17 @@ from django.http import HttpRequest
 from django.contrib.auth import login
 from django.contrib.staticfiles import finders
 from django.core.files.base import File
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 from .models import Product
 from .forms import UserRegisterForm, ProductRegisterForm, EmailAuthenticationForm, ProductSearchForm
+from .util import get_pagination_pages
 
 # Constant imports
 from .constants import GET, POST
 from .constants import URL_PATH_INDEX, URL_NAME_INDEX
 from .constants import URL_PATH_REGISTER_USER, URL_PATH_LOGIN, URL_PATH_SEARCH_PRODUCT
+from .constants import PRODUCT_SEARCH_RESULTS_PER_PAGE
 
 # Marketplace app views
 
@@ -78,7 +81,7 @@ def register_product(request):
     else:
         form = ProductRegisterForm()
 
-    return render(request, 'marketplace/register_product.html', {'form': form})
+    return render(request, 'marketplace/register_product.html', {'form': form}) 
 
 
 def product_detail(request, product_id):
@@ -122,17 +125,11 @@ def login_user(request):
   
 # Product search 
 def search_product(request: HttpRequest):
-    products = Product.objects.none()
-    query = ""
-
     if request.method == GET:
-        pass
+        products = Product.objects.none()
+        query = request.GET.get('query', '')
 
-    if request.method == POST:
-        product_search_form = ProductSearchForm(data=request.POST)
-        if product_search_form.is_valid():
-            query = product_search_form.cleaned_data['query']
-
+        if query:
             # Exact match/contained query in product name and description
             results_1 = Product.objects.filter(product_name__iexact=query)
             results_2 = Product.objects.filter(product_name__icontains=query)
@@ -161,12 +158,28 @@ def search_product(request: HttpRequest):
 
             products = combined
 
+        # Paginate results
+        paginator = Paginator(products, PRODUCT_SEARCH_RESULTS_PER_PAGE)
+        page = request.GET.get('page')
 
-    return render(
-        request=request,
-        template_name=URL_PATH_SEARCH_PRODUCT,
-        context = {
-            'query': query,
-            'products': products
-        }
-    )
+        try:
+            products_page = paginator.page(page)
+        except PageNotAnInteger:
+            products_page = paginator.page(1)
+        except EmptyPage:
+            products_page = paginator.page(paginator.num_pages)
+
+        # Generate pagination page numbers
+        page_numbers = get_pagination_pages(products_page.number, paginator.num_pages)
+
+
+
+        return render(
+            request=request,
+            template_name=URL_PATH_SEARCH_PRODUCT,
+            context = {
+                'query': query,
+                'products': products_page,
+                'page_numbers': page_numbers,
+            }
+        )

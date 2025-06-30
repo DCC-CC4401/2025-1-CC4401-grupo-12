@@ -22,19 +22,51 @@ Búsqueda de productos
                 {% if product.photo1 %}
                 <img src="{{ product.photo1.url }}" alt="{{ product.product_name }}">
                 {% endif %}
-
+        
                 <div class="image-card-separator"></div>
-
-                <h3>{{ product.product_name }}</h3>
-                <p>Precio: ${{ product.price }}</p>
+        
+                <div class="product-info">
+                    <div class="info-top-row">
+                        <span class="product-price">${{ product.price }}</span>
+                        <span class="product-city">{{ product.owner.city }}</span>
+                    </div>
+                    <span class="product-title">{{ product.product_name }}</span>
+                </div>
             </a>
         </li>
           
         {% endfor %}
     </ul>
+
     {% else %}
     <p>No se encontraron productos que coincidan con tu búsqueda.</p>
     {% endif %}
+
+    <!-- Pagination support -->
+    <hr class="pagination-separator" />
+
+    <div class="pagination">
+    {% if products.has_previous %}
+        <a href="?page={{ products.previous_page_number }}&query={{ query|urlencode }}">Anterior</a>
+    {% endif %}
+
+    {% for p in page_numbers %}
+        {% if p == '...' %}
+            <span class="dots">…</span>
+        {% elif p == products.number %}
+            <span class="current">{{ p }}</span>
+        {% else %}
+            <a href="?page={{ p }}&query={{ query|urlencode }}">{{ p }}</a>
+        {% endif %}
+    {% endfor %}
+
+    {% if products.has_next %}
+        <a href="?page={{ products.next_page_number }}&query={{ query|urlencode }}">Siguiente</a>
+    {% endif %}
+</div>
+
+    
+      
 
 </main>
 {% endblock %}

@@ -181,7 +181,7 @@ cython_debug/
 /vendelia/scripts/reset.json
 
 # Avoid pushing migrations
-marketplace/migrations/*
+vendelia/marketplace/migrations/*
 !marketplace/migrations/__init__.py
 !marketplace/migrations/**/
 

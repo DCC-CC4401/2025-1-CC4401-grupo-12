@@ -5,6 +5,9 @@
 GET = 'GET'
 POST = 'POST'
 
+# Numbers and limits
+PRODUCT_SEARCH_RESULTS_PER_PAGE = 40
+
 # URLs
 URL_NAME_INDEX = 'index'
 URL_PATTERN_INDEX = 'index/'

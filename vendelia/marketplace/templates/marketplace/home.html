@@ -29,8 +29,8 @@ Explora productos
 
     <!-- Search bar -->
     <div class="search-bar">
-        <form method="post" enctype="multipart/form-data" class="product-search-form" action="{% url 'search_product' %}">
-            {% csrf_token %}
+        <form method="get" class="product-search-form" action="{% url 'search_product' %}">
+            <!-- {% csrf_token %} -->
             <div class="search-input-container">
                 {{ product_search_form.query }}
                 <button type="submit" class="search-btn">
