@@ -27,6 +27,14 @@ Explora productos
         </select>
     </div>
 
+    <div class="search-bar">
+        <form method="post" enctype="multipart/form-data" class="product-search-form" action="{% url 'search_product' %}">
+            {% csrf_token %}
+            {{ product_search_form.as_p }}
+            <button type="submit" class="submit-btn">Buscar</button>
+        </form>
+    </div>
+
     <!-- Lista de productos -->
     <section class="product-section">
         <h2 class="section-title">Productos recientes</h2>

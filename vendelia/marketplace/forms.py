@@ -155,3 +155,13 @@ class EmailAuthenticationForm(forms.Form):
     def get_user(self):
         return self.user
     
+
+class ProductSearchForm(forms.Form):
+    query = forms.CharField(max_length=120, required=True)
+
+    def clean_query(self):
+        query = self.cleaned_data.get('query')
+        if query is None or len(query) == 0:
+            raise forms.ValidationError("Debe ingresar algo en la búsqueda.")
+        
+        return query
