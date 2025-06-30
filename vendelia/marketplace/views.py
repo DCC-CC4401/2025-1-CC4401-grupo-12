@@ -1,3 +1,4 @@
+from .models import User
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpRequest
 from django.contrib.auth import login
@@ -8,6 +9,12 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from .models import Product
 from .forms import UserRegisterForm, ProductRegisterForm, EmailAuthenticationForm, ProductSearchForm
 from .util import get_pagination_pages
+from django.http import HttpResponseForbidden
+from .decorators import bloquear_baneados
+
+from .models import Product
+from .models import Compra
+from .forms import UserRegisterForm, ProductRegisterForm, EmailAuthenticationForm
 
 # Constant imports
 from .constants import GET, POST
@@ -56,7 +63,11 @@ def register_user(request: HttpRequest):
 
 #login required to do this
 def register_product(request):
-    if request.method == POST:
+
+    if request.user.is_authenticated and request.user.is_banned:
+        return HttpResponseForbidden("Tu cuenta ha sido baneada. No puedes registrar productos.")
+
+    if request.method == 'POST':
         form = ProductRegisterForm(request.POST, request.FILES)
         if form.is_valid():
             new_product = form.save(commit=False)
@@ -88,16 +99,25 @@ def product_detail(request, product_id):
     product = get_object_or_404(Product, id=product_id)
     return render(request, 'marketplace/product_detail.html', {'product': product})
 
+#def home(request):
+#    return render(request, 'marketplace/home.html')
+ 
 def home(request):
-    if request.method == GET:
-        product_search_form = ProductSearchForm()
-        return render(
-            request=request,
-            template_name='marketplace/home.html',
-            context={
-                'product_search_form': product_search_form
-                }
-            )
+    ciudad = request.GET.get('ciudad', '')
+    
+    if ciudad:
+        productos = Product.objects.filter(owner__city__iexact=ciudad)
+    else:
+        productos = Product.objects.all()
+    
+    ciudades_disponibles = User.objects.values_list('city', flat=True).distinct()
+    
+    return render(request, 'marketplace/home.html', {
+        'productos': productos,
+        'ciudades': ciudades_disponibles,
+        'ciudad_seleccionada': ciudad
+    })
+  
   
 def login_user(request):
     # GET Request: Shows the login form to the user
@@ -122,6 +142,7 @@ def login_user(request):
         # If not, return to the login user form
         else:
             return render(request, URL_PATH_LOGIN, {'login_user_form': login_user_form})
+  
   
 # Product search 
 def search_product(request: HttpRequest):
@@ -183,3 +204,15 @@ def search_product(request: HttpRequest):
                 'page_numbers': page_numbers,
             }
         )
+
+      
+def mis_compras(request):
+    if request.user.is_authenticated:
+        if request.user.is_banned:
+            return HttpResponseForbidden("Tu cuenta ha sido baneada. No puedes ver tus compras.")
+        
+        compras = Compra.objects.filter(comprador=request.user).select_related('producto')
+        return render(request, 'marketplace/mis_compras.html', {'compras': compras})
+    else:
+        return redirect('login')  # o la URL que corresponda
+
