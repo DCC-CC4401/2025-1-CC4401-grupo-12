@@ -26,5 +26,5 @@ URL_PATTERN_REGISTER_PRODUCT = 'register_product/'
 URL_PATH_REGISTER_PRODUCT = 'marketplace/register_product.html'
 
 URL_NAME_SEARCH_PRODUCT = 'search_product'
-URL_PATTERN_SEARCH_PRODUCT = 'search_product'
+URL_PATTERN_SEARCH_PRODUCT = 'search_product/'
 URL_PATH_SEARCH_PRODUCT = 'marketplace/search_product.html'

@@ -39,6 +39,12 @@ urlpatterns = [
         name=URL_NAME_REGISTER_PRODUCT
     ),
 
+    path(
+        route=URL_PATTERN_SEARCH_PRODUCT, 
+        view=views.search_product, 
+        name=URL_NAME_SEARCH_PRODUCT
+    ),
+
     path('product/<int:product_id>/', views.product_detail, name='product_detail'),
     path('', views.home, name='home'),
     path('logout/', LogoutView.as_view(next_page=URL_PATTERN_LOGIN), name='logout'),
