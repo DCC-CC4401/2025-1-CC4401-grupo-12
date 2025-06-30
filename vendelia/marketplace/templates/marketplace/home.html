@@ -27,35 +27,37 @@ Explora productos
         </select>
     </div>
 
-    <!-- Lista de productos -->
-    <section class="product-section">
-        <h2 class="section-title">Productos recientes</h2>
-        <div class="product-list">
-            <!-- Producto 1 -->
+<!-- 🔍 Filtro por ciudad -->
+<form method="get">
+    <label for="ciudad">Filtrar por ciudad:</label>
+    <select name="ciudad" id="ciudad" onchange="this.form.submit()">
+        <option value="">-- Todas --</option>
+        {% for ciudad in ciudades %}
+            <option value="{{ ciudad }}" {% if ciudad == ciudad_seleccionada %}selected{% endif %}>
+                {{ ciudad }}
+            </option>
+        {% endfor %}
+    </select>
+</form>
+
+<!-- 🛍️ Lista dinámica de productos -->
+<section class="product-section">
+    <h2 class="section-title">Productos recientes</h2>
+    <div class="product-list">
+        {% for producto in productos %}
             <div class="product-card">
-                <div class="product-icon">🚲</div>
-                <h3 class="product-title">Bicicleta urbana</h3>
-                <p class="product-description">Ligera, ideal para ciudad.</p>
-                <p class="product-price">$80.000</p>
-                <a href="#" class="product-button">Ver</a>
+                <div class="product-icon">🛒</div>
+                <h3 class="product-title">{{ producto.product_name }}</h3>
+                <p class="product-description">{{ producto.description }}</p>
+                <p class="product-price">${{ producto.price }}</p>
+                <p class="product-city">Ciudad: {{ producto.owner.city }}</p>
+                <a href="{% url 'product_detail' product_id=producto.id %}" class="product-button">Ver</a>
             </div>
-            <!-- Producto 2 -->
-            <div class="product-card">
-                <div class="product-icon">📱</div>
-                <h3 class="product-title">Smartphone</h3>
-                <p class="product-description">Samsung A52, buen estado.</p>
-                <p class="product-price">$120.000</p>
-                <a href="#" class="product-button">Ver</a>
-            </div>
-            <!-- Producto 3 -->
-            <div class="product-card">
-                <div class="product-icon">💺</div>
-                <h3 class="product-title">Silla de oficina</h3>
-                <p class="product-description">Ergonómica, poco uso.</p>
-                <p class="product-price">$35.000</p>
-                <a href="#" class="product-button">Ver</a>
-            </div>
-        </div>
-    </section>
+        {% empty %}
+            <p>No hay productos disponibles en esta ciudad.</p>
+        {% endfor %}
+    </div>
+</section>
+
 </main>
 {% endblock %}

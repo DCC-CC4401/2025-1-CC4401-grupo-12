@@ -77,8 +77,25 @@ def product_detail(request, product_id):
     product = get_object_or_404(Product, id=product_id)
     return render(request, 'marketplace/product_detail.html', {'product': product})
 
+#def home(request):
+#    return render(request, 'marketplace/home.html')
+ 
 def home(request):
-    return render(request, 'marketplace/home.html')
+    ciudad = request.GET.get('ciudad', '')
+    
+    if ciudad:
+        productos = Product.objects.filter(owner__city__iexact=ciudad)
+    else:
+        productos = Product.objects.all()
+    
+    ciudades_disponibles = User.objects.values_list('city', flat=True).distinct()
+    
+    return render(request, 'marketplace/home.html', {
+        'productos': productos,
+        'ciudades': ciudades_disponibles,
+        'ciudad_seleccionada': ciudad
+    })
+  
   
 def login_user(request):
     # GET Request: Shows the login form to the user
