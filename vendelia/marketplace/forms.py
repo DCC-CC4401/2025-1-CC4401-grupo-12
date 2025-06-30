@@ -159,10 +159,6 @@ class EmailAuthenticationForm(forms.Form):
 class ProductSearchForm(forms.Form):
     query = forms.CharField(max_length=120, required=True)
 
-    def __init__(self, request=None, *args, **kwargs):
-        self.request = request
-        super().__init__(*args, **kwargs)
-
     def clean_query(self):
         query = self.cleaned_data.get('query')
         if query is None or len(query) == 0:
