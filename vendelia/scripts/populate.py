@@ -62,15 +62,14 @@ if args.products:
 
         i = 0
         for data in product_data:
-            
             admin_user = User.objects.get(username='admin')
-            n_imgs = random.randint(1, 3)
+            n_imgs = random.randint(0, 3)
 
             product = Product(
                 product_name = data['title'],
                 description = data['description'],
                 price = random.randint(1, 20)*1000,
-                photo1 = File(img1, name=f'image_{i}_1.jpg'),
+                photo1 = File(img1, name=f'image_{i}_1.jpg') if n_imgs >= 1 else None,
                 photo2 = File(img2, name=f'image_{i}_2.jpg') if n_imgs >= 2 else None,
                 photo3 = File(img3, name=f'image_{i}_3.jpg') if n_imgs >= 3 else None,
                 category = Categoria.objects.get(id = random.choice(category_ids)),
