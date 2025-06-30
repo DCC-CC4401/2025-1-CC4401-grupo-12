@@ -5,7 +5,6 @@ from django.core.exceptions import ValidationError
 from .models import User, Product
 import re
 
-
 class UserRegisterForm(UserCreationForm):
     class Meta:
         model = User
@@ -103,7 +102,22 @@ class ProductRegisterForm(forms.ModelForm):
             raise forms.ValidationError("La descripción no puede sólo contener espacios en blanco.")
         return description
     
+    # Photo validator
+    # The product must have at least on photo to be published
+    # The photo can't have a size higher than 5MB 
+    def clean_photos(self):
+        photo = self.cleaned_data.get('photos')
+        max_size = 5*1024*1024 
+        if not photo:
+            raise forms.ValidationError("Debe subir al menos una imagen para publicar su producto.")
+        if photo.size > max_size:
+            raise forms.ValidationError("La imagen que subió es demasiado grande. \n"
+                                        "Tamaño máximo permitido: 5 MB. \n"
+                                        f"Tamaño actual: {round(photo.size/1024/1024, 2)} MB")
+        
+        return photo
 
+            
 # Form to authenticate the user with email and password
 class EmailAuthenticationForm(forms.Form):
     email = forms.EmailField(label="Correo electrónico", max_length=254)
