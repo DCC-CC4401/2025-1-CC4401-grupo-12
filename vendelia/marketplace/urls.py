@@ -42,11 +42,5 @@ urlpatterns = [
     path('product/<int:product_id>/', views.product_detail, name='product_detail'),
     path('', views.home, name='home'),
     path('logout/', LogoutView.as_view(next_page=URL_PATTERN_LOGIN), name='logout'),
-
-    # Product search
-    path(
-        route=URL_PATTERN_SEARCH_PRODUCT,
-        view=views.search_product,
-        name=URL_NAME_SEARCH_PRODUCT
-    )
+    path('mis-compras/', views.mis_compras, name='mis_compras')
 ]
