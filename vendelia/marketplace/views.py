@@ -1,6 +1,8 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpRequest
 from django.contrib.auth import login
+from django.contrib.staticfiles import finders
+from django.core.files.base import File
 
 from .models import Product
 from .forms import UserRegisterForm, ProductRegisterForm, EmailAuthenticationForm, ProductSearchForm
@@ -54,11 +56,25 @@ def register_product(request):
     if request.method == POST:
         form = ProductRegisterForm(request.POST, request.FILES)
         if form.is_valid():
-            new_product = form.save()
+            new_product = form.save(commit=False)
+            
+            # Assign owner if authenticated
             if request.user.is_authenticated:
                 new_product.owner = request.user
-                new_product.save()
-                return redirect('home')
+                # new_product.save()
+
+            # Add dummy image if no photos were uploaded
+            if not new_product.photo1 and not new_product.photo2 and not new_product.photo3:
+                dummy_image_path = finders.find('images/product_no_image.jpg')
+                if dummy_image_path:
+                    with open(dummy_image_path, 'rb') as fp:
+                        new_product.photo1.save('dummy.jpg', File(fp), save=False)
+                else:
+                    raise Exception("No product dummy image not found in static files!")
+                
+            new_product.save()
+            return redirect('home')
+        
     else:
         form = ProductRegisterForm()
 
