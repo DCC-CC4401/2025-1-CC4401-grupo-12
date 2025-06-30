@@ -37,6 +37,8 @@ class Categoria(models.Model):
 #            photo3:         picture 3 of the product
 #            owner:          the user that owns the published product
 #            categories:     name of the categories that classifiy the new product (work in progress)
+#            is_sold:        status of the product, indicates if it's already sold. False by default
+
 class Product(models.Model):
     product_name = models.CharField(max_length=255)
     description = models.TextField(max_length=255, blank=True)
@@ -46,6 +48,7 @@ class Product(models.Model):
     photo3 = models.ImageField(upload_to='product_images/', null=True, blank=True)
     #category = models.ForeignKey(Categoria, default="general", on_delete=models.CASCADE)
     owner = models.ForeignKey(User, blank=True, null=True, on_delete=models.CASCADE)
+    is_sold = models.BooleanField(default=False)
     
     def __str__(self):
         return f"{self.product_name} - $ {self.price}"
