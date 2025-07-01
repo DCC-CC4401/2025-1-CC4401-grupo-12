@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Vendelia | Perfil
+{% endblock %}
+
+{% block content %}
+    {% if user.is_authenticated %}
+        <div class="user-profile">
+            <div class="profile-field">
+                <strong>Nombre de usuario:</strong>
+                <span>{{ user.username }}</span>
+            </div>
+
+            <div class="profile-field">
+                <strong>Correo electrónico:</strong>
+                <span>{{ user.email }}</span>
+            </div>
+
+            <div class="profile-field">
+                <strong>Nombre:</strong>
+                <span>{{ user.first_name }}</span>
+            </div>
+
+            <div class="profile-field">
+                <strong>Apellido:</strong>
+                <span>{{ user.last_name }}</span>
+            </div>
+
+            <div class="profile-field">
+                <strong>Teléfono:</strong>
+                <span>{{ user.phone_number }}</span>
+            </div>
+
+            <div class="profile-field">
+                <strong>Ciudad:</strong>
+                <span>{{ user.city }}</span>
+            </div>
+
+            <div>
+                <a href="{% url 'edit_profile' %}">Editar Perfil</a>
+            </div>
+        </div>
+    {% else %}
+        <p>No has iniciado sesión.</p>
+        <a href="{% url 'login' %}">Iniciar sesión</a>
+    {% endif %}
+{% endblock %}

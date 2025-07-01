@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Vendelia | Perfil
+{% endblock %}
+
+{% block content %}
+    <div>
+        <h1>Editar Perfil</h1>
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit">Guardar Cambios</button>
+        </form>
+
+        <a href="{% url 'user_profile' %}">Volver al perfil</a>
+    </div>
+{% endblock %}

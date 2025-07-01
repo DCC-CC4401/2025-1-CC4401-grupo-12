@@ -13,7 +13,7 @@ from django.utils import timezone
 
 
 from .models import Product, Compra, User
-from .forms import UserRegisterForm, ProductRegisterForm, EmailAuthenticationForm, ProductSearchForm, ProductEditForm
+from .forms import UserRegisterForm, ProductRegisterForm, EmailAuthenticationForm, ProductSearchForm, ProductEditForm, UserProfileForm
 from .util import get_pagination_pages, get_all_categories
 from django.http import HttpResponseForbidden
 from .decorators import bloquear_baneados
@@ -21,7 +21,7 @@ from .decorators import bloquear_baneados
 
 # Constant imports
 from .constants import GET, POST
-from .constants import URL_PATH_REGISTER_USER, URL_PATH_LOGIN, URL_PATH_SEARCH_PRODUCT
+from .constants import URL_PATH_REGISTER_USER, URL_PATH_LOGIN, URL_PATH_SEARCH_PRODUCT, URL_PATH_USER_PROFILE, URL_PATH_EDIT_PROFILE
 from .constants import PRODUCT_SEARCH_RESULTS_PER_PAGE, PRODUCT_LIST_IN_HOME_PAGE
 
 # Marketplace app views
@@ -401,3 +401,38 @@ def delete_product(request, product_id):
     product.delete()
     
     return redirect('my_sales')
+
+# User profile
+@login_required(login_url='/login/')
+def user_profile(request):
+    return render(
+        request=request,
+        template_name=URL_PATH_USER_PROFILE,
+        context= {
+            'user': request.user
+        }
+    )
+
+# Edit user profile
+@login_required(login_url='/login/')
+def edit_profile(request):
+    user = request.user
+
+    if request.method == POST:
+        form = UserProfileForm(request.POST, instance=user)
+        if form.is_valid():
+            print("ola")
+            form.save()
+            return redirect('user_profile')
+        else:
+            print(form.errors)
+    else:
+        form = UserProfileForm(instance=user)
+
+    return render(
+        request=request,
+        template_name=URL_PATH_EDIT_PROFILE,
+        context={
+            'form': form
+        }
+    )
