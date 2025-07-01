@@ -143,5 +143,3 @@ AUTH_USER_MODEL = 'marketplace.User'
 AUTHENTICATION_BACKENDS = [
     'marketplace.backends.EmailBackend'
 ]
-
-LOGIN_URL = '/login/'

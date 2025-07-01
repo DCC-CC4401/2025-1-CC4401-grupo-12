@@ -165,3 +165,17 @@ class ProductSearchForm(forms.Form):
             raise forms.ValidationError("Debe ingresar algo en la búsqueda.")
         
         return query
+    
+
+# Form to modify the user profile data
+class UserProfileForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ['email', 'first_name', 'last_name', 'phone_number', 'city']
+        labels = {
+            'email': 'Correo electrónico',
+            'first_name': 'Nombre',
+            'last_name': 'Apellido',
+            'phone_number': 'Teléfono',
+            'city': 'Ciudad',
+        }

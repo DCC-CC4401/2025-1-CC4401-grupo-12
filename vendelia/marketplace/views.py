@@ -211,6 +211,6 @@ def mis_compras(request):
     else:
         return redirect('login')  # o la URL que corresponda
     
-@login_required
+@login_required(login_url='/login/')
 def user_profile(request):
     return render(request, URL_PATH_USER_PROFILE, {'user': request.user})
