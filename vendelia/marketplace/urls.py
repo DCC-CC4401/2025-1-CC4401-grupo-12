@@ -12,6 +12,7 @@ from .constants import URL_NAME_REGISTER_PRODUCT, URL_PATTERN_REGISTER_PRODUCT
 from .constants import URL_PATTERN_MY_SALES, URL_NAME_MY_SALES
 from .constants import URL_PATTERN_MY_PURCHASES, URL_NAME_MY_PURCHASES
 from .constants import URL_PATTERN_USER_PROFILE, URL_NAME_USER_PROFILE
+from .constants import URL_PATTERN_EDIT_PROFILE, URL_NAME_EDIT_PROFILE
 
 
 # Register all marketplace URLS here
@@ -59,6 +60,12 @@ urlpatterns = [
         route=URL_PATTERN_USER_PROFILE,
         view=views.user_profile,
         name=URL_NAME_USER_PROFILE
+    ),
+
+    path(
+        route=URL_PATTERN_EDIT_PROFILE,
+        view=views.edit_profile,
+        name=URL_NAME_EDIT_PROFILE
     ),
 
     path('product/<int:product_id>/', views.product_detail, name='product_detail'),

@@ -36,4 +36,8 @@ URL_PATH_MY_PURCHASES = "marketplace/my_purchases.html"
 
 URL_PATTERN_USER_PROFILE = 'user_profile/'
 URL_NAME_USER_PROFILE = 'user_profile'
-URL_PATH_USER_PROFILE = 'marketplace/user-profile.html'
+URL_PATH_USER_PROFILE = 'marketplace/user_profile.html'
+
+URL_PATTERN_EDIT_PROFILE = 'user_profile/edit/'
+URL_NAME_EDIT_PROFILE = 'edit_profile'
+URL_PATH_EDIT_PROFILE = 'marketplace/edit_profile.html'
