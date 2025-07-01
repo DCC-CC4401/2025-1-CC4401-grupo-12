@@ -53,4 +53,5 @@ python manage.py runserver
 ### Development tools
 Inside the `vendelia/scripts` folder reside some scripts than help ease some common routines while working on the application, you can use the following syntax to get help from any script: `python script_file.py --help`.
 
-1. Reset: This deletes the migrations and DB, also can be used to create a test super user.
+1. Reset `reset.py`: Deletes the migrations and DB, also can be used to create a test super user.
+2. Populate `populate.py`: Populate the DB with default categories, optionally can create sample product data for testing.

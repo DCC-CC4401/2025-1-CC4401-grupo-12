@@ -5,6 +5,9 @@
 GET = 'GET'
 POST = 'POST'
 
+# Numbers and limits
+PRODUCT_SEARCH_RESULTS_PER_PAGE = 40
+
 # URLs
 URL_NAME_INDEX = 'index'
 URL_PATTERN_INDEX = 'index/'
@@ -21,6 +24,10 @@ URL_PATH_LOGIN = 'marketplace/login_user.html'
 URL_NAME_REGISTER_PRODUCT = 'register-product'
 URL_PATTERN_REGISTER_PRODUCT = 'register-product/'
 URL_PATH_REGISTER_PRODUCT = 'marketplace/register_product.html'
+
+URL_NAME_SEARCH_PRODUCT = 'search_product'
+URL_PATTERN_SEARCH_PRODUCT = 'search_product/'
+URL_PATH_SEARCH_PRODUCT = 'marketplace/search_product.html'
 
 URL_PATTERN_MY_SALES = "my-sales/"
 URL_NAME_MY_SALES = "my_sales"

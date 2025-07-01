@@ -3,6 +3,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import authenticate
 from django.core.exceptions import ValidationError
 from .models import User, Product
+import re
 
 class UserRegisterForm(UserCreationForm):
     class Meta:
@@ -66,26 +67,69 @@ class UserRegisterForm(UserCreationForm):
 class ProductRegisterForm(forms.ModelForm):
     class Meta:
         model = Product
-        fields = ['product_name', 'description', 'price', 'photos']
+        fields = ['product_name', 'category', 'description', 'price', 'photo1', 'photo2', 'photo3']
 
         # Custom field label overrides
         labels = {'product_name': 'Nombre',
+                  'category': 'Categoría',
                   'description': 'Descripción',
                   'price': 'Precio',
-                  'photos': 'Fotos'
+                  'photo1': 'Foto 1',
+                  'photo2': 'Foto 2',
+                  'photo3': 'Foto 3'
         }
     
-    # Price validator:
+    # Price validator
     # The price can't be negative
     def clean_price(self):
         price = self.cleaned_data.get('price')
-        print('clean price')
         if price<0 and price is not None:
-            print('El precio no puede ser negativo')
-            raise forms.ValidationError('El precio no puede ser negativo')
-        
+            raise forms.ValidationError('El precio no puede ser negativo.')
         return price
+    
+    # Name validator
+    # The name can't contain only empty spaces or the characters #, $, % y /
+    def clean_product_name(self):
+        product_name = self.cleaned_data.get('product_name', '')
+        if not product_name.strip():
+            raise forms.ValidationError("El nombre no puede contener solo espacios.")
+        if re.search(r"[#$%/]", product_name):
+            raise forms.ValidationError("El nombre contiene caracteres no válidos (#, $, %, /).")
+        return product_name
+    
+    # Description validator
+    # The description can´t contain only empty spaces
+    def clean_description(self):
+        description = self.cleaned_data.get('description', '')
+        if not description.strip():
+            raise forms.ValidationError("La descripción no puede sólo contener espacios en blanco.")
+        return description
+    
+    # Photo validator
+    # The product must have at least on photo to be published
+    # The photo can't have a size higher than 5MB 
+    def clean_photos(self):
+        photo = self.cleaned_data.get('photos')
+        max_size = 5*1024*1024 
+        if not photo:
+            raise forms.ValidationError("Debe subir al menos una imagen para publicar su producto.")
+        if photo.size > max_size:
+            raise forms.ValidationError("La imagen que subió es demasiado grande. \n"
+                                        "Tamaño máximo permitido: 5 MB. \n"
+                                        f"Tamaño actual: {round(photo.size/1024/1024, 2)} MB")
+        
+        return photo
+    
+    # Category validator
+    # The product must have a valid category selected
+    def clean_category(self):
+        category = self.cleaned_data.get('category')
+        if category is None:
+            raise forms.ValidationError("Debe seleccionar una categoría.")
+        
+        return category
 
+            
 # Form to authenticate the user with email and password
 class EmailAuthenticationForm(forms.Form):
     email = forms.EmailField(label="Correo electrónico", max_length=254)
@@ -111,3 +155,13 @@ class EmailAuthenticationForm(forms.Form):
     def get_user(self):
         return self.user
     
+
+class ProductSearchForm(forms.Form):
+    query = forms.CharField(max_length=120, required=True)
+
+    def clean_query(self):
+        query = self.cleaned_data.get('query')
+        if query is None or len(query) == 0:
+            raise forms.ValidationError("Debe ingresar algo en la búsqueda.")
+        
+        return query
