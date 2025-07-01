@@ -1,3 +1,4 @@
+from django.core.files import File
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpRequest
 from django.contrib.auth import login
@@ -377,24 +378,72 @@ def mark_as_sold(request, product_id):
 
     return JsonResponse({'success': True})
 
+# View to edit the listing of a product
 @login_required(login_url='/login/')
 def edit_product(request, product_id):
     product = get_object_or_404(Product, pk=product_id, owner=request.user)
-    
+
     if request.user != product.owner:
         return HttpResponseForbidden('You don´t have permission to edit this product')
-    
+
     if request.method == 'POST':
+        print(request.POST)
         form = ProductEditForm(request.POST, request.FILES, instance=product)
         if form.is_valid():
-            product.save()  # Save on+ly after ypou press the button
-            # Redirect to my-sales to prevent duplicate submissions
+            # Handle clear checkboxes for each image
+            if 'clear_photo1' in request.POST:
+                if product.photo1:
+                    product.photo1.delete(save=False)
+                    product.photo1 = None
+            if 'clear_photo2' in request.POST:
+                if product.photo2:
+                    product.photo2.delete(save=False)
+                    product.photo2 = None
+            if 'clear_photo3' in request.POST:
+                if product.photo3:
+                    product.photo3.delete(save=False)
+                    product.photo3 = None
+
+            # Shift images up to fill gaps
+            photos = [product.photo1, product.photo2, product.photo3]
+            existing_photos = [p for p in photos if p]
+
+            product.photo1 = existing_photos[0] if len(
+                existing_photos) > 0 else None
+            product.photo2 = existing_photos[1] if len(
+                existing_photos) > 1 else None
+            product.photo3 = existing_photos[2] if len(
+                existing_photos) > 2 else None
+
+            # Add dummy image if no photos remain
+            if not product.photo1 and not product.photo2 and not product.photo3:
+                dummy_image_path = finders.find('images/product_no_image.jpg')
+                if dummy_image_path:
+                    with open(dummy_image_path, 'rb') as fp:
+                        product.photo1.save('dummy.jpg', File(fp), save=False)
+                else:
+                    raise Exception(
+                        "No product dummy image found in static files!")
+
+            # Save changes
+            product.save()
+
             return redirect('product_detail', product_id=product_id)
     else:
         form = ProductEditForm(instance=product)
 
-    return render(request, 'marketplace/edit_product.html', {'form': form, 'product': product})
+    return render(
+        request=request,
+        template_name='marketplace/edit_product.html',
+        context={
+            'form': form,
+            'product': product,
+            'product_search_form': ProductSearchForm(),
+            'categories': get_all_categories(),
+        }
+    )
 
+# Delete a product
 @login_required(login_url='/login/')
 def delete_product(request, product_id):
     product = get_object_or_404(Product, pk=product_id, owner=request.user)

@@ -2,92 +2,107 @@
 {% load static %}
 
 {% block title %}
-    Vendelia | Editar {{ product.product_name }}
+Vendelia | Editar: {{ product.product_name }}
 {% endblock %}
 
 {% block content %}
-<div class="product-detail-container">
-    <div class="product-detail-info-box">
-        <form method="post" enctype="multipart/form-data">
-            {% csrf_token %}
-
-            <h3> Nombre </h3>
-            <h1 class="new-product-form">
-                {{ form.product_name }}
-            </h1>
-
-            <div class="product-detail-price-buy-container">
-                <h3> Precio </h3>
-                <p class="new-product-form">
-                    ${{ form.price }}
-                </p>
-            </div>
-
-            <div class="product-category-section">
-                <label for="{{ form.category.id_for_label }}" class="new-product-form">
-                    <h3> Categoría: </h3>
-                </label>
-                {{ form.category }}
-            </div>
-
-            <hr class="product-detail-info-box-separator" />
-
-            <h3 class="product-detail-section-title">Descripción</h3>
-            <p class="new-product-form">
-                {{ form.description }}
-            </p>
-
-            <div class="new-product-form">
-                <h3>Imágenes</h3>
-                <div class="image-upload-fields">
-                    <div class="upload-field">
-                        <label for="{{ form.photo1.id_for_label }}">Imagen 1:</label>
-                        {{ form.photo1 }}
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <div class="product-edit-container">
+    <!-- COLUMN 1: Images -->
+        <div class="product-edit-images-column">
+            <!-- COLUMN 1: Images -->
+            <div class="product-edit-images-column">
+                <!-- Photo 1 -->
+                <div class="product-edit-image-row">
+                    {% if product.photo1 %}
+                    <img src="{{ product.photo1.url }}" alt="Imagen 1" class="product-edit-image-preview">
+                    {% else %}
+                    <div class="product-edit-no-image">Sin Imagen</div>
+                    {% endif %}
+                    <div class="product-edit-image-actions">
+                        <label>
+                            <input type="checkbox" name="clear_photo1" {% if not product.photo1 %}disabled{% endif %}> Eliminar Imagen 1
+                        </label>
+                        <label class="product-edit-replace-label">
+                            Reemplazar:
+                            <input type="file" name="photo1">
+                        </label>
                     </div>
-                    <div class="upload-field">
-                        <label for="{{ form.photo2.id_for_label }}">Imagen 2:</label>
-                        {{ form.photo2 }}
+                </div>
+            
+                <!-- Photo 2 -->
+                <div class="product-edit-image-row">
+                    {% if product.photo2 %}
+                    <img src="{{ product.photo2.url }}" alt="Imagen 2" class="product-edit-image-preview">
+                    {% else %}
+                    <div class="product-edit-no-image">Sin Imagen</div>
+                    {% endif %}
+                    <div class="product-edit-image-actions">
+                        <label>
+                            <input type="checkbox" name="clear_photo2" {% if not product.photo2 %}disabled{% endif %}> Eliminar Imagen 2
+                        </label>
+                        <label class="product-edit-replace-label">
+                            Reemplazar:
+                            <input type="file" name="photo2">
+                        </label>
                     </div>
-                    <div class="upload-field">
-                        <label for="{{ form.photo3.id_for_label }}">Imagen 3:</label>
-                        {{ form.photo3 }}
+                </div>
+            
+                <!-- Photo 3 -->
+                <div class="product-edit-image-row">
+                    {% if product.photo3 %}
+                    <img src="{{ product.photo3.url }}" alt="Imagen 3" class="product-edit-image-preview">
+                    {% else %}
+                    <div class="product-edit-no-image">Sin Imagen</div>
+                    {% endif %}
+                    <div class="product-edit-image-actions">
+                        <label>
+                            <input type="checkbox" name="clear_photo3" {% if not product.photo3 %}disabled{% endif %}> Eliminar Imagen 3
+                        </label>
+                        <label class="product-edit-replace-label">
+                            Reemplazar:
+                            <input type="file" name="photo3">
+                        </label>
                     </div>
                 </div>
             </div>
 
-            <button type="submit" class="new-product-submit-btn">Guardar Cambios</button>
-        </form>
-    </div>
-</div>
+        </div>
 
-<div id="imageModal" class="modal">
-    <span class="close">&times;</span>
-    <img class="product-detail-modal-content" id="modalImage">
-</div>
+    <!-- COLUMN 2: Form -->
+        <div class="product-edit-info-column">
 
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-        const modal = document.getElementById("imageModal");
-        const modalImg = document.getElementById("modalImage");
-        const closeBtn = document.querySelector(".close");
+                <h3>Nombre</h3>
+                <div class="product-edit-form-group">
+                    {{ form.product_name }}
+                </div>
 
-        document.querySelectorAll(".product-detail-image-link").forEach(link => {
-            link.addEventListener("click", function (e) {
-                e.preventDefault();
-                modal.style.display = "block";
-                modalImg.src = this.href;
-            });
-        });
+                <div class="product-edit-form-group product-edit-price-row">
+                    <h3>Precio</h3>
+                    <div class="product-edit-price-input-group">
+                        <span class="product-edit-price-symbol">$</span>
+                        {{ form.price }}
+                    </div>
+                </div>
+                
 
-        closeBtn.addEventListener("click", function () {
-            modal.style.display = "none";
-        });
+                <div class="product-edit-form-group">
+                    <h3>Categoría</h3>
+                    {{ form.category }}
+                </div>
 
-        modal.addEventListener("click", function (e) {
-            if (e.target === modal) {
-                modal.style.display = "none";
-            }
-        });
-    });
-</script>
+                <hr class="product-edit-separator" />
+
+                <h3>Descripción</h3>
+                <div class="product-edit-form-group">
+                    {{ form.description }}
+                </div>
+
+                <hr class="product-edit-separator" />
+
+                <button type="submit" class="product-edit-submit-btn">Guardar Cambios</button>
+            </div>
+        </div>
+</form>
 {% endblock %}
