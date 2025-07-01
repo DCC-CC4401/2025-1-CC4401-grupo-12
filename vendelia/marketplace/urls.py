@@ -8,6 +8,8 @@ from .constants import URL_PATTERN_REGISTER_USER, URL_NAME_REGISTER_USER
 from .constants import URL_PATTERN_LOGIN, URL_NAME_LOGIN
 from .constants import URL_PATTERN_REGISTER_PRODUCT, URL_NAME_REGISTER_PRODUCT
 from .constants import URL_PATTERN_SEARCH_PRODUCT, URL_NAME_SEARCH_PRODUCT
+from .constants import URL_NAME_REGISTER_PRODUCT, URL_PATTERN_REGISTER_PRODUCT
+from .constants import URL_NAME_USER_PROFILE, URL_PATTERN_USER_PROFILE
 
 # Register all marketplace URLS here
 urlpatterns = [
@@ -29,7 +31,7 @@ urlpatterns = [
     path(
         route=URL_PATTERN_LOGIN,
         view=views.login_user,
-        name= URL_NAME_LOGIN
+        name=URL_NAME_LOGIN
     ),
   
     # Product register form (new item to sell)
@@ -43,6 +45,12 @@ urlpatterns = [
         route=URL_PATTERN_SEARCH_PRODUCT, 
         view=views.search_product, 
         name=URL_NAME_SEARCH_PRODUCT
+    ),
+    # User profile
+    path(
+        route=URL_PATTERN_USER_PROFILE,
+        view=views.user_profile,
+        name=URL_NAME_USER_PROFILE
     ),
 
     path('product/<int:product_id>/', views.product_detail, name='product_detail'),

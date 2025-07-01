@@ -12,6 +12,9 @@ from .util import get_pagination_pages
 from django.http import HttpResponseForbidden
 from .decorators import bloquear_baneados
 
+# To send the user to the login if it is not authenticated
+from django.contrib.auth.decorators import login_required
+
 from .models import Product
 from .models import Compra
 from .forms import UserRegisterForm, ProductRegisterForm, EmailAuthenticationForm
@@ -19,7 +22,7 @@ from .forms import UserRegisterForm, ProductRegisterForm, EmailAuthenticationFor
 # Constant imports
 from .constants import GET, POST
 from .constants import URL_PATH_INDEX, URL_NAME_INDEX
-from .constants import URL_PATH_REGISTER_USER, URL_PATH_LOGIN, URL_PATH_SEARCH_PRODUCT
+from .constants import URL_PATH_REGISTER_USER, URL_PATH_LOGIN, URL_PATH_SEARCH_PRODUCT, URL_PATH_USER_PROFILE
 from .constants import PRODUCT_SEARCH_RESULTS_PER_PAGE
 
 # Marketplace app views
@@ -61,7 +64,7 @@ def register_user(request: HttpRequest):
                 context={'register_user_form': register_user_form}
             )
 
-#login required to do this
+# Login required to do this
 def register_product(request):
 
     if request.user.is_authenticated and request.user.is_banned:
@@ -141,8 +144,6 @@ def login_user(request):
         # If not, return to the login user form
         else:
             return render(request, URL_PATH_LOGIN, {'login_user_form': login_user_form})
-  
-  
 # Product search 
 def search_product(request: HttpRequest):
     if request.method == GET:
@@ -192,8 +193,6 @@ def search_product(request: HttpRequest):
         # Generate pagination page numbers
         page_numbers = get_pagination_pages(products_page.number, paginator.num_pages)
 
-
-
         return render(
             request=request,
             template_name=URL_PATH_SEARCH_PRODUCT,
@@ -214,4 +213,8 @@ def mis_compras(request):
         return render(request, 'marketplace/mis_compras.html', {'compras': compras})
     else:
         return redirect('login')  # o la URL que corresponda
+    
 
+@login_required
+def user_profile(request):
+    return render(request, URL_PATH_USER_PROFILE, {'user': request.user})
