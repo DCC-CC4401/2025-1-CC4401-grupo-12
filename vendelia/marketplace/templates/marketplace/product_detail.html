@@ -1,48 +1,48 @@
+{% extends 'base.html' %}
+
 {% load static %}
 
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <title>{{ product.name }}</title>
-    <link rel="stylesheet" href="{% static 'marketplace/style.css' %}">
-</head>
-<body>
-    <div class="product-container">
-        <h1>Producto</h1>
+{% block title %}
+    Vendelia | {{product.product_name}}
+{% endblock %}
 
-        <div class="product-images-container"> 
-            {% if product.photo1 %}
-            <div class="product-image-wrapper">  
-                <img class="product-image" src="{{ product.photo1.url }}" alt="{{ product.product_name }}">
-            </div>
-            {% endif %}
-            
-            {% if product.photo2 %}
-            <div class="product-image-wrapper">
-                <img class="product-image" src="{{ product.photo2.url }}" alt="{{ product.product_name }}">
-            </div>
-            {% endif %}
-            
-            {% if product.photo3 %}
-            <div class="product-image-wrapper">
-                <img class="product-image" src="{{ product.photo3.url }}" alt="{{ product.product_name }}">
-            </div>
-            {% endif %}
+{% block content %}
+
+<div class="product-container">
+    <h1>Producto</h1>
+
+    <div class="product-images-container"> 
+        {% if product.photo1 %}
+        <div class="product-image-wrapper">  
+            <img class="product-image" src="{{ product.photo1.url }}" alt="{{ product.product_name }}">
         </div>
-
-        <h2 class="product-name">Nombre</h2>
-        <p>{{ product.product_name }}</p>
-
-        <h2>Precio</h2>
-        <p class="product-price">${{ product.price }}</p>
+        {% endif %}
         
-        <h2>Categoría</h2>
-        <p class="product-category">{{ product.category }}</p>
-
-        <h2>Descripción</h2>
-        <p class="product-description">{{ product.description }}</p>
+        {% if product.photo2 %}
+        <div class="product-image-wrapper">
+            <img class="product-image" src="{{ product.photo2.url }}" alt="{{ product.product_name }}">
+        </div>
+        {% endif %}
         
+        {% if product.photo3 %}
+        <div class="product-image-wrapper">
+            <img class="product-image" src="{{ product.photo3.url }}" alt="{{ product.product_name }}">
+        </div>
+        {% endif %}
     </div>
-</body>
-</html>
+
+    <h2 class="product-name">Nombre</h2>
+    <p>{{ product.product_name }}</p>
+
+    <h2>Precio</h2>
+    <p class="product-price">${{ product.price }}</p>
+    
+    <h2>Categoría</h2>
+    <p class="product-category">{{ product.category }}</p>
+
+    <h2>Descripción</h2>
+    <p class="product-description">{{ product.description }}</p>
+    
+</div>
+
+{% endblock %}

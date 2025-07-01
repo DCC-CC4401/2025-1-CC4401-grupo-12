@@ -1,0 +1,38 @@
+.site-footer {
+    display: flex;
+    justify-content: center;
+    background-color: hsl(139, 62%, 85%);
+}
+
+.footer-container {
+    width: 50vw;
+    max-width: 50vw;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.footer-left {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.footer-right {
+    display: flex;
+    justify-content: flex-end;
+    margin: 10px;
+}
+
+.footer-icon {
+    max-width: 25%;
+}
+
+.footer-title,
+.footer-slogan {
+    color: hsl(149, 50%, 30%);
+}
+
+.footer-slogan {
+    font-style: italic;
+}

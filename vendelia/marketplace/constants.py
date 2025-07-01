@@ -7,12 +7,9 @@ POST = 'POST'
 
 # Numbers and limits
 PRODUCT_SEARCH_RESULTS_PER_PAGE = 40
+PRODUCT_LIST_IN_HOME_PAGE = 4*6
 
 # URLs
-URL_NAME_INDEX = 'index'
-URL_PATTERN_INDEX = 'index/'
-URL_PATH_INDEX = 'marketplace/index.html'
-
 URL_NAME_REGISTER_USER = 'register'
 URL_PATTERN_REGISTER_USER = 'register/'
 URL_PATH_REGISTER_USER = 'marketplace/register_user.html'

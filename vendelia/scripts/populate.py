@@ -5,6 +5,7 @@ import argparse
 import json
 import random
 import io
+from datetime import datetime, timezone
 
 
 PROJECT_ROOT = pathlib.Path(__file__).resolve().parent.parent
@@ -79,7 +80,8 @@ if args.products:
             photo3 = File(img3, name=f'image_{i}_3.jpg') if n_imgs >= 3 else None,
             category = Categoria.objects.get(id = random.choice(category_ids)),
             owner = admin_user,
-            is_sold = False
+            is_sold = False,
+            creation_date = datetime.now(timezone.utc),
         )
 
         product.save()

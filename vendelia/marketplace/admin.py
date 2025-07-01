@@ -15,10 +15,15 @@ class UserAdmin(BaseUserAdmin):
     # Campos que aparecen al crear un nuevo usuario en el admin
     add_fieldsets = BaseUserAdmin.add_fieldsets + (
         ('Moderación', {'fields': ('is_banned',)}),
-    )   
+    )
 
-# Register marketplace app models to admin panel
+# Allow showing internal fields (creation_date)
+@admin.register(Product)
+class ProductAdmin(admin.ModelAdmin):
+    list_display = ('id', 'product_name', 'price', 'category', 'owner', 'is_sold', 'creation_date')
+    readonly_fields = ('creation_date',)
+
+# Register other marketplace app models to admin panel
 admin.site.register(User)
 admin.site.register(Categoria)
-admin.site.register(Product)
 admin.site.register(Compra)

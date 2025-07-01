@@ -1,25 +1,135 @@
 {% load static %}
 
-
 <!DOCTYPE html>
 <html lang="esp">
 <head>
     <!-- codificacion de caracteres de la pagina -->
     <meta charset="UTF-8">
-     <!-- Titulo -->
+    
+    <!-- Titulo -->
     <title>{% block title %}{% endblock title %}</title>
+    
     <!-- Link a el archivo de css -->
     <link rel="stylesheet" href="{% static 'styles.css' %}">
+    <link rel="stylesheet" href="{% static 'styles_header.css' %}">
+    <link rel="stylesheet" href="{% static 'styles_footer.css' %}">
 
+    <!-- Favicon -->
+    <link rel="icon" href="{% static 'images/favicon.png' %}" type="image/png">
 </head>
+
 <body>
-    <header>
+    <!-- <header>
         <nav>
             {% if request.user.is_authenticated %}
                 <button href="{% url 'logout'%}" class="btn-outline"> Cerrar Sesión</button>
             {% endif %}
         </nav>
+    </header> -->
+
+    <header class="site-header">
+        <div class="header-ribbon">
+            <!-- === Row 1: Logo | Search | User === -->
+            <div class="header-top">
+                <!-- Logo -->
+                <a href="/" class="logo">
+                    <img src="{% static 'images/vendelia_logo.png' %}" alt="Vendelia Logo">
+                </a>
+        
+                <!-- Search Bar (reused from home view) -->
+                <div class="search-bar">
+                    <form method="get" class="product-search-form" action="{% url 'search_product' %}">
+                        <input type="hidden" name="mode" value="all">
+                        <!-- {% csrf_token %} -->
+                        <div class="search-input-container">
+                            {{ product_search_form.query }}
+                            <button type="submit" class="search-btn">
+                                <!-- Inline Lens SVG icon  -->
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-4.35-4.35M17 10a7 7 0 11-14 0 7 7 0 0114 0z" />
+                                </svg>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- New product to sell, only if authenticated -->
+                {% if request.user.is_authenticated %}
+                <div class="new-product-container">
+                    <a href="{% url 'register_product' %}" class="new-product-button">
+                        
+                        <!-- Inline Plus SVG icon -->
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="plus-icon">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                        </svg>
+                        
+                        Publicar aviso
+                    </a>
+                </div>
+                {% endif %}
+    
+                <!-- User interaction -->
+                <div class="user-interaction">
+                    {% if request.user.is_authenticated %}
+                    <div class="profile-menu">
+                        <!-- Trigger: icon + username + arrow -->
+                        <div class="profile-trigger">
+                            <div class="profile-circle">
+                                <!-- Inline SVG User icon -->
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
+                                    <circle cx="12" cy="8" r="4" />
+                                    <path d="M4 20c0-4 4-6 8-6s8 2 8 6" />
+                                </svg>
+                            </div>
+                            <span class="profile-username">{{ request.user.username }}</span>
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" width="16" height="16"
+                                class="profile-arrow">
+                                <path fill-rule="evenodd"
+                                    d="M5.23 7.21a.75.75 0 011.06.02L10 11.18l3.71-3.95a.75.75 0 011.08 1.04l-4.25 4.53a.75.75 0 01-1.08 0L5.25 8.27a.75.75 0 01-.02-1.06z"
+                                    clip-rule="evenodd" />
+                            </svg>
+                        </div>
+                
+                        <!-- Profile Dropdown -->
+                        <div class="profile-dropdown">
+                            <a href="#">Mi perfil</a>
+                            <a href="#">Mis compras</a>
+                            <a href="#">Mis ventas</a>
+                            <a href="{% url 'logout' %}">Salir</a>
+                        </div>
+                    </div>
+                    {% else %}
+                    <a href="{% url 'login' %}" class="btn-login">Ingresar</a>
+                    {% endif %}
+                </div>
+                  
+            </div>
+        
+            <!-- === Row 2: Category Dropdown | Static Categories === -->
+            <div class="header-bottom">
+                <div class="category-dropdown">
+                    <select id="category-select">
+                        <option value="">Todas las categorías</option>
+                        
+                        {% for category in categories %}
+                        <option value="{{ category.name }}">{{ category.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+    
+                <div class="hot-search-container">
+                    <span class="hot-search-title">Tendencias</span>
+    
+                    <span class="hot-search">iPhone 12</span>
+                    <span class="hot-search">Aire Acondicionado</span>
+                    <span class="hot-search">Cadenas para Auto</span>
+                    <span class="hot-search">Silla gamer</span>
+                    <span class="hot-search">Repuesto cocina</span>
+                </div>
+            </div>
+        </div>
     </header>
+
 
     <!-- Mostrar mensajes si es que ocurre un error, por ejemplo mala contraseña-->
     {% if messages %}
@@ -34,9 +144,51 @@
     <!-- Contenido -->
     {% block content %}{% endblock content %}
 
-    <!-- Pie de pagina (copyright de Vendelia aunque esta no sea una marca registrada) -->
-    <footer>
-        <p>© 2025 Vendelia. All rights reserved.</p>
+    <!-- Footer -->
+    <footer class="site-footer">
+        <div class="footer-container">
+            <div class="footer-left">
+                <div class="footer-left-top">
+                    <h3 class="footer-title">Vendelia</h3>
+                </div>
+    
+                <div class="footer-left-bottom">
+                    <p class="footer-slogan">Compra fácil, vende rápido.</p>
+                </div>
+    
+            </div>
+    
+            <div class="footer-right">
+                <img src="{% static 'images/vendelia_icon.png' %}" alt="Vendelia Icon" class="footer-icon">
+            </div>
+        </div>
     </footer>
+
+    <!-- Scripts -->
+    <!-- Open search when selecting a category from the category dropdown selector -->
+    <script>
+        document.getElementById('category-select').addEventListener('change', function () {
+            const category = this.value;
+            if (category) {
+                // Redirect to search page with selected category as a query parameter
+                window.location.href = `/search_product?mode=category&query=${encodeURIComponent(category)}`;
+            } else {
+                // Optional: redirect to general search or homepage if no category selected
+                window.location.href = '/search';
+            }
+        });
+    </script>
+
+    <!-- Open search for hot search elements -->
+    <script>
+        document.querySelectorAll('.hot-search').forEach(item => {
+            item.addEventListener('click', () => {
+                const query = encodeURIComponent(item.textContent.trim());
+                const url = `{% url 'search_product' %}` + `?mode=all&query=${query}`;
+                window.location.href = url;
+            });
+        });
+    </script>
+        
 </body>
 </html>

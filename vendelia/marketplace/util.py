@@ -1,3 +1,5 @@
+from .models import Categoria
+
 # Helper function to generate number of pages in a search
 def get_pagination_pages(current_page, total_pages, left=2, right=2):
     pages = []
@@ -29,3 +31,8 @@ def get_pagination_pages(current_page, total_pages, left=2, right=2):
 
     return pages
 
+
+# Helper function to retrieve a queryset of all categories
+def get_all_categories():
+    categories = Categoria.objects.all()
+    return categories
