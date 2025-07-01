@@ -31,4 +31,4 @@ URL_PATH_SEARCH_PRODUCT = 'marketplace/search_product.html'
 
 URL_NAME_USER_PROFILE = 'user-profile'
 URL_PATTERN_USER_PROFILE = 'user-profile/'
-URL_PATH_USER_PROFILE = 'marketplace/user-profile.html'
+URL_PATH_USER_PROFILE = 'marketplace/user_profile.html'

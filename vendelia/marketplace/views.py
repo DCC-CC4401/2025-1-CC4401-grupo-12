@@ -97,12 +97,10 @@ def register_product(request):
 
     return render(request, 'marketplace/register_product.html', {'form': form}) 
 
-
 def product_detail(request, product_id):
     product = get_object_or_404(Product, id=product_id)
     return render(request, 'marketplace/product_detail.html', {'product': product})
 
- 
 def home(request):
     ciudad = request.GET.get('ciudad', '')
     
@@ -119,7 +117,6 @@ def home(request):
         'ciudades': ciudades_disponibles,
         'ciudad_seleccionada': ciudad
     })
-  
   
 def login_user(request):
     # GET Request: Shows the login form to the user
@@ -144,6 +141,7 @@ def login_user(request):
         # If not, return to the login user form
         else:
             return render(request, URL_PATH_LOGIN, {'login_user_form': login_user_form})
+        
 # Product search 
 def search_product(request: HttpRequest):
     if request.method == GET:
@@ -203,7 +201,6 @@ def search_product(request: HttpRequest):
             }
         )
 
-      
 def mis_compras(request):
     if request.user.is_authenticated:
         if request.user.is_banned:
@@ -214,7 +211,6 @@ def mis_compras(request):
     else:
         return redirect('login')  # o la URL que corresponda
     
-
 @login_required
 def user_profile(request):
     return render(request, URL_PATH_USER_PROFILE, {'user': request.user})
