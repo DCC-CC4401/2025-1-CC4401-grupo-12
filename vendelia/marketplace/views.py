@@ -21,7 +21,7 @@ from .decorators import bloquear_baneados
 
 # Constant imports
 from .constants import GET, POST
-from .constants import URL_PATH_REGISTER_USER, URL_PATH_LOGIN, URL_PATH_SEARCH_PRODUCT
+from .constants import URL_PATH_REGISTER_USER, URL_PATH_LOGIN, URL_PATH_SEARCH_PRODUCT, URL_PATH_USER_PROFILE
 from .constants import PRODUCT_SEARCH_RESULTS_PER_PAGE, PRODUCT_LIST_IN_HOME_PAGE
 
 # Marketplace app views
@@ -401,3 +401,14 @@ def delete_product(request, product_id):
     product.delete()
     
     return redirect('my_sales')
+
+# User profile
+@login_required(login_url='/login/')
+def user_profile(request):
+    return render(
+        request=request,
+        template_name=URL_PATH_USER_PROFILE,
+        context= {
+            'user': request.user
+        }
+    )

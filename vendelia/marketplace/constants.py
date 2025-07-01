@@ -33,3 +33,7 @@ URL_PATH_MY_SALES = "marketplace/my_sales.html"
 URL_PATTERN_MY_PURCHASES = "my_purchases/"
 URL_NAME_MY_PURCHASES = "my_purchases"
 URL_PATH_MY_PURCHASES = "marketplace/my_purchases.html"
+
+URL_PATTERN_USER_PROFILE = 'user_profile/'
+URL_NAME_USER_PROFILE = 'user_profile'
+URL_PATH_USER_PROFILE = 'marketplace/user-profile.html'
