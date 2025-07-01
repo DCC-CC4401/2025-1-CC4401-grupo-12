@@ -1,0 +1,100 @@
+/* === User Edit Profile Page === */
+.user-edit-container {
+    max-width: 30vw;
+    width: 100%;
+    margin: 1em auto;
+    padding: 30px 25px;
+    background-color: #f9fdf7;
+    /* same subtle light background */
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.user-edit-title {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #151d14;
+    margin-bottom: 30px;
+    text-align: center;
+}
+
+.user-edit-form p {
+    margin-bottom: 20px;
+    font-size: 1.1rem;
+    color: #333;
+}
+
+.user-edit-form label {
+    display: block;
+    font-weight: 600;
+    color: #5a6d63;
+    margin-bottom: 6px;
+}
+
+.user-edit-form input[type="text"],
+.user-edit-form input[type="email"],
+.user-edit-form input[type="tel"],
+.user-edit-form select,
+.user-edit-form textarea {
+    width: 100%;
+    padding: 10px 14px;
+    border: 1.5px solid #a6b2a1;
+    border-radius: 6px;
+    font-size: 1rem;
+    color: #151d14;
+    background-color: white;
+    transition: border-color 0.2s ease;
+    box-sizing: border-box;
+}
+
+.user-edit-form input[type="text"]:focus,
+.user-edit-form input[type="email"]:focus,
+.user-edit-form input[type="tel"]:focus,
+.user-edit-form select:focus,
+.user-edit-form textarea:focus {
+    border-color: #13c35d;
+    outline: none;
+}
+
+.user-edit-submit-btn {
+    background-color: #13c35d;
+    color: white;
+    font-weight: bold;
+    font-size: 1.3rem;
+    border: none;
+    padding: 12px 30px;
+    border-radius: 6px;
+    cursor: pointer;
+    display: block;
+    margin: 30px auto 0 auto;
+    transition: background-color 0.2s ease;
+}
+
+.user-edit-submit-btn:hover {
+    background-color: #10a947;
+}
+
+.user-edit-back-link {
+    text-align: center;
+    margin-top: 24px;
+}
+
+.user-edit-back-link a {
+    color: #13c35d;
+    font-weight: 600;
+    text-decoration: none;
+    font-size: 1.1rem;
+    transition: color 0.2s ease;
+}
+
+.user-edit-back-link a:hover {
+    color: #0f8e3f;
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+    .user-edit-container {
+        padding: 20px 15px;
+    }
+}
