@@ -127,9 +127,9 @@ class ProductRegisterForm(forms.ModelForm):
         MAX_SIZE = 5*1024*1024 #5MB
         if photo:
             if photo.size > MAX_SIZE:
-                raise forms.ValidationError(f"La imagen {field_name[-1]} es demasiado grande."
-                                            "Tamaño máximo: 5MB"
-                                            f"Tamaño actual: {round(photo.size/1024/1024, 2)}MB")
+                raise forms.ValidationError(f"La imagen {field_name[-1]} es demasiado grande. "
+                                            "Tamaño máximo: 5MB. "
+                                            f"Tamaño actual: {round(photo.size/1024/1024, 2)}MB.")
         return photo
        
     # Category validator
@@ -184,10 +184,11 @@ class ProductSearchForm(forms.Form):
 class ProductEditForm(forms.ModelForm):
     class Meta:
         model = Product
-        fields = ['product_name', 'description', 'price', 'photo1', 'photo2', 'photo3']
+        fields = ['product_name', 'category', 'description', 'price', 'photo1', 'photo2', 'photo3']
 
         # Custom field label overrides
         labels = {'product_name': 'Nombre',
+                  'category': 'Categoria',
                   'description': 'Descripción',
                   'price': 'Precio',
                   'photo1': 'Foto 1',
@@ -243,7 +244,7 @@ class ProductEditForm(forms.ModelForm):
         MAX_SIZE = 5*1024*1024 #5MB
         if photo:
             if photo.size > MAX_SIZE:
-                raise forms.ValidationError(f"La imagen {field_name[-1]} es demasiado grande."
-                                            "Tamaño máximo: 5MB"
-                                            f"Tamaño actual: {round(photo.size/1024/1024, 2)}MB")
+                raise forms.ValidationError(f"La imagen {field_name[-1]} es demasiado grande. "
+                                            "Tamaño máximo: 5MB. "
+                                            f"Tamaño actual: {round(photo.size/1024/1024, 2)}MB. ")
         return photo
