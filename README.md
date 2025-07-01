@@ -8,7 +8,11 @@ _**Vendelia** is a web-based marketplace designed to connect everyday people who
 _**Vendelia** es un mercado web diseñado para conectar a personas comunes que quieren comprar y vender artículos de forma local, sin empresas, intermediarios ni envíos internacionales. Ofrece una plataforma simple pero sólida que facilita el contacto directo entre vendedores y compradores._
 
 
+## 📦 Table of Contents / Tabla de contenido
 
+- [🧰 Installation / Instalación](#-installation--instalación)
+- [🛠 Development Tools / Herramientas de desarrollo](#-development-tools--herramientas-de-desarrollo)
+- [🚀 Usage / Uso de la aplicación](#-usage--uso-de-la-aplicación)
 
 
 ## Installation
@@ -64,3 +68,13 @@ Inside the `vendelia/scripts` folder reside some scripts than help ease some com
 
 1. Reset `reset.py`: Deletes the migrations and DB, also can be used to create a test super user.
 2. Populate `populate.py`: Populate the DB with default categories, optionally can create sample user/product data for testing.
+
+## Usage
+
+Once the server is running, you can open the app at: http://localhost:8000
+
+Main features:
+- User registration and authentication (with email or username)
+- Product posting and image uploads
+- Local search by product or category
+- Personal user profile and product listings
