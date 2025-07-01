@@ -1,12 +1,12 @@
 {% extends 'base.html' %}
 
-{% block title %}Mis Ventas - Vendelia{% endblock %}
+{% block title %}Vendelia | Mis Ventas{% endblock %}
 
 {% block content %}
 <div class="my-sales-container">
     <div class="header-section">
         <h1>Mis Ventas</h1>
-        <a href="{% url 'register_product' %}" class="btn-add-product">+ Agregar Producto</a>
+        <!-- <a href="{% url 'register_product' %}" class="btn-add-product">+ Agregar Producto</a> -->
     </div>
     <p>¡Bienvenido/a, {{ user.first_name }}! Aquí puedes gestionar tus productos y hacer seguimiento de tus ventas.</p>
     
@@ -17,8 +17,8 @@
             <div class="products-grid">
                 {% for product in active_listings %}
                     <div class="product-card active">
-                        {% if product.photos %}
-                            <img src="{{ product.photos.url }}" alt="{{ product.product_name }}" class="product-image">
+                        {% if product.photo1 %}
+                            <img src="{{ product.photo1.url }}" alt="{{ product.product_name }}" class="product-image">
                         {% else %}
                             <div class="no-image">Sin Imagen</div>
                         {% endif %}
@@ -50,8 +50,8 @@
             <div class="products-grid">
                 {% for product in sold_items %}
                     <div class="product-card sold">
-                        {% if product.photos %}
-                            <img src="{{ product.photos.url }}" alt="{{ product.product_name }}" class="product-image">
+                        {% if product.photo1 %}
+                            <img src="{{ product.photo1.url }}" alt="{{ product.product_name }}" class="product-image">
                         {% else %}
                             <div class="no-image">Sin Imagen</div>
                         {% endif %}
