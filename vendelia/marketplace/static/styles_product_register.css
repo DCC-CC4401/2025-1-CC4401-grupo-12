@@ -1,0 +1,81 @@
+/* === NEW PRODUCT FORM WRAPPER === */
+.new-product-wrapper {
+    max-width: 600px;
+    margin: 50px auto;
+    padding: 0 20px;
+    text-align: center;
+}
+
+.new-product-info {
+    margin-bottom: 28px;
+}
+
+.new-product-title {
+    font-size: 1.8rem;
+    color: #222;
+    font-weight: 700;
+    margin-bottom: 8px;
+}
+
+.new-product-subtitle {
+    font-size: 1rem;
+    color: #6d6d6d;
+}
+
+/* === NEW PRODUCT FORM === */
+.new-product-form {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    text-align: left;
+}
+
+.new-product-form p {
+    margin: 0;
+}
+
+.new-product-form label {
+    font-size: 1rem;
+    font-weight: 500;
+    color: #252525;
+    display: block;
+    margin-bottom: 6px;
+}
+
+.new-product-form input,
+.new-product-form select,
+.new-product-form textarea {
+    background: #f7f7f4;
+    border: none;
+    border-radius: 8px;
+    padding: 12px 14px;
+    font-size: 1rem;
+    box-sizing: border-box;
+    width: 100%;
+    outline: none;
+    transition: border 0.2s;
+}
+
+.new-product-form input:focus,
+.new-product-form select:focus,
+.new-product-form textarea:focus {
+    border: 1.5px solid #1eae65;
+}
+
+.new-product-submit-btn {
+    background: #13c35d;
+    color: #fff;
+    border: none;
+    border-radius: 999px;
+    padding: 14px 0;
+    font-size: 1.1rem;
+    font-weight: 700;
+    cursor: pointer;
+    margin-top: 12px;
+    transition: background 0.2s;
+    width: 100%;
+}
+
+.new-product-submit-btn:hover {
+    background: #119c4b;
+}

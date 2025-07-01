@@ -2,6 +2,15 @@
 
 CC4001 | Software Engineering Project
 
+_**Vendelia** is a web-based marketplace designed to connect everyday people who want to buy and sell items locally — without companies, intermediaries, or international shipping. It provides a simple yet robust platform that makes it easy for sellers and buyers to connect directly._
+
+
+_**Vendelia** es un mercado web diseñado para conectar a personas comunes que quieren comprar y vender artículos de forma local, sin empresas, intermediarios ni envíos internacionales. Ofrece una plataforma simple pero sólida que facilita el contacto directo entre vendedores y compradores._
+
+
+
+
+
 ## Installation
 
 1. Clone and enter repository.
@@ -54,4 +63,4 @@ python manage.py runserver
 Inside the `vendelia/scripts` folder reside some scripts than help ease some common routines while working on the application, you can use the following syntax to get help from any script: `python script_file.py --help`.
 
 1. Reset `reset.py`: Deletes the migrations and DB, also can be used to create a test super user.
-2. Populate `populate.py`: Populate the DB with default categories, optionally can create sample product data for testing.
+2. Populate `populate.py`: Populate the DB with default categories, optionally can create sample user/product data for testing.

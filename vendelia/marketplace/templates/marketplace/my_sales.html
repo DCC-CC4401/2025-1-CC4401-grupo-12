@@ -29,6 +29,7 @@
                             <p class="product-date">Publicado: {{ product.date_created|date:"M d, Y" }}</p>
                             <div class="product-actions">
                                 <a href="{% url 'product_detail' product.id %}" class="btn-details">Ver Detalles</a>
+                                <a href="{% url 'product_detail' product.id %}" class="btn-edit-listing">Editar</a>
                                 <button class="btn-sold" onclick="markAsSold({{ product.id }})">Marcar como Vendido</button>
                             </div>
                         </div>
@@ -82,7 +83,7 @@
 <script>
 function markAsSold(productId) {
     if (confirm('¿Marcar este producto como vendido?')) {
-        fetch(`/mark-as-sold/${productId}/`, {
+        fetch(`/mark_as_sold/${productId}/`, {
             method: 'POST',
             headers: {
                 'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value,
