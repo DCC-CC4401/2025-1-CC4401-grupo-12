@@ -6,7 +6,7 @@
 <div class="my-sales-container">
     <div class="header-section">
         <h1>Mis Ventas</h1>
-        <a href="{% url 'register-product' %}" class="btn-add-product">+ Agregar Producto</a>
+        <a href="{% url 'register_product' %}" class="btn-add-product">+ Agregar Producto</a>
     </div>
     <p>¡Bienvenido/a, {{ user.first_name }}! Aquí puedes gestionar tus productos y hacer seguimiento de tus ventas.</p>
     
@@ -38,7 +38,7 @@
         {% else %}
             <div class="empty-state">
                 <p>No tienes productos en venta actualmente.</p>
-                <a href="{% url 'register-product' %}" class="btn-primary">Agregar Producto</a>
+                <a href="{% url 'register_product' %}" class="btn-primary">Agregar Producto</a>
             </div>
         {% endif %}
     </div>

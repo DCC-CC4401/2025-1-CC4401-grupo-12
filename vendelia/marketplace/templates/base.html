@@ -89,8 +89,8 @@
                         <!-- Profile Dropdown -->
                         <div class="profile-dropdown">
                             <a href="#">Mi perfil</a>
-                            <a href="#">Mis compras</a>
-                            <a href="#">Mis ventas</a>
+                            <a href="{% url 'my_purchases' %}">Mis compras</a>
+                            <a href="{% url 'my_sales' %}">Mis ventas</a>
                             <a href="{% url 'logout' %}">Salir</a>
                         </div>
                     </div>

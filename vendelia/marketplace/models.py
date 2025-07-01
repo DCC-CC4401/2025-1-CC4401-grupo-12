@@ -66,3 +66,11 @@ class Product(models.Model):
     class Meta:
         ordering = ['-date_created']
 
+
+class Compra(models.Model):
+    comprador = models.ForeignKey(User, on_delete=models.CASCADE)
+    producto = models.ForeignKey(Product, on_delete=models.CASCADE)
+    fecha = models.DateTimeField(auto_now_add=True)
+
+    def _str_(self):
+        return f"{self.comprador.username} compró {self.producto.product_name}"
