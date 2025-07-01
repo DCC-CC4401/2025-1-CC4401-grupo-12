@@ -29,7 +29,7 @@
                             <p class="product-date">Publicado: {{ product.date_created|date:"M d, Y" }}</p>
                             <div class="product-actions">
                                 <a href="{% url 'product_detail' product.id %}" class="btn-details">Ver Detalles</a>
-                                <a href="{% url 'product_detail' product.id %}" class="btn-edit-listing">Editar</a>
+                                <a href="{% url 'edit_product' product.id %}" class="btn-edit-listing">Editar</a>
                                 <button class="btn-sold" onclick="markAsSold({{ product.id }})">Marcar como Vendido</button>
                             </div>
                         </div>

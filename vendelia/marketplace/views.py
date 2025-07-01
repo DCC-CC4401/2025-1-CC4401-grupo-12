@@ -387,10 +387,17 @@ def edit_product(request, product_id):
     if request.method == 'POST':
         form = ProductEditForm(request.POST, request.FILES, instance=product)
         if form.is_valid():
-            product.save()  # Save only after ypou press the button
+            product.save()  # Save on+ly after ypou press the button
             # Redirect to my-sales to prevent duplicate submissions
             return redirect('product_detail', product_id=product_id)
     else:
         form = ProductEditForm(instance=product)
 
     return render(request, 'marketplace/edit_product.html', {'form': form, 'product': product})
+
+@login_required(login_url='/login/')
+def delete_product(request, product_id):
+    product = get_object_or_404(Product, pk=product_id, owner=request.user)
+    product.delete()
+    
+    return redirect('my_sales')

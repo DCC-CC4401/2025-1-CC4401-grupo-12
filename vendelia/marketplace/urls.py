@@ -63,6 +63,6 @@ urlpatterns = [
 
 
     path('mark-as-sold/<int:product_id>/', views.mark_as_sold, name='mark_as_sold'),
-    path('product/<int:product_id>/edit/', views.edit_product, name='edit_product')
-
+    path('product/<int:product_id>/edit/', views.edit_product, name='edit_product'),
+    path('product/<int:product_id>/delete/', views.delete_product, name='delete_product')
 ]
