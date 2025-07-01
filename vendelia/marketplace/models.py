@@ -45,7 +45,7 @@ class Categoria(models.Model):
 #           creation_date:  datetime of listing creation
 class Product(models.Model):
     product_name = models.CharField(max_length=255)
-    description = models.TextField(max_length=255, blank=True)
+    description = models.TextField(max_length=10000, blank=True)
     price = models.IntegerField() 
     photo1 = models.ImageField(upload_to='product_images/', null=True, blank=True)
     photo2 = models.ImageField(upload_to='product_images/', null=True, blank=True)
