@@ -35,7 +35,12 @@
     
 
     <div class="product-detail-info-box">
-        <p class="product-detail-category">Categoría: {{ product.category }}</p>
+        <p class="product-detail-category">
+            Categoría: {{ product.category }}
+            <a class="product-detail-category-search" href="/search_product?mode=category&query={{ product.category|urlencode }}" target="_self">
+                Ver más
+            </a>
+        </p>
 
         <h1 class="product-detail-title">{{ product.product_name }}</h1>
 
