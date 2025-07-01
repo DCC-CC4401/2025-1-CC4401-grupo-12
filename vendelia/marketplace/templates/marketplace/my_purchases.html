@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Vendelia | Mis Compras
+{% endblock %}
+
+{% block content %}
+<div class="my-purchases-container">
+    <div class="header-section">
+        <h1>Mis Compras</h1>
+    </div>
+    
+    <!-- Purchased Items Section -->
+    <div class="purchases-section">
+        <h2>Productos Comprados ({{ purchased_count }})</h2>
+        {% if purchased_items %}
+            <div class="products-grid">
+                {% for product in purchased_items %}
+                    <div class="product-card purchased">
+                        {% if product.photo1 %}
+                            <img src="{{ product.photo1.url }}" alt="{{ product.product_name }}" class="product-image">
+                        {% else %}
+                            <div class="no-image">Sin Imagen</div>
+                        {% endif %}
+                        <div class="product-info">
+                            <h3>{{ product.product_name }}</h3>
+                            <p class="product-price">${{ product.price }}</p>
+                            <p class="product-description">{{ product.description|truncatewords:15 }}</p>
+                            <div class="purchase-info">
+                                <p class="purchase-date">Comprado: {{ product.date_sold|date:"M d, Y" }}</p>
+                                <p class="seller">Vendedor: {{ product.owner.first_name }} {{ product.owner.last_name }}</p>
+                                <p class="seller-contact">{{ product.owner.email }} | {{ product.owner.phone_number }}</p>
+                            </div>
+                            <div class="product-actions">
+                                <a href="{% url 'product_detail' product.id %}" class="btn-details">Ver Detalles</a>
+                            </div>
+                        </div>
+                        <div class="purchased-badge">COMPRADO</div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="empty-state">
+                <p>Aún no has comprado ningún producto.</p>
+                <a href="{% url 'home' %}" class="btn-primary">Explorar Productos</a>
+            </div>
+        {% endif %}
+    </div>
+</div>
+
+{% csrf_token %}
+{% endblock %}

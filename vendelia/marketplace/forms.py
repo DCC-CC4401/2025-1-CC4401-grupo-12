@@ -3,6 +3,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import authenticate
 from django.core.exceptions import ValidationError
 from .models import User, Product
+import re
 
 class UserRegisterForm(UserCreationForm):
     class Meta:
@@ -66,26 +67,81 @@ class UserRegisterForm(UserCreationForm):
 class ProductRegisterForm(forms.ModelForm):
     class Meta:
         model = Product
-        fields = ['product_name', 'description', 'price', 'photos']
+        fields = ['product_name', 'category', 'description', 'price', 'photo1', 'photo2', 'photo3']
 
         # Custom field label overrides
         labels = {'product_name': 'Nombre',
+                  'category': 'Categoría',
                   'description': 'Descripción',
                   'price': 'Precio',
-                  'photos': 'Fotos'
+                  'photo1': 'Foto 1',
+                  'photo2': 'Foto 2',
+                  'photo3': 'Foto 3'
         }
     
-    # Price validator:
+    # Price validator
     # The price can't be negative
     def clean_price(self):
         price = self.cleaned_data.get('price')
-        print('clean price')
         if price<0 and price is not None:
-            print('El precio no puede ser negativo')
-            raise forms.ValidationError('El precio no puede ser negativo')
-        
+            raise forms.ValidationError('El precio no puede ser negativo.')
         return price
+    
+    # Name validator
+    # The name can't contain only empty spaces or the characters #, $, % y /
+    def clean_product_name(self):
+        product_name = self.cleaned_data.get('product_name', '')
+        if not product_name.strip():
+            raise forms.ValidationError("El nombre no puede contener solo espacios.")
+        if re.search(r"[#$%/]", product_name):
+            raise forms.ValidationError("El nombre contiene caracteres no válidos (#, $, %, /).")
+        return product_name
+    
+    # Description validator
+    # The description can´t contain only empty spaces
+    def clean_description(self):
+        description = self.cleaned_data.get('description', '')
+        if not description.strip():
+            raise forms.ValidationError("La descripción no puede sólo contener espacios en blanco.")
+        return description
+    
+    # Photo1 validator
+    # Photo1 can't exceed the limit of 5MB
+    def clean_photo1(self):
+        return self.validate_photo_size('photo1')
+    
+    # Photo2 validator
+    # Photo2 can't exceed the limit of 5MB
+    def clean_photo2(self):
+        return self.validate_photo_size('photo2')
+    
+    # Photo3 validator
+    # Photo3 can't exceed the limit of 5MB
+    def clean_photo3(self):
+        return self.validate_photo_size('photo3')
+    
+    # Auxiliar function
+    # It validates that the photos don't exceed the limit of 5MB
+    def validate_photo_size(self, field_name):
+        photo = self.cleaned_data.get(field_name)
+        MAX_SIZE = 5*1024*1024 #5MB
+        if photo:
+            if photo.size > MAX_SIZE:
+                raise forms.ValidationError(f"La imagen {field_name[-1]} es demasiado grande. "
+                                            "Tamaño máximo: 5MB. "
+                                            f"Tamaño actual: {round(photo.size/1024/1024, 2)}MB.")
+        return photo
+       
+    # Category validator
+    # The product must have a valid category selected
+    def clean_category(self):
+        category = self.cleaned_data.get('category')
+        if category is None:
+            raise forms.ValidationError("Debe seleccionar una categoría.")
+        
+        return category
 
+            
 # Form to authenticate the user with email and password
 class EmailAuthenticationForm(forms.Form):
     email = forms.EmailField(label="Correo electrónico", max_length=254)
@@ -111,3 +167,134 @@ class EmailAuthenticationForm(forms.Form):
     def get_user(self):
         return self.user
     
+
+class ProductSearchForm(forms.Form):
+    query = forms.CharField(
+        max_length=120, 
+        required=True,
+        widget=forms.TextInput(attrs={'placeholder': "Buscar en Vendelia"}))
+
+    def clean_query(self):
+        query = self.cleaned_data.get('query')
+        if query is None or len(query) == 0:
+            raise forms.ValidationError("Debe ingresar algo en la búsqueda.")
+        
+        return query
+
+class ProductEditForm(forms.ModelForm):
+    class Meta:
+        model = Product
+        fields = ['product_name', 'category', 'description', 'price', 'photo1', 'photo2', 'photo3']
+
+        # Custom field label overrides
+        labels = {'product_name': 'Nombre',
+                  'category': 'Categoria',
+                  'description': 'Descripción',
+                  'price': 'Precio',
+                  'photo1': 'Foto 1',
+                  'photo2': 'Foto 2',
+                  'photo3': 'Foto 3'
+        }
+    
+    # Price validator
+    # The price can't be negative
+    def clean_price(self):
+        price = self.cleaned_data.get('price')
+        if price<0 and price is not None:
+            raise forms.ValidationError('El precio no puede ser negativo.')
+        return price
+    
+    # Name validator
+    # The name can't contain only empty spaces or the characters #, $, % y /
+    def clean_product_name(self):
+        product_name = self.cleaned_data.get('product_name', '')
+        if not product_name.strip():
+            raise forms.ValidationError("El nombre no puede contener solo espacios.")
+        if re.search(r"[#$%/]", product_name):
+            raise forms.ValidationError("El nombre contiene caracteres no válidos (#, $, %, /).")
+        return product_name
+    
+    # Description validator
+    # The description can´t contain only empty spaces
+    def clean_description(self):
+        description = self.cleaned_data.get('description', '')
+        if not description.strip():
+            raise forms.ValidationError("La descripción no puede sólo contener espacios en blanco.")
+        return description
+    
+    # Photo1 validator
+    # Photo1 can't exceed the limit of 5MB
+    def clean_photo1(self):
+        return self.validate_photo_size('photo1')
+    
+    # Photo2 validator
+    # Photo2 can't exceed the limit of 5MB
+    def clean_photo2(self):
+        return self.validate_photo_size('photo2')
+    
+    # Photo3 validator
+    # Photo3 can't exceed the limit of 5MB
+    def clean_photo3(self):
+        return self.validate_photo_size('photo3')
+    
+    # Auxiliar function
+    # It validates that the photos don't exceed the limit of 5MB
+    def validate_photo_size(self, field_name):
+        photo = self.cleaned_data.get(field_name)
+        MAX_SIZE = 5*1024*1024 #5MB
+        if photo:
+            if photo.size > MAX_SIZE:
+                raise forms.ValidationError(f"La imagen {field_name[-1]} es demasiado grande. "
+                                            "Tamaño máximo: 5MB. "
+                                            f"Tamaño actual: {round(photo.size/1024/1024, 2)}MB. ")
+        return photo
+    
+class UserProfileForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ['username','email', 'first_name', 'last_name', 'phone_number', 'city']
+        labels = {
+            'username': 'Nombre de usuario',
+            'email': 'Correo electrónico',
+            'first_name': 'Nombre',
+            'last_name': 'Apellido',
+            'phone_number': 'Teléfono',
+            'city': 'Ciudad',
+        }
+
+    # Validations (= user validations)
+    # Length must be between 6 to 32 chars
+    def clean_username(self):
+        username = self.cleaned_data.get('username')
+        if not (6 <= len(username) <= 32):
+            raise forms.ValidationError('El nombre de usuario debe tener entre 6 y 32 caracteres.')
+        
+        return username
+    
+    # Phone number validator
+    # Must be exactly 8 digits (only chilean cellphone numbers)
+    def clean_phone_number(self):
+        phone_number = self.cleaned_data.get('phone_number')
+        if len(phone_number) != 8:
+            raise forms.ValidationError('El número debe consistir de 8 dígitos.')
+        elif not phone_number.isdigit():
+            raise forms.ValidationError('El número debe consistir de solo dígitos.')
+        
+        return phone_number
+    
+    # City validator
+    # Must be a string of length between 4 and 30.
+    # 
+    # Appropiate lenght taken from wikidata with this query:
+    # SELECT ?item ?itemLabel (STRLEN(?itemLabel) AS ?labelLength) WHERE {
+    # ?item wdt:P31 wd:Q25412763.
+    # SERVICE wikibase:label { bd:serviceParam wikibase:language "[AUTO_LANGUAGE],en". }
+    # }
+    def clean_city(self):
+        city = self.cleaned_data.get('city')
+        if len(city) < 4 or len(city) > 30:
+            raise forms.ValidationError('La ciudad debe tener entre 4 a 30 caracteres.')
+        if not city.isalpha():
+            raise forms.ValidationError('La ciudad solo puede contener letras.')
+        
+        return city

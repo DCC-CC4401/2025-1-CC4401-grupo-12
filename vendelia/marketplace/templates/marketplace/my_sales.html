@@ -1,0 +1,110 @@
+{% extends 'base.html' %}
+
+{% block title %}Vendelia | Mis Ventas{% endblock %}
+
+{% block content %}
+<div class="my-sales-container">
+    <div class="header-section">
+        <h1>Mis Ventas</h1>
+        <!-- <a href="{% url 'register_product' %}" class="btn-add-product">+ Agregar Producto</a> -->
+    </div>
+    <p>¡Bienvenido/a, {{ user.first_name }}! Aquí puedes gestionar tus productos y hacer seguimiento de tus ventas.</p>
+    
+    <!-- Active Listings Section -->
+    <div class="sales-section">
+        <h2>Productos en Venta ({{ active_count }})</h2>
+        {% if active_listings %}
+            <div class="products-grid">
+                {% for product in active_listings %}
+                    <div class="product-card active">
+                        {% if product.photo1 %}
+                            <img src="{{ product.photo1.url }}" alt="{{ product.product_name }}" class="product-image">
+                        {% else %}
+                            <div class="no-image">Sin Imagen</div>
+                        {% endif %}
+                        <div class="product-info">
+                            <h3>{{ product.product_name }}</h3>
+                            <p class="product-price">${{ product.price }}</p>
+                            <p class="product-description">{{ product.description|truncatewords:15 }}</p>
+                            <p class="product-date">Publicado: {{ product.date_created|date:"M d, Y" }}</p>
+                            <div class="product-actions">
+                                <a href="{% url 'product_detail' product.id %}" class="btn-details">Ver Detalles</a>
+                                <a href="{% url 'edit_product' product.id %}" class="btn-edit-listing">Editar</a>
+                                <button class="btn-sold" onclick="markAsSold({{ product.id }})">Marcar como Vendido</button>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="empty-state">
+                <p>No tienes productos en venta actualmente.</p>
+                <a href="{% url 'register_product' %}" class="btn-primary">Agregar Producto</a>
+            </div>
+        {% endif %}
+    </div>
+
+    <!-- Sold Items Section -->
+    <div class="sales-section">
+        <h2>Productos Vendidos ({{ sold_count }})</h2>
+        {% if sold_items %}
+            <div class="products-grid">
+                {% for product in sold_items %}
+                    <div class="product-card sold">
+                        {% if product.photo1 %}
+                            <img src="{{ product.photo1.url }}" alt="{{ product.product_name }}" class="product-image">
+                        {% else %}
+                            <div class="no-image">Sin Imagen</div>
+                        {% endif %}
+                        <div class="product-info">
+                            <h3>{{ product.product_name }}</h3>
+                            <p class="product-price">${{ product.price }}</p>
+                            <p class="product-description">{{ product.description|truncatewords:15 }}</p>
+                            <div class="sale-info">
+                                <p class="sold-date">Vendido: {{ product.date_sold|date:"M d, Y" }}</p>
+                                {% if product.sold_to %}
+                                    <p class="buyer">Comprador: {{ product.sold_to.first_name }} {{ product.sold_to.last_name }}</p>
+                                    <p class="buyer-contact">{{ product.sold_to.email }} | {{ product.sold_to.phone_number }}</p>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="sold-badge">VENDIDO</div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="empty-state">
+                <p>Aún no has vendido ningún producto.</p>
+            </div>
+        {% endif %}
+    </div>
+</div>
+
+<script>
+function markAsSold(productId) {
+    if (confirm('¿Marcar este producto como vendido?')) {
+        fetch(`/mark_as_sold/${productId}/`, {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value,
+                'Content-Type': 'application/json',
+            },
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert('¡Producto marcado como vendido!');
+                location.reload();
+            } else {
+                alert('Error: ' + data.message);
+            }
+        })
+        .catch(error => {
+            alert('Error al marcar producto como vendido.');
+        });
+    }
+}
+</script>
+
+{% csrf_token %}
+{% endblock %}

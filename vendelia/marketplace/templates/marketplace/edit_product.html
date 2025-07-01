@@ -1,0 +1,108 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+Vendelia | Editar: {{ product.product_name }}
+{% endblock %}
+
+{% block content %}
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <div class="product-edit-container">
+    <!-- COLUMN 1: Images -->
+        <div class="product-edit-images-column">
+            <!-- COLUMN 1: Images -->
+            <div class="product-edit-images-column">
+                <!-- Photo 1 -->
+                <div class="product-edit-image-row">
+                    {% if product.photo1 %}
+                    <img src="{{ product.photo1.url }}" alt="Imagen 1" class="product-edit-image-preview">
+                    {% else %}
+                    <div class="product-edit-no-image">Sin Imagen</div>
+                    {% endif %}
+                    <div class="product-edit-image-actions">
+                        <label>
+                            <input type="checkbox" name="clear_photo1" {% if not product.photo1 %}disabled{% endif %}> Eliminar Imagen 1
+                        </label>
+                        <label class="product-edit-replace-label">
+                            Reemplazar:
+                            <input type="file" name="photo1">
+                        </label>
+                    </div>
+                </div>
+            
+                <!-- Photo 2 -->
+                <div class="product-edit-image-row">
+                    {% if product.photo2 %}
+                    <img src="{{ product.photo2.url }}" alt="Imagen 2" class="product-edit-image-preview">
+                    {% else %}
+                    <div class="product-edit-no-image">Sin Imagen</div>
+                    {% endif %}
+                    <div class="product-edit-image-actions">
+                        <label>
+                            <input type="checkbox" name="clear_photo2" {% if not product.photo2 %}disabled{% endif %}> Eliminar Imagen 2
+                        </label>
+                        <label class="product-edit-replace-label">
+                            Reemplazar:
+                            <input type="file" name="photo2">
+                        </label>
+                    </div>
+                </div>
+            
+                <!-- Photo 3 -->
+                <div class="product-edit-image-row">
+                    {% if product.photo3 %}
+                    <img src="{{ product.photo3.url }}" alt="Imagen 3" class="product-edit-image-preview">
+                    {% else %}
+                    <div class="product-edit-no-image">Sin Imagen</div>
+                    {% endif %}
+                    <div class="product-edit-image-actions">
+                        <label>
+                            <input type="checkbox" name="clear_photo3" {% if not product.photo3 %}disabled{% endif %}> Eliminar Imagen 3
+                        </label>
+                        <label class="product-edit-replace-label">
+                            Reemplazar:
+                            <input type="file" name="photo3">
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    <!-- COLUMN 2: Form -->
+        <div class="product-edit-info-column">
+
+                <h3>Nombre</h3>
+                <div class="product-edit-form-group">
+                    {{ form.product_name }}
+                </div>
+
+                <div class="product-edit-form-group product-edit-price-row">
+                    <h3>Precio</h3>
+                    <div class="product-edit-price-input-group">
+                        <span class="product-edit-price-symbol">$</span>
+                        {{ form.price }}
+                    </div>
+                </div>
+                
+
+                <div class="product-edit-form-group">
+                    <h3>Categoría</h3>
+                    {{ form.category }}
+                </div>
+
+                <hr class="product-edit-separator" />
+
+                <h3>Descripción</h3>
+                <div class="product-edit-form-group">
+                    {{ form.description }}
+                </div>
+
+                <hr class="product-edit-separator" />
+
+                <button type="submit" class="product-edit-submit-btn">Guardar Cambios</button>
+            </div>
+        </div>
+</form>
+{% endblock %}
