@@ -2,6 +2,7 @@
     display: flex;
     justify-content: center;
     background-color: hsl(139, 62%, 85%);
+    margin-top: auto;
 }
 
 .footer-container {

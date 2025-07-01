@@ -1,0 +1,93 @@
+/* === LOGIN WRAPPER === */
+.login-wrapper {
+    max-width: 500px;
+    margin: 50px auto;
+    padding: 0 10px;
+    text-align: center;
+}
+
+/* === LOGIN TITLE AND SUBTITLE === */
+.login-title {
+    font-size: 1.5rem;
+    color: #222;
+    font-weight: 700;
+    margin-bottom: 8px;
+}
+
+.login-subtitle {
+    font-size: 1rem;
+    color: #6d6d6d;
+    margin-bottom: 28px;
+}
+
+/* === LOGIN FORM === */
+.login-form {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    margin-bottom: 24px;
+    align-items: stretch;
+}
+
+.form-field {
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.form-field label {
+    font-size: 1rem;
+    font-weight: 500;
+    color: #252525;
+}
+
+.form-field input {
+    background: #f7f7f4;
+    border: none;
+    border-radius: 8px;
+    padding: 12px 14px;
+    font-size: 1rem;
+    box-sizing: border-box;
+    outline: none;
+    transition: border 0.2s;
+}
+
+.form-field input:focus {
+    border: 1.5px solid #1eae65;
+}
+
+/* === LOGIN BUTTON === */
+.login-btn {
+    background: #13c35d;
+    color: #fff;
+    border: none;
+    border-radius: 999px;
+    padding: 14px 0;
+    font-size: 1.1rem;
+    font-weight: 700;
+    cursor: pointer;
+    margin-top: 12px;
+    transition: background 0.2s;
+}
+
+.login-btn:hover {
+    background: #119c4b;
+}
+
+/* === REGISTER LINK BELOW LOGIN === */
+.register-link {
+    font-size: 1rem;
+    color: #13c35d;
+    margin-top: 16px;
+}
+
+.register-link a {
+    color: #13c35d;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+.register-link a:hover {
+    text-decoration: underline;
+}

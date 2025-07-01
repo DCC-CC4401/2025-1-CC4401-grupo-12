@@ -1,0 +1,47 @@
+/* === REGISTER WRAPPER === */
+.register-wrapper {
+    max-width: 500px;
+    margin: 50px auto;
+    padding: 0 10px;
+    text-align: center;
+}
+
+/* === REGISTER TITLE AND SUBTITLE === */
+.register-title {
+    font-size: 1.5rem;
+    color: #222;
+    font-weight: 700;
+    margin-bottom: 8px;
+}
+
+.register-subtitle {
+    font-size: 1rem;
+    color: #6d6d6d;
+    margin-bottom: 28px;
+}
+
+/* === REGISTER FORM === */
+.register-form {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    margin-bottom: 24px;
+    align-items: stretch;
+}
+
+.register-form-submit-btn {
+    background: #13c35d;
+    color: #fff;
+    border: none;
+    border-radius: 999px;
+    padding: 14px 0;
+    font-size: 1.1rem;
+    font-weight: 700;
+    cursor: pointer;
+    margin-top: 8px;
+    transition: background 0.2s;
+}
+
+.register-form-submit-btn:hover {
+    background: #119c4b;
+}
