@@ -1,0 +1,122 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+    Vendelia | Editar {{ product.product_name }}
+{% endblock %}
+
+{% block content %}
+<div class="product-detail-container">
+    <div class="product-detail-gallery">
+
+        {% if product.photo1 %}
+        <div class="product-detail-image-wrapper">
+            <a href="{{ product.photo1.url }}" class="product-detail-image-link">
+                <img src="{{ product.photo1.url }}" alt="{{ product.product_name }}">
+                <div class="image-actions">
+                    <input type="checkbox" name="photo1-clear" id="photo1-clear">
+                    <label for="photo1-clear">Eliminar</label>
+                </div>
+            </a>
+        </div>
+        {% endif %}
+        
+        {% if product.photo2 %}
+        <div class="product-detail-image-wrapper">
+            <a href="{{ product.photo2.url }}" class="product-detail-image-link">
+                <img src="{{ product.photo2.url }}" alt="{{ product.product_name }}">
+                <div class="image-actions">
+                    <input type="checkbox" name="photo2-clear" id="photo2-clear">
+                    <label for="photo2-clear">Eliminar</label>
+                </div>
+            </a>
+        </div>
+        {% endif %}
+        
+        {% if product.photo3 %}
+        <div class="product-detail-image-wrapper">
+            <a href="{{ product.photo3.url }}" class="product-detail-image-link">
+                <img src="{{ product.photo3.url }}" alt="{{ product.product_name }}">
+                <div class="image-actions">
+                    <input type="checkbox" name="photo3-clear" id="photo3-clear">
+                    <label for="photo3-clear">Eliminar</label>
+                </div>
+            </a>
+        </div>
+        {% endif %}
+    </div>
+
+    <div class="product-detail-info-box">
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+
+            <h1 class="product-detail-title">
+                {{ form.product_name }}
+            </h1>
+
+            <div class="product-detail-price-buy-container">
+                <p class="product-detail-price">
+                    ${{ form.price }}
+                </p>
+                <button type="submit" class="product-detail-buy-button">Guardar Cambios</button>
+            </div>
+
+            <hr class="product-detail-info-box-separator" />
+
+            <h2 class="product-detail-section-title">Descripción</h2>
+            <p class="product-detail-description">
+                {{ form.description }}
+            </p>
+
+            <div class="image-upload-section">
+                <h3>Nuevas imágenes</h3>
+                <div class="image-upload-fields">
+                    <div class="upload-field">
+                        <label for="{{ form.photo1.id_for_label }}">Imagen 1:</label>
+                        {{ form.photo1 }}
+                    </div>
+                    <div class="upload-field">
+                        <label for="{{ form.photo2.id_for_label }}">Imagen 2 (opcional):</label>
+                        {{ form.photo2 }}
+                    </div>
+                    <div class="upload-field">
+                        <label for="{{ form.photo3.id_for_label }}">Imagen 3 (opcional):</label>
+                        {{ form.photo3 }}
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div id="imageModal" class="modal">
+    <span class="close">&times;</span>
+    <img class="product-detail-modal-content" id="modalImage">
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const modal = document.getElementById("imageModal");
+        const modalImg = document.getElementById("modalImage");
+        const closeBtn = document.querySelector(".close");
+
+        document.querySelectorAll(".product-detail-image-link").forEach(link => {
+            link.addEventListener("click", function (e) {
+                e.preventDefault();
+                modal.style.display = "block";
+                modalImg.src = this.href;
+            });
+        });
+
+        closeBtn.addEventListener("click", function () {
+            modal.style.display = "none";
+        });
+
+        modal.addEventListener("click", function (e) {
+            if (e.target === modal) {
+                modal.style.display = "none";
+            }
+        });
+    });
+</script>
+{% endblock %}
