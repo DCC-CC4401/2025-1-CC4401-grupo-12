@@ -21,3 +21,11 @@ URL_PATH_LOGIN = 'marketplace/login_user.html'
 URL_NAME_REGISTER_PRODUCT = 'register-product'
 URL_PATTERN_REGISTER_PRODUCT = 'register-product/'
 URL_PATH_REGISTER_PRODUCT = 'marketplace/register_product.html'
+
+URL_PATTERN_MY_SALES = "my-sales/"
+URL_NAME_MY_SALES = "my_sales"
+URL_PATH_MY_SALES = "marketplace/my_sales.html"
+
+URL_PATTERN_MY_PURCHASES = "my-purchases/"
+URL_NAME_MY_PURCHASES = "my_purchases"
+URL_PATH_MY_PURCHASES = "marketplace/my_purchases.html"

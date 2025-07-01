@@ -42,6 +42,16 @@ class Product(models.Model):
     photos = models.ImageField(upload_to='product_images/', null=True, blank=True)
     #category = models.ForeignKey(Categoria, default="general", on_delete=models.CASCADE)
     owner = models.ForeignKey(User, blank=True, null=True, on_delete=models.CASCADE)
+
+    #Sales tracking
+    is_sold = models.BooleanField(default=False)
+    sold_to = models.ForeignKey(User, blank=True, null=True, on_delete=models.SET_NULL, related_name='purchased_products')
+    date_created = models.DateTimeField(auto_now_add=True)
+    date_sold = models.DateTimeField(blank=True, null=True)
+    
     
     def __str__(self):
         return f"{self.product_name} - $ {self.price}"
+
+    class Meta:
+        ordering = ['-date_created']
