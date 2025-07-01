@@ -387,9 +387,11 @@ def edit_product(request, product_id):
         return HttpResponseForbidden('You don´t have permission to edit this product')
 
     if request.method == 'POST':
-        print(request.POST)
+        # print(request.POST)
         form = ProductEditForm(request.POST, request.FILES, instance=product)
         if form.is_valid():
+            product = form.save(commit=False)
+
             # Handle clear checkboxes for each image
             if 'clear_photo1' in request.POST:
                 if product.photo1:
