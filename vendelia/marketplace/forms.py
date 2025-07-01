@@ -157,7 +157,10 @@ class EmailAuthenticationForm(forms.Form):
     
 
 class ProductSearchForm(forms.Form):
-    query = forms.CharField(max_length=120, required=True)
+    query = forms.CharField(
+        max_length=120, 
+        required=True,
+        widget=forms.TextInput(attrs={'placeholder': "Buscar en Vendelia"}))
 
     def clean_query(self):
         query = self.cleaned_data.get('query')

@@ -33,16 +33,16 @@ class Categoria(models.Model):
 
     
 # This model represents all the Products in Vendalia
-# Fields:    name:           name of the product in the application (unique)
-#            description:    text with a description of the product. Max length of 255 characters.
-#            price:          price of the product in integers
-#            photo1:         picture 1 of the product
-#            photo2:         picture 2 of the product
-#            photo3:         picture 3 of the product
-#            owner:          the user that owns the published product
-#            categories:     name of the categories that classifiy the new product (work in progress)
-#            is_sold:        status of the product, indicates if it's already sold. False by default
-
+# Fields:   name:           name of the product in the application (unique)
+#           description:    text with a description of the product. Max length of 255 characters.
+#           price:          price of the product in integers
+#           photo1:         picture 1 of the product
+#           photo2:         picture 2 of the product
+#           photo3:         picture 3 of the product
+#           owner:          the user that owns the published product
+#           categories:     name of the categories that classifiy the new product (work in progress)
+#           is_sold:        status of the product, indicates if it's already sold. False by default
+#           creation_date:  datetime of listing creation
 class Product(models.Model):
     product_name = models.CharField(max_length=255)
     description = models.TextField(max_length=255, blank=True)
@@ -54,6 +54,8 @@ class Product(models.Model):
     owner = models.ForeignKey(User, blank=True, null=True, on_delete=models.CASCADE)
     
     is_sold = models.BooleanField(default=False)
+    creation_date = models.DateTimeField(auto_now_add=True)
+    
     sold_to = models.ForeignKey(User, blank=True, null=True, on_delete=models.SET_NULL, related_name='purchased_products')
     date_created = models.DateTimeField(auto_now_add=True)
     date_sold = models.DateTimeField(blank=True, null=True)

@@ -1,79 +1,60 @@
 {% extends 'base.html' %}
 
 {% block title %}
-Explora productos
+Vendelia | Home
 {% endblock %}
 
 {% block content %}
 
 <main class="main-content">
-    <h1 class="main-title">Explora productos</h1>
 
-    <!-- Filtros de categoría -->
-    <div class="category-list">
-        <span class="category-item active">Todos</span>
-        <span class="category-item">Electrónica</span>
-        <span class="category-item">Hogar</span>
-        <span class="category-item">Ropa</span>
-        <span class="category-item">Deporte</span>
-        <!-- Selector para más categorías -->
-        <select class="category-select" name="otra_categoria">
-            <option disabled selected>Otro</option>
-            <option value="libros">Libros</option>
-            <option value="juguetes">Juguetes</option>
-            <option value="instrumentos">Instrumentos musicales</option>
-            <option value="herramientas">Herramientas</option>
-            <option value="antiguedades">Antigüedades</option>
+    <!-- Filtering should go in the search template -->
+    <!-- 🔍 Filtro por ciudad -->
+    <!-- <form method="get">
+        <label for="ciudad">Filtrar por ciudad:</label>
+        <select name="ciudad" id="ciudad" onchange="this.form.submit()">
+            <option value="">-- Todas --</option>
+            {% for ciudad in ciudades %}
+                <option value="{{ ciudad }}" {% if ciudad == ciudad_seleccionada %}selected{% endif %}>
+                    {{ ciudad }}
+                </option>
+            {% endfor %}
         </select>
-    </div>
+    </form> -->
 
-    <!-- Search bar -->
-    <div class="search-bar">
-        <form method="get" class="product-search-form" action="{% url 'search_product' %}">
-            <!-- {% csrf_token %} -->
-            <div class="search-input-container">
-                {{ product_search_form.query }}
-                <button type="submit" class="search-btn">
-                    <!-- Inline Lens SVG icon here -->
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-4.35-4.35M17 10a7 7 0 11-14 0 7 7 0 0114 0z" />
-                    </svg>
-                </button>
-            </div>
-        </form>
-    </div>
+    <!-- Productos recientes -->
 
-      <!-- 🔍 Filtro por ciudad -->
-      <form method="get">
-          <label for="ciudad">Filtrar por ciudad:</label>
-          <select name="ciudad" id="ciudad" onchange="this.form.submit()">
-              <option value="">-- Todas --</option>
-              {% for ciudad in ciudades %}
-                  <option value="{{ ciudad }}" {% if ciudad == ciudad_seleccionada %}selected{% endif %}>
-                      {{ ciudad }}
-                  </option>
-              {% endfor %}
-          </select>
-      </form>
-
-<!-- 🛍️ Lista dinámica de productos -->
-<section class="product-section">
-    <h2 class="section-title">Productos recientes</h2>
-    <div class="product-list">
-        {% for producto in productos %}
-            <div class="product-card">
-                <div class="product-icon">🛒</div>
-                <h3 class="product-title">{{ producto.product_name }}</h3>
-                <p class="product-description">{{ producto.description }}</p>
-                <p class="product-price">${{ producto.price }}</p>
-                <p class="product-city">Ciudad: {{ producto.owner.city }}</p>
-                <a href="{% url 'product_detail' product_id=producto.id %}" class="product-button">Ver</a>
-            </div>
-        {% empty %}
-            <p>No hay productos disponibles en esta ciudad.</p>
-        {% endfor %}
+    <h1 class="recent-products-title">Lo más reciente</h2>
+    <div class="recent-products">
+        {% if products %}
+        <ul class="product-list">
+            {% for product in products %}
+    
+            <li class="product-item">
+                <a href="{% url 'product_detail' product.id %}">
+                    {% if product.photo1 %}
+                    <img src="{{ product.photo1.url }}" alt="{{ product.product_name }}">
+                    {% endif %}
+    
+                    <div class="image-card-separator"></div>
+    
+                    <div class="product-info">
+                        <div class="info-top-row">
+                            <span class="product-price">${{ product.price }}</span>
+                            <span class="product-city">{{ product.owner.city }}</span>
+                        </div>
+                        <span class="product-title">{{ product.product_name }}</span>
+                    </div>
+                </a>
+            </li>
+    
+            {% endfor %}
+        </ul>
+    
+        {% else %}
+            <p>Aún no hay productos, qué esperas para publicar un nuevo aviso?</p>
+        {% endif %}
     </div>
-</section>
 
 </main>
 {% endblock %}

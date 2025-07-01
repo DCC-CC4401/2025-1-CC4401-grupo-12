@@ -1,4 +1,3 @@
-from .models import User
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpRequest
 from django.contrib.auth import login
@@ -13,30 +12,19 @@ from django.http import HttpRequest, JsonResponse
 from django.utils import timezone
 
 
-from .models import Product
+from .models import Product, Compra, User
 from .forms import UserRegisterForm, ProductRegisterForm, EmailAuthenticationForm, ProductSearchForm
-from .util import get_pagination_pages
+from .util import get_pagination_pages, get_all_categories
 from django.http import HttpResponseForbidden
 from .decorators import bloquear_baneados
 
-from .models import Product
-from .models import Compra
-from .forms import UserRegisterForm, ProductRegisterForm, EmailAuthenticationForm
 
 # Constant imports
 from .constants import GET, POST
-from .constants import URL_PATH_INDEX, URL_NAME_INDEX
 from .constants import URL_PATH_REGISTER_USER, URL_PATH_LOGIN, URL_PATH_SEARCH_PRODUCT
-from .constants import PRODUCT_SEARCH_RESULTS_PER_PAGE
+from .constants import PRODUCT_SEARCH_RESULTS_PER_PAGE, PRODUCT_LIST_IN_HOME_PAGE
 
 # Marketplace app views
-
-# Default index view
-def index(request: HttpRequest):
-    return render(
-        request=request, 
-        template_name=URL_PATH_INDEX
-        )
 
 # Register user view
 def register_user(request: HttpRequest):
@@ -47,7 +35,11 @@ def register_user(request: HttpRequest):
         return render(
             request=request, 
             template_name=URL_PATH_REGISTER_USER,
-            context={'register_user_form': register_user_form}
+            context={
+                'register_user_form': register_user_form,
+                'product_search_form': ProductSearchForm(),
+                'categories': get_all_categories(),
+                }
         )
 
     # POST Request: Process the user register form
@@ -65,12 +57,15 @@ def register_user(request: HttpRequest):
             return render(
                 request=request, 
                 template_name=URL_PATH_REGISTER_USER,
-                context={'register_user_form': register_user_form}
+                context={
+                    'register_user_form': register_user_form,
+                    'product_search_form': ProductSearchForm(),
+                    'categories': get_all_categories(),
+                    }
             )
 
 #login required to do this
 def register_product(request):
-
     if request.user.is_authenticated and request.user.is_banned:
         return HttpResponseForbidden("Tu cuenta ha sido baneada. No puedes registrar productos.")
 
@@ -99,30 +94,50 @@ def register_product(request):
     else:
         form = ProductRegisterForm()
 
-    return render(request, 'marketplace/register_product.html', {'form': form}) 
+    return render(
+        request=request, 
+        template_name='marketplace/register_product.html', 
+        context={
+            'form': form,
+            'product_search_form': ProductSearchForm(),
+            'categories': get_all_categories(),
+            }
+        ) 
 
 
 def product_detail(request, product_id):
     product = get_object_or_404(Product, id=product_id)
-    return render(request, 'marketplace/product_detail.html', {'product': product})
+    
+    return render(
+        request=request, 
+        template_name='marketplace/product_detail.html', 
+        context={
+            'product': product,
+            'product_search_form': ProductSearchForm(),
+            'categories': get_all_categories(),
+            }
+        )
 
  
 def home(request):
-    ciudad = request.GET.get('ciudad', '')
-    
-    if ciudad:
-        productos = Product.objects.filter(owner__city__iexact=ciudad)
-    else:
-        productos = Product.objects.all()
-    
-    ciudades_disponibles = User.objects.values_list('city', flat=True).distinct()
-    
-    return render(request, 'marketplace/home.html', {
-        'product_search_form': ProductSearchForm(),
-        'productos': productos,
-        'ciudades': ciudades_disponibles,
-        'ciudad_seleccionada': ciudad
-    })
+    if request.method == GET:
+        # Home view should not have filtering capacities, these are supposed to go in the search/explore page
+        # ciudad = request.GET.get('ciudad', '')
+        # if ciudad:
+        #     productos = Product.objects.filter(owner__city__iexact=ciudad)
+        # else:
+        #     productos = Product.objects.all()
+        
+        # ciudades_disponibles = User.objects.values_list('city', flat=True).distinct()
+
+        search_bar = ProductSearchForm()
+        products = Product.objects.order_by('-creation_date')[:PRODUCT_LIST_IN_HOME_PAGE]
+        
+        return render(request, 'marketplace/home.html', {
+            'product_search_form': search_bar,
+            'products': products,
+            'categories': get_all_categories(),
+        })
   
   
 def login_user(request):
@@ -133,7 +148,11 @@ def login_user(request):
         return render(
             request=request,
             template_name=URL_PATH_LOGIN,
-            context={'login_user_form': login_user_form}
+            context={
+                'login_user_form': login_user_form,
+                'product_search_form': ProductSearchForm(),
+                'categories': get_all_categories(),
+                }
         )
     
     # POST Request: Process the user login form
@@ -147,7 +166,15 @@ def login_user(request):
             return redirect('/')
         # If not, return to the login user form
         else:
-            return render(request, URL_PATH_LOGIN, {'login_user_form': login_user_form})
+            return render(
+                request=request, 
+                template_name=URL_PATH_LOGIN, 
+                context={
+                    'login_user_form': login_user_form,
+                    'product_search_form': ProductSearchForm(),
+                    'categories': get_all_categories(), 
+                    }
+                )
   
 
 
@@ -234,35 +261,40 @@ def search_product(request: HttpRequest):
     if request.method == GET:
         products = Product.objects.none()
         query = request.GET.get('query', '')
+        mode = request.GET.get('mode', 'all')
 
         if query:
-            # Exact match/contained query in product name and description
-            results_1 = Product.objects.filter(product_name__iexact=query)
-            results_2 = Product.objects.filter(product_name__icontains=query)
-            results_3 = Product.objects.filter(description__iexact=query)
-            results_4 = Product.objects.filter(description__icontains=query)
+            if mode == 'all':
+                # Exact match/contained query in product name and description
+                results_1 = Product.objects.filter(product_name__iexact=query)
+                results_2 = Product.objects.filter(product_name__icontains=query)
+                results_3 = Product.objects.filter(description__iexact=query)
+                results_4 = Product.objects.filter(description__icontains=query)
 
-            # Add results that contain any word of the query in the name or description
-            query_words = query.strip().split(' ')
-            results_5 = Product.objects.none()
-            for word in query_words:
-                results_5 |= Product.objects.filter(product_name__icontains=word)
+                # Add results that contain any word of the query in the name or description
+                query_words = query.strip().split(' ')
+                results_5 = Product.objects.none()
+                for word in query_words:
+                    results_5 |= Product.objects.filter(product_name__icontains=word)
 
-            # Add results that contain any word of the query as its category
-            results_6 = Product.objects.none()
-            for word in query_words:
-                results_6 = Product.objects.filter(category__name__icontains=word)
+                # Add results that contain any word of the query as its category
+                results_6 = Product.objects.none()
+                for word in query_words:
+                    results_6 = Product.objects.filter(category__name__icontains=word)
 
-            # Combine unique results
-            seen_ids = set()
-            combined = []
-            for query_set in [results_1, results_2, results_3, results_4, results_5, results_6]:
-                for product in query_set:
-                    if product.id not in seen_ids:
-                        combined.append(product)
-                        seen_ids.add(product.id)
+                # Combine unique results
+                seen_ids = set()
+                combined = []
+                for query_set in [results_1, results_2, results_3, results_4, results_5, results_6]:
+                    for product in query_set:
+                        if product.id not in seen_ids:
+                            combined.append(product)
+                            seen_ids.add(product.id)
 
-            products = combined
+                products = combined
+
+            elif mode == 'category':
+                products = Product.objects.filter(category__name__icontains=query)
 
         # Paginate results
         paginator = Paginator(products, PRODUCT_SEARCH_RESULTS_PER_PAGE)
@@ -287,6 +319,9 @@ def search_product(request: HttpRequest):
                 'query': query,
                 'products': products_page,
                 'page_numbers': page_numbers,
+
+                'product_search_form': ProductSearchForm(),
+                'categories': get_all_categories(),
             }
         )
 
@@ -297,7 +332,15 @@ def mis_compras(request):
             return HttpResponseForbidden("Tu cuenta ha sido baneada. No puedes ver tus compras.")
         
         compras = Compra.objects.filter(comprador=request.user).select_related('producto')
-        return render(request, 'marketplace/mis_compras.html', {'compras': compras})
+        return render(
+            request=request, 
+            template_name='marketplace/mis_compras.html', 
+            context={
+                'compras': compras,
+                'product_search_form': ProductSearchForm(),
+                'categories': get_all_categories(), 
+                }
+            )
     else:
         return redirect('login')  # o la URL que corresponda
 

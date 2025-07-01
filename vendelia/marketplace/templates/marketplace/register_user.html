@@ -1,19 +1,28 @@
 {% extends 'base.html' %}
 
 {% block title %}
-    Regístrate en Vendelia
+    Vendelia | Registro
 {% endblock %}
 
 {% block content %}
 <div class="register-wrapper">
-    <div class="info-box">
-        <h2>Únete a Vendelia</h2>
-        <p>Crea tu cuenta para comprar y vender de forma sencilla.</p>
-    </div>
+    <h2 class="register-title">Únete a Vendelia</h2>
+    <p class="register-subtitle">Crea tu cuenta para comprar y vender rápido y sencillo.</p>
+
     <form method="post" class="register-form">
         {% csrf_token %}
-        {{ register_user_form.as_p }}
-        <button type="submit" class="submit-btn">Crear cuenta</button>
+        
+        {% for field in register_user_form %}
+        <div class="form-field">
+            {{ field.label_tag }}
+            {{ field }}
+            {% if field.errors %}
+            <div class="form-error">{{ field.errors }}</div>
+            {% endif %}
+        </div>
+        {% endfor %}
+        
+        <button type="submit" class="register-form-submit-btn">Crear cuenta</button>
     </form>
 </div>
 {% endblock %}

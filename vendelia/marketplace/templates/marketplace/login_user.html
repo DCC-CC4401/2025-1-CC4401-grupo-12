@@ -1,14 +1,15 @@
 {% extends 'base.html' %}
 
 {% block title %}
-    Iniciar sesión - Vendelia
+    Vendelia | Ingreso
 {% endblock %}
 
 {% block content %}
 <div class="login-wrapper">
-    <h1 class="site-title">VENDELIA</h1>
+    <!-- <h1 class="site-title">VENDELIA</h1> -->
+     
     <h2 class="login-title">Iniciar sesión</h2>
-    <p class="login-subtitle">Accede a tu cuenta para comprar o vender en Mercado Directo.</p>
+    <p class="login-subtitle">Accede a tu cuenta para comprar o vender en Vendelia.</p>
 
     <form method="post" class="login-form">
         {% csrf_token %}
