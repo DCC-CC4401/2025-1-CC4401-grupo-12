@@ -56,7 +56,7 @@ urlpatterns = [
 
     path('product/<int:product_id>/', views.product_detail, name='product_detail'),
     path('', views.home, name='home'),
-    path('logout/', LogoutView.as_view(next_page=URL_PATTERN_LOGIN), name='logout'),
+    path('logout/', LogoutView.as_view(next_page='home'), name='logout'),
     path('buy_product/<int:product_id>/', views.buy_product, name='buy_product'),
     path('mis-compras/', views.mis_compras, name='mis_compras'),
 
