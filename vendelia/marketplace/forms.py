@@ -105,21 +105,41 @@ class ProductRegisterForm(forms.ModelForm):
             raise forms.ValidationError("La descripción no puede sólo contener espacios en blanco.")
         return description
     
-    # Photo validator
+    # Photos validator
     # The product must have at least on photo to be published
-    # The photo can't have a size higher than 5MB 
     def clean_photos(self):
-        photo = self.cleaned_data.get('photos')
-        max_size = 5*1024*1024 
-        if not photo:
+        cleaned_data = super().clean()
+        if not (cleaned_data.get('photo1') or cleaned_data.get('photo2')) or (cleaned_data.get('photo3')):
             raise forms.ValidationError("Debe subir al menos una imagen para publicar su producto.")
-        if photo.size > max_size:
-            raise forms.ValidationError("La imagen que subió es demasiado grande. \n"
-                                        "Tamaño máximo permitido: 5 MB. \n"
-                                        f"Tamaño actual: {round(photo.size/1024/1024, 2)} MB")
-        
-        return photo
+        return cleaned_data
     
+    # Photo1 validator
+    # Photo1 can't exceed the limit of 5MB
+    def clean_photo1(self):
+        return self.validate_photo_size('photo1')
+    
+    # Photo2 validator
+    # Photo2 can't exceed the limit of 5MB
+    def clean_photo2(self):
+        return self.validate_photo_size('photo2')
+    
+    # Photo3 validator
+    # Photo3 can't exceed the limit of 5MB
+    def clean_photo3(self):
+        return self.validate_photo_size('photo3')
+    
+    # Auxiliar function
+    # It validates that the photos don't exceed the limit of 5MB
+    def validate_photo_size(self, field_name):
+        photo = self.cleaned_data.get(field_name)
+        MAX_SIZE = 5*1024*1024 #5MB
+        if photo:
+            if photo.size > MAX_SIZE:
+                raise forms.ValidationError(f"La imagen {field_name[-1]} es demasiado grande."
+                                            "Tamaño máximo: 5MB"
+                                            f"Tamaño actual: {round(photo.size/1024/1024, 2)}MB")
+        return photo
+       
     # Category validator
     # The product must have a valid category selected
     def clean_category(self):
