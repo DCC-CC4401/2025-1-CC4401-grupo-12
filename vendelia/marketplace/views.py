@@ -64,20 +64,17 @@ def register_user(request: HttpRequest):
                     }
             )
 
-#login required to do this
+# View to Register a new product in the marketplace
+@login_required(login_url='/login/')
 def register_product(request):
-    if request.user.is_authenticated and request.user.is_banned:
-        return HttpResponseForbidden("Tu cuenta ha sido baneada. No puedes registrar productos.")
+    if request.user.is_banned:
+        return HttpResponseForbidden("Tu cuenta ha sido suspendida. No puedes publicar nuevos avisos.")
 
     if request.method == 'POST':
         form = ProductRegisterForm(request.POST, request.FILES)
         if form.is_valid():
             new_product = form.save(commit=False)
-            
-            # Assign owner if authenticated
-            if request.user.is_authenticated:
-                new_product.owner = request.user
-                # new_product.save()
+            new_product.owner = request.user
 
             # Add dummy image if no photos were uploaded
             if not new_product.photo1 and not new_product.photo2 and not new_product.photo3:
@@ -89,7 +86,7 @@ def register_product(request):
                     raise Exception("No product dummy image not found in static files!")
                 
             new_product.save()
-            return redirect('home')
+            return redirect('my_sales')
         
     else:
         form = ProductRegisterForm()
@@ -104,7 +101,24 @@ def register_product(request):
             }
         ) 
 
+# Deprecated, see above
+# View to register a product into the market
+# @login_required(login_url='/login/')
+# def register_product(request):
+#     if request.method == 'POST':
+#         form = ProductRegisterForm(request.POST, request.FILES)
+#         if form.is_valid():
+#             new_product = form.save(commit=False)
+#             new_product.owner = request.user
+#             new_product.save()  # Save only after ypou press the button
+#             # Redirect to my-sales to prevent duplicate submissions
+#             return redirect('my_sales')
+#     else:
+#         form = ProductRegisterForm()
 
+#     return render(request, 'marketplace/register_product.html', {'form': form})
+
+# View to see details about the product
 def product_detail(request, product_id):
     product = get_object_or_404(Product, id=product_id)
     
@@ -118,7 +132,7 @@ def product_detail(request, product_id):
             }
         )
 
- 
+# Home view, landing page + latest products
 def home(request):
     if request.method == GET:
         # Home view should not have filtering capacities, these are supposed to go in the search/explore page
@@ -131,7 +145,7 @@ def home(request):
         # ciudades_disponibles = User.objects.values_list('city', flat=True).distinct()
 
         search_bar = ProductSearchForm()
-        products = Product.objects.order_by('-creation_date')[:PRODUCT_LIST_IN_HOME_PAGE]
+        products = Product.objects.filter(is_sold=False).order_by('-creation_date')[:PRODUCT_LIST_IN_HOME_PAGE]
         
         return render(request, 'marketplace/home.html', {
             'product_search_form': search_bar,
@@ -139,7 +153,8 @@ def home(request):
             'categories': get_all_categories(),
         })
   
-  
+
+# View that handles user login
 def login_user(request):
     # GET Request: Shows the login form to the user
     if request.method == GET:
@@ -177,7 +192,7 @@ def login_user(request):
                 )
   
 
-
+# View to see all the current sales for the user
 @login_required(login_url='/login/')
 def my_sales(request):
     user_products = Product.objects.filter(owner=request.user)
@@ -202,21 +217,7 @@ def my_sales(request):
         context=context
         )
 
-@login_required(login_url='/login/')
-def register_product(request):
-    if request.method == 'POST':
-        form = ProductRegisterForm(request.POST, request.FILES)
-        if form.is_valid():
-            new_product = form.save(commit=False)  
-            new_product.owner = request.user  
-            new_product.save()  # Save only after ypou press the button
-            # Redirect to my-sales to prevent duplicate submissions
-            return redirect('my_sales')
-    else:
-        form = ProductRegisterForm()
-
-    return render(request, 'marketplace/register_product.html', {'form': form})
-
+# View that shows all the products that the user has bought
 @login_required(login_url='/login/')
 def my_purchases(request):
     # Obtener todos los productos que el usuario ha comprado
@@ -225,15 +226,17 @@ def my_purchases(request):
     context = {
         'purchased_items': purchased_items,
         'purchased_count': purchased_items.count(),
+        
+        'product_search_form': ProductSearchForm(),
+        'categories': get_all_categories(),
     }
     
     return render(request, 'marketplace/my_purchases.html', context)
 
+
+# View used to buy a product
 @login_required(login_url='/login/')
 def buy_product(request, product_id):
-    """
-    Vista para comprar un producto
-    """
     if request.method == 'POST':
         try:
             product = get_object_or_404(Product, id=product_id, is_sold=False)
@@ -264,7 +267,7 @@ def buy_product(request, product_id):
     return JsonResponse({'success': False, 'message': 'Método de solicitud inválido.'})
 
   
-# Product search 
+# View for product search, provides a query based on several parameters
 def search_product(request: HttpRequest):
     if request.method == GET:
         products = Product.objects.none()
@@ -274,21 +277,21 @@ def search_product(request: HttpRequest):
         if query:
             if mode == 'all':
                 # Exact match/contained query in product name and description
-                results_1 = Product.objects.filter(product_name__iexact=query)
-                results_2 = Product.objects.filter(product_name__icontains=query)
-                results_3 = Product.objects.filter(description__iexact=query)
-                results_4 = Product.objects.filter(description__icontains=query)
+                results_1 = Product.objects.filter(product_name__iexact=query, is_sold=False)
+                results_2 = Product.objects.filter(product_name__icontains=query, is_sold=False)
+                results_3 = Product.objects.filter(description__iexact=query, is_sold=False)
+                results_4 = Product.objects.filter(description__icontains=query, is_sold=False)
 
                 # Add results that contain any word of the query in the name or description
                 query_words = query.strip().split(' ')
                 results_5 = Product.objects.none()
                 for word in query_words:
-                    results_5 |= Product.objects.filter(product_name__icontains=word)
+                    results_5 |= Product.objects.filter(product_name__icontains=word, is_sold=False)
 
                 # Add results that contain any word of the query as its category
                 results_6 = Product.objects.none()
                 for word in query_words:
-                    results_6 = Product.objects.filter(category__name__icontains=word)
+                    results_6 = Product.objects.filter(category__name__icontains=word, is_sold=False)
 
                 # Combine unique results
                 seen_ids = set()
@@ -333,26 +336,26 @@ def search_product(request: HttpRequest):
             }
         )
 
-      
-def mis_compras(request):
-    if request.user.is_authenticated:
-        if request.user.is_banned:
-            return HttpResponseForbidden("Tu cuenta ha sido baneada. No puedes ver tus compras.")
+# Deprecated view, see my_purchases
+# def mis_compras(request):
+#     if request.user.is_authenticated:
+#         if request.user.is_banned:
+#             return HttpResponseForbidden("Tu cuenta ha sido baneada. No puedes ver tus compras.")
         
-        compras = Compra.objects.filter(comprador=request.user).select_related('producto')
-        return render(
-            request=request, 
-            template_name='marketplace/mis_compras.html', 
-            context={
-                'compras': compras,
-                'product_search_form': ProductSearchForm(),
-                'categories': get_all_categories(), 
-                }
-            )
-    else:
-        return redirect('login')  # o la URL que corresponda
+#         compras = Compra.objects.filter(comprador=request.user).select_related('producto')
+#         return render(
+#             request=request, 
+#             template_name='marketplace/mis_compras.html', 
+#             context={
+#                 'compras': compras,
+#                 'product_search_form': ProductSearchForm(),
+#                 'categories': get_all_categories(), 
+#                 }
+#             )
+#     else:
+#         return redirect('login')  # o la URL que corresponda
 
-
+# View to mark a product as sold
 def mark_as_sold(request, product_id):
     print(product_id)
     # Allow only POST requests

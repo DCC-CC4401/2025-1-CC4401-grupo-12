@@ -165,6 +165,7 @@
 }
 
 .btn-details,
+.btn-edit-listing,
 .btn-primary,
 .btn-sold {
     padding: 8px 16px;
@@ -177,14 +178,14 @@
     transition: background-color 0.2s ease;
 }
 
-.btn-details {
+.btn-details, .btn-edit-listing {
     background-color: #13c35d;
     color: white;
     text-decoration: none;
     line-height: 1.2;
 }
 
-.btn-details:hover {
+.btn-details:hover, .btn-edit-listing:hover {
     background-color: #10a947;
 }
 
@@ -211,7 +212,6 @@
 }
 
 /* Sold badge */
-
 .sold-badge {
     position: absolute;
     top: 12px;
