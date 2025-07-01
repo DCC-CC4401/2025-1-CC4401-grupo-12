@@ -57,7 +57,8 @@ Vendelia | {{ product.product_name }}
             <hr class="product-detail-info-box-separator" />
 
             <h2 class="product-detail-section-title">Descripción</h2>
-            <p class="product-detail-description">{{ product.description }}</p>
+            <p class="product-detail-description">{{ product.description|linebreaksbr }}</p>
+
         </div>
     </div>
 </div>
@@ -112,7 +113,7 @@ Vendelia | {{ product.product_name }}
                         .then(data => {
                             alert(data.message);
                             if (data.success) {
-                                // ✅ Redirect to "my_purchases" instead of reload
+                                // Redirect to "my_purchases" instead of reload
                                 window.location.href = "{% url 'my_purchases' %}";
                             }
                         })
