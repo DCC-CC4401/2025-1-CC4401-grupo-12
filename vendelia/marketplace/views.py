@@ -1,6 +1,5 @@
 from django.core.files import File
 from django.shortcuts import render, redirect, get_object_or_404
-from django.http import HttpRequest
 from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
 from django.http import HttpRequest, JsonResponse, HttpResponseNotAllowed, HttpResponseForbidden
@@ -8,15 +7,11 @@ from django.utils import timezone
 from django.contrib.staticfiles import finders
 from django.core.files.base import File
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from django.contrib.auth.decorators import login_required
-from django.http import HttpRequest, JsonResponse
-from django.utils import timezone
 
 
 from .models import Product, Compra, User
 from .forms import UserRegisterForm, ProductRegisterForm, EmailAuthenticationForm, ProductSearchForm, ProductEditForm, UserProfileForm
 from .util import get_pagination_pages, get_all_categories
-from django.http import HttpResponseForbidden
 from .decorators import bloquear_baneados
 
 
@@ -460,7 +455,9 @@ def user_profile(request):
         request=request,
         template_name=URL_PATH_USER_PROFILE,
         context= {
-            'user': request.user
+            'user': request.user,
+            'product_search_form': ProductSearchForm(),
+            'categories': get_all_categories(),
         }
     )
 
@@ -484,6 +481,8 @@ def edit_profile(request):
         request=request,
         template_name=URL_PATH_EDIT_PROFILE,
         context={
-            'form': form
+            'form': form,
+            'product_search_form': ProductSearchForm(),
+            'categories': get_all_categories(),
         }
     )
