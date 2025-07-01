@@ -105,7 +105,8 @@ if args.admin:
         phone_number=admin_phone_number,
         first_name=admin_first_name,
         last_name=admin_last_name,
-        city=admin_city
+        city=admin_city,
+        is_banned=False
     )
 
 print('Operation completed.')

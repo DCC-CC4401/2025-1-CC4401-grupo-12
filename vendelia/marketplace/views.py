@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpRequest
 from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
-from django.http import HttpRequest, JsonResponse
+from django.http import HttpRequest, JsonResponse, HttpResponseNotAllowed, HttpResponseForbidden
 from django.utils import timezone
 from django.contrib.staticfiles import finders
 from django.core.files.base import File
@@ -190,9 +190,17 @@ def my_sales(request):
         'sold_items': sold_items,
         'active_count': active_listings.count(),
         'sold_count': sold_items.count(),
+
+        'product_search_form': ProductSearchForm(),
+        'categories': get_all_categories(),
+
     }
     
-    return render(request, 'marketplace/my_sales.html', context)
+    return render(
+        request=request, 
+        template_name='marketplace/my_sales.html', 
+        context=context
+        )
 
 @login_required(login_url='/login/')
 def register_product(request):
@@ -345,3 +353,23 @@ def mis_compras(request):
         return redirect('login')  # o la URL que corresponda
 
 
+def mark_as_sold(request, product_id):
+    print(product_id)
+    # Allow only POST requests
+    if request.method != 'POST':
+        return HttpResponseNotAllowed(['POST'])
+
+    # Check if user is authenticated
+    if not request.user.is_authenticated:
+        return HttpResponseForbidden('Authentication required')
+
+    product = get_object_or_404(Product, id=product_id, owner=request.user)
+
+    if getattr(product, 'is_sold', False):
+        return JsonResponse({'success': False, 'message': 'El producto ya está vendido.'})
+
+    product.is_sold = True
+    product.date_sold = timezone.now()
+    product.save()
+
+    return JsonResponse({'success': True})
