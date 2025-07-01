@@ -336,24 +336,24 @@ def search_product(request: HttpRequest):
             }
         )
 
-# Deprecated view
-def mis_compras(request):
-    if request.user.is_authenticated:
-        if request.user.is_banned:
-            return HttpResponseForbidden("Tu cuenta ha sido baneada. No puedes ver tus compras.")
+# Deprecated view, see my_purchases
+# def mis_compras(request):
+#     if request.user.is_authenticated:
+#         if request.user.is_banned:
+#             return HttpResponseForbidden("Tu cuenta ha sido baneada. No puedes ver tus compras.")
         
-        compras = Compra.objects.filter(comprador=request.user).select_related('producto')
-        return render(
-            request=request, 
-            template_name='marketplace/mis_compras.html', 
-            context={
-                'compras': compras,
-                'product_search_form': ProductSearchForm(),
-                'categories': get_all_categories(), 
-                }
-            )
-    else:
-        return redirect('login')  # o la URL que corresponda
+#         compras = Compra.objects.filter(comprador=request.user).select_related('producto')
+#         return render(
+#             request=request, 
+#             template_name='marketplace/mis_compras.html', 
+#             context={
+#                 'compras': compras,
+#                 'product_search_form': ProductSearchForm(),
+#                 'categories': get_all_categories(), 
+#                 }
+#             )
+#     else:
+#         return redirect('login')  # o la URL que corresponda
 
 # View to mark a product as sold
 def mark_as_sold(request, product_id):
