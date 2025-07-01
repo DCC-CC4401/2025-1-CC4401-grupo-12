@@ -105,14 +105,6 @@ class ProductRegisterForm(forms.ModelForm):
             raise forms.ValidationError("La descripción no puede sólo contener espacios en blanco.")
         return description
     
-    # Photos validator
-    # The product must have at least on photo to be published
-    def clean_photos(self):
-        cleaned_data = super().clean()
-        if not (cleaned_data.get('photo1') or cleaned_data.get('photo2')) or (cleaned_data.get('photo3')):
-            raise forms.ValidationError("Debe subir al menos una imagen para publicar su producto.")
-        return cleaned_data
-    
     # Photo1 validator
     # Photo1 can't exceed the limit of 5MB
     def clean_photo1(self):
@@ -188,3 +180,70 @@ class ProductSearchForm(forms.Form):
             raise forms.ValidationError("Debe ingresar algo en la búsqueda.")
         
         return query
+
+class ProductEditForm(forms.ModelForm):
+    class Meta:
+        model = Product
+        fields = ['product_name', 'description', 'price', 'photo1', 'photo2', 'photo3']
+
+        # Custom field label overrides
+        labels = {'product_name': 'Nombre',
+                  'description': 'Descripción',
+                  'price': 'Precio',
+                  'photo1': 'Foto 1',
+                  'photo2': 'Foto 2',
+                  'photo3': 'Foto 3'
+        }
+    
+    # Price validator
+    # The price can't be negative
+    def clean_price(self):
+        price = self.cleaned_data.get('price')
+        if price<0 and price is not None:
+            raise forms.ValidationError('El precio no puede ser negativo.')
+        return price
+    
+    # Name validator
+    # The name can't contain only empty spaces or the characters #, $, % y /
+    def clean_product_name(self):
+        product_name = self.cleaned_data.get('product_name', '')
+        if not product_name.strip():
+            raise forms.ValidationError("El nombre no puede contener solo espacios.")
+        if re.search(r"[#$%/]", product_name):
+            raise forms.ValidationError("El nombre contiene caracteres no válidos (#, $, %, /).")
+        return product_name
+    
+    # Description validator
+    # The description can´t contain only empty spaces
+    def clean_description(self):
+        description = self.cleaned_data.get('description', '')
+        if not description.strip():
+            raise forms.ValidationError("La descripción no puede sólo contener espacios en blanco.")
+        return description
+    
+    # Photo1 validator
+    # Photo1 can't exceed the limit of 5MB
+    def clean_photo1(self):
+        return self.validate_photo_size('photo1')
+    
+    # Photo2 validator
+    # Photo2 can't exceed the limit of 5MB
+    def clean_photo2(self):
+        return self.validate_photo_size('photo2')
+    
+    # Photo3 validator
+    # Photo3 can't exceed the limit of 5MB
+    def clean_photo3(self):
+        return self.validate_photo_size('photo3')
+    
+    # Auxiliar function
+    # It validates that the photos don't exceed the limit of 5MB
+    def validate_photo_size(self, field_name):
+        photo = self.cleaned_data.get(field_name)
+        MAX_SIZE = 5*1024*1024 #5MB
+        if photo:
+            if photo.size > MAX_SIZE:
+                raise forms.ValidationError(f"La imagen {field_name[-1]} es demasiado grande."
+                                            "Tamaño máximo: 5MB"
+                                            f"Tamaño actual: {round(photo.size/1024/1024, 2)}MB")
+        return photo

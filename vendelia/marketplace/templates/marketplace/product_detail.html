@@ -61,6 +61,15 @@ Vendelia | {{ product.product_name }}
 
         </div>
     </div>
+
+    {% if user.is_authenticated %}
+    <div class="product-detail-action">
+        <a href="{% url 'edit_product' product.id %}" class="product-edit-button">
+            <i class="fas fa-edit"></i> Editar Producto
+        </a>
+    </div>
+    {% endif %}
+
 </div>
 
 <div id="imageModal" class="modal">
