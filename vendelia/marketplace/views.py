@@ -225,6 +225,9 @@ def my_purchases(request):
     context = {
         'purchased_items': purchased_items,
         'purchased_count': purchased_items.count(),
+        
+        'product_search_form': ProductSearchForm(),
+        'categories': get_all_categories(),
     }
     
     return render(request, 'marketplace/my_purchases.html', context)
