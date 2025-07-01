@@ -52,16 +52,15 @@ class Product(models.Model):
     photo3 = models.ImageField(upload_to='product_images/', null=True, blank=True)
     category = models.ForeignKey(Categoria, on_delete=models.CASCADE, blank=False)
     owner = models.ForeignKey(User, blank=True, null=True, on_delete=models.CASCADE)
+    
     is_sold = models.BooleanField(default=False)
+    sold_to = models.ForeignKey(User, blank=True, null=True, on_delete=models.SET_NULL, related_name='purchased_products')
+    date_created = models.DateTimeField(auto_now_add=True)
+    date_sold = models.DateTimeField(blank=True, null=True)
     
     def __str__(self):
         return f"{self.product_name} - $ {self.price}"
     
-class Compra(models.Model):
-    comprador = models.ForeignKey(User, on_delete=models.CASCADE)
-    producto = models.ForeignKey(Product, on_delete=models.CASCADE)
-    fecha = models.DateTimeField(auto_now_add=True)
-
-    def __str__(self):
-        return f"{self.comprador.username} compró {self.producto.product_name}"
+    class Meta:
+        ordering = ['-date_created']
 

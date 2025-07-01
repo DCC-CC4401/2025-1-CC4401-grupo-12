@@ -2,9 +2,16 @@ from .models import User
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpRequest
 from django.contrib.auth import login
+from django.contrib.auth.decorators import login_required
+from django.http import HttpRequest, JsonResponse
+from django.utils import timezone
 from django.contrib.staticfiles import finders
 from django.core.files.base import File
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.contrib.auth.decorators import login_required
+from django.http import HttpRequest, JsonResponse
+from django.utils import timezone
+
 
 from .models import Product
 from .forms import UserRegisterForm, ProductRegisterForm, EmailAuthenticationForm, ProductSearchForm
@@ -142,6 +149,85 @@ def login_user(request):
         else:
             return render(request, URL_PATH_LOGIN, {'login_user_form': login_user_form})
   
+
+
+@login_required(login_url='/login/')
+def my_sales(request):
+    user_products = Product.objects.filter(owner=request.user)
+    # Separate active listings from sold items
+    active_listings = user_products.filter(is_sold=False)
+    sold_items = user_products.filter(is_sold=True)
+    
+    context = {
+        'active_listings': active_listings,
+        'sold_items': sold_items,
+        'active_count': active_listings.count(),
+        'sold_count': sold_items.count(),
+    }
+    
+    return render(request, 'marketplace/my_sales.html', context)
+
+@login_required(login_url='/login/')
+def register_product(request):
+    if request.method == 'POST':
+        form = ProductRegisterForm(request.POST, request.FILES)
+        if form.is_valid():
+            new_product = form.save(commit=False)  
+            new_product.owner = request.user  
+            new_product.save()  # Save only after ypou press the button
+            # Redirect to my-sales to prevent duplicate submissions
+            return redirect('my_sales')
+    else:
+        form = ProductRegisterForm()
+
+    return render(request, 'marketplace/register_product.html', {'form': form})
+
+@login_required(login_url='/login/')
+def my_purchases(request):
+    # Obtener todos los productos que el usuario ha comprado
+    purchased_items = Product.objects.filter(sold_to=request.user, is_sold=True)
+    
+    context = {
+        'purchased_items': purchased_items,
+        'purchased_count': purchased_items.count(),
+    }
+    
+    return render(request, 'marketplace/my_purchases.html', context)
+
+@login_required(login_url='/login/')
+def buy_product(request, product_id):
+    """
+    Vista para comprar un producto
+    """
+    if request.method == 'POST':
+        try:
+            product = get_object_or_404(Product, id=product_id, is_sold=False)
+            
+            # Verificar que el usuario no esté comprando su propio producto
+            if product.owner == request.user:
+                return JsonResponse({
+                    'success': False,
+                    'message': 'No puedes comprar tu propio producto.'
+                })
+            
+            # Marcar como vendido y asignar comprador
+            product.is_sold = True
+            product.sold_to = request.user
+            product.date_sold = timezone.now()
+            product.save()
+            
+            return JsonResponse({
+                'success': True,
+                'message': '¡Producto comprado exitosamente!'
+            })
+        except Exception as e:
+            return JsonResponse({
+                'success': False,
+                'message': 'Error al comprar el producto.'
+            })
+    
+    return JsonResponse({'success': False, 'message': 'Método de solicitud inválido.'})
+
   
 # Product search 
 def search_product(request: HttpRequest):
@@ -214,4 +300,5 @@ def mis_compras(request):
         return render(request, 'marketplace/mis_compras.html', {'compras': compras})
     else:
         return redirect('login')  # o la URL que corresponda
+
 
