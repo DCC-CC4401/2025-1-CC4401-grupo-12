@@ -131,7 +131,7 @@ def home(request):
         # ciudades_disponibles = User.objects.values_list('city', flat=True).distinct()
 
         search_bar = ProductSearchForm()
-        products = Product.objects.order_by('-creation_date')[:PRODUCT_LIST_IN_HOME_PAGE]
+        products = Product.objects.filter(is_sold=False).order_by('-creation_date')[:PRODUCT_LIST_IN_HOME_PAGE]
         
         return render(request, 'marketplace/home.html', {
             'product_search_form': search_bar,
@@ -229,11 +229,11 @@ def my_purchases(request):
     
     return render(request, 'marketplace/my_purchases.html', context)
 
+"""
+Vista para comprar un producto
+"""
 @login_required(login_url='/login/')
 def buy_product(request, product_id):
-    """
-    Vista para comprar un producto
-    """
     if request.method == 'POST':
         try:
             product = get_object_or_404(Product, id=product_id, is_sold=False)
@@ -274,21 +274,21 @@ def search_product(request: HttpRequest):
         if query:
             if mode == 'all':
                 # Exact match/contained query in product name and description
-                results_1 = Product.objects.filter(product_name__iexact=query)
-                results_2 = Product.objects.filter(product_name__icontains=query)
-                results_3 = Product.objects.filter(description__iexact=query)
-                results_4 = Product.objects.filter(description__icontains=query)
+                results_1 = Product.objects.filter(product_name__iexact=query, is_sold=False)
+                results_2 = Product.objects.filter(product_name__icontains=query, is_sold=False)
+                results_3 = Product.objects.filter(description__iexact=query, is_sold=False)
+                results_4 = Product.objects.filter(description__icontains=query, is_sold=False)
 
                 # Add results that contain any word of the query in the name or description
                 query_words = query.strip().split(' ')
                 results_5 = Product.objects.none()
                 for word in query_words:
-                    results_5 |= Product.objects.filter(product_name__icontains=word)
+                    results_5 |= Product.objects.filter(product_name__icontains=word, is_sold=False)
 
                 # Add results that contain any word of the query as its category
                 results_6 = Product.objects.none()
                 for word in query_words:
-                    results_6 = Product.objects.filter(category__name__icontains=word)
+                    results_6 = Product.objects.filter(category__name__icontains=word, is_sold=False)
 
                 # Combine unique results
                 seen_ids = set()
