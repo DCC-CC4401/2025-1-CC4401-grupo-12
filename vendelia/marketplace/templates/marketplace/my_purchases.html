@@ -1,6 +1,8 @@
 {% extends 'base.html' %}
 
-{% block title %}Mis Compras - Vendelia{% endblock %}
+{% block title %}
+    Vendelia | Mis Compras
+{% endblock %}
 
 {% block content %}
 <div class="my-purchases-container">
@@ -16,8 +18,8 @@
             <div class="products-grid">
                 {% for product in purchased_items %}
                     <div class="product-card purchased">
-                        {% if product.photos %}
-                            <img src="{{ product.photos.url }}" alt="{{ product.product_name }}" class="product-image">
+                        {% if product.photo1 %}
+                            <img src="{{ product.photo1.url }}" alt="{{ product.product_name }}" class="product-image">
                         {% else %}
                             <div class="no-image">Sin Imagen</div>
                         {% endif %}

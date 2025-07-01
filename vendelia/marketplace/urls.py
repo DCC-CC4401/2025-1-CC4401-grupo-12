@@ -57,11 +57,9 @@ urlpatterns = [
     path('product/<int:product_id>/', views.product_detail, name='product_detail'),
     path('', views.home, name='home'),
     path('logout/', LogoutView.as_view(next_page=URL_PATTERN_LOGIN), name='logout'),
-    path('comprar-producto/<int:product_id>/', views.buy_product, name='buy_product'),
-    path('comprar-producto/<int:product_id>/', views.buy_product, name='buy_product'),
+    path('buy_product/<int:product_id>/', views.buy_product, name='buy_product'),
     path('mis-compras/', views.mis_compras, name='mis_compras'),
 
-    path('mark-as-sold/<int:product_id>/', views.mark_as_sold, name='mark_as_sold'),
-
+    path('mark_as_sold/<int:product_id>/', views.mark_as_sold, name='mark_as_sold'),
 
 ]
