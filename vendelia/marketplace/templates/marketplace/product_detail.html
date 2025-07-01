@@ -3,12 +3,12 @@
 {% load static %}
 
 {% block title %}
-    Vendelia | {{ product.product_name }}
+Vendelia | {{ product.product_name }}
 {% endblock %}
 
 {% block content %}
 <div class="product-detail-container">
-    <div class="product-detail-gallery">
+    <div class="column-photos">
         {% if product.photo1 %}
         <div class="product-detail-image-wrapper">
             <a href="{{ product.photo1.url }}" class="product-detail-image-link">
@@ -31,40 +31,44 @@
         </div>
         {% endif %}
     </div>
-    
-    
 
-    <div class="product-detail-info-box">
-        <!-- <p class="product-detail-category">Categoría: {{ product.category }}</p> -->
-        <p class="product-detail-category">
-            Categoría: {{ product.category }}
-            <a class="product-detail-category-search"
-                href="/search_product?mode=category&query={{ product.category|urlencode }}" target="_self">
-                Ver más
-            </a>
-        </p>
+    <div class="column-info">
+        <div class="product-detail-info-box">
+            <p class="product-detail-category">
+                Categoría: {{ product.category }}
+                <a class="product-detail-category-search"
+                    href="/search_product?mode=category&query={{ product.category|urlencode }}" target="_self">
+                    Ver más
+                </a>
+            </p>
 
-        <h1 class="product-detail-title">{{ product.product_name }}</h1>
+            <h1 class="product-detail-title">{{ product.product_name }}</h1>
 
-        <div class="product-detail-price-buy-container">
-            <p class="product-detail-price">${{ product.price }}</p>
-            <button class="{% if user.is_authenticated %}product-detail-buy-button{% else %}product-detail-buy-button-disabled{% endif %}">Comprar</button>
+            <div class="product-detail-price-buy-container">
+                <input type="hidden" id="csrfToken" value="{{ csrf_token }}">
+                <p class="product-detail-price">${{ product.price }}</p>
+                {% if user.is_authenticated and not product.is_sold and product.owner != user %}
+                <button id="buyButton" class="product-detail-buy-button">Comprar</button>
+                {% else %}
+                <button class="product-detail-buy-button-disabled" disabled>Comprar</button>
+                {% endif %}
+            </div>
+
+            <hr class="product-detail-info-box-separator" />
+
+            <h2 class="product-detail-section-title">Descripción</h2>
+            <p class="product-detail-description">{{ product.description|linebreaksbr }}</p>
+
         </div>
-
-        <hr class="product-detail-info-box-separator" />
-        
-
-        <h2 class="product-detail-section-title">Descripción</h2>
-        <p class="product-detail-description">{{ product.description }}</p>
     </div>
 </div>
-
 
 <div id="imageModal" class="modal">
     <span class="close">&times;</span>
     <img class="product-detail-modal-content" id="modalImage">
 </div>
 
+<!-- Handles the modal image enlargement -->
 <script>
     document.addEventListener("DOMContentLoaded", function () {
         const modal = document.getElementById("imageModal");
@@ -90,5 +94,37 @@
         });
     });
 </script>
-    
+
+<!-- Handles process of buying an item -->
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const buyButton = document.getElementById("buyButton");
+        if (buyButton) {
+            buyButton.addEventListener("click", function () {
+                if (confirm("¿Estás seguro de que deseas comprar este producto?")) {
+                    fetch("{% url 'buy_product' product.id %}", {
+                        method: "POST",
+                        headers: {
+                            "X-CSRFToken": document.getElementById("csrfToken").value,
+                            "Content-Type": "application/json",
+                        },
+                    })
+                        .then(response => response.json())
+                        .then(data => {
+                            alert(data.message);
+                            if (data.success) {
+                                // Redirect to "my_purchases" instead of reload
+                                window.location.href = "{% url 'my_purchases' %}";
+                            }
+                        })
+                        .catch(error => {
+                            console.error("Error:", error);
+                            alert("Error al procesar la compra.");
+                        });
+                }
+            });
+        }
+    });
+</script>
+
 {% endblock %}

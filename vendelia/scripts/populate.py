@@ -7,6 +7,8 @@ import random
 import io
 from datetime import datetime, timezone
 import unicodedata
+import requests
+import tqdm
 
 
 PROJECT_ROOT = pathlib.Path(__file__).resolve().parent.parent
@@ -107,23 +109,34 @@ if args.products:
 
     category_ids = list(Categoria.objects.values_list('id', flat=True))
 
-    # Load images
-    img1 = open(PRODUCT_IMAGE_1_PATH, 'rb')
-    img2 = open(PRODUCT_IMAGE_2_PATH, 'rb')
-    img3 = open(PRODUCT_IMAGE_3_PATH, 'rb')
+    # # Load images
+    # img1 = open(PRODUCT_IMAGE_1_PATH, 'rb')
+    # img2 = open(PRODUCT_IMAGE_2_PATH, 'rb')
+    # img3 = open(PRODUCT_IMAGE_3_PATH, 'rb')
 
     i = 0
-    for data in product_data:
+    for data in tqdm.tqdm(product_data):
+        photo_files = []
+        for photo_url in data['photos']:
+            try:
+                r_photo = requests.get(photo_url)
+                r_photo.raise_for_status()
+            except Exception:
+                continue
+
+            photo = io.BytesIO(r_photo.content)
+            photo_files.append(photo)
+            
+        n_imgs = len(photo_files)
         random_user = User.objects.order_by("?").first()
-        n_imgs = random.randint(0, 3)
 
         product = Product(
             product_name = data['title'],
             description = data['description'],
             price = random.randint(1, 20)*1000,
-            photo1 = File(img1, name=f'image_{i}_1.jpg') if n_imgs >= 1 else None,
-            photo2 = File(img2, name=f'image_{i}_2.jpg') if n_imgs >= 2 else None,
-            photo3 = File(img3, name=f'image_{i}_3.jpg') if n_imgs >= 3 else None,
+            photo1 = File(photo_files[0], name=f'image_{i}_1.jpg') if n_imgs >= 1 else None,
+            photo2 = File(photo_files[1], name=f'image_{i}_2.jpg') if n_imgs >= 2 else None,
+            photo3 = File(photo_files[2], name=f'image_{i}_3.jpg') if n_imgs >= 3 else None,
             category = Categoria.objects.get(id = random.choice(category_ids)),
             owner = random_user,
             is_sold = False,
@@ -134,9 +147,9 @@ if args.products:
 
         i += 1
 
-    img1.close()
-    img2.close()
-    img3.close()
+    # img1.close()
+    # img2.close()
+    # img3.close()
 
 
     print("Assigning dummy image to products without images")

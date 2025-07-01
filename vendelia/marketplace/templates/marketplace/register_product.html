@@ -1,19 +1,19 @@
 {% extends 'base.html' %}
 
 {% block title %}
-     Vendelia | Nueva venta
+Vendelia | Nuevo Producto
 {% endblock %}
 
 {% block content %}
-<div class="register-wrapper">
-     <div class="info-box">
-          <h2>Ingresa tu nuevo producto</h2>
-          <p>Llena los datos.</p>
+<div class="new-product-wrapper">
+     <div class="new-product-info">
+          <h1 class="new-product-title">Publicar nuevo Aviso</h1>
+          <p class="new-product-subtitle">Completa los campos para publicar tu aviso.</p>
      </div>
-     <form method="post" enctype="multipart/form-data" class="register-form">
+     <form method="post" enctype="multipart/form-data" class="new-product-form">
           {% csrf_token %}
           {{ form.as_p }}
-          <button type="submit" class="submit-btn">Publicar producto</button>
+          <button type="submit" class="new-product-submit-btn">Publicar Aviso</button>
      </form>
 </div>
 {% endblock %}
