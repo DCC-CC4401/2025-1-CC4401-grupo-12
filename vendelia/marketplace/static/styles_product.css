@@ -222,3 +222,26 @@
         flex: 1 1 100%;
     }
 }
+
+.btn-delete-product{
+    background-color: #10a947;
+    color: white;
+    font-weight: bold;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 999px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 20px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    text-align: center;
+}
+
+.btn-delete-product:hover{
+    background-color: #ff1a1d;
+    transform: translateY(-1px);
+}

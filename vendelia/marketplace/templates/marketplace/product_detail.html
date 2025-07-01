@@ -64,12 +64,11 @@ Vendelia | {{ product.product_name }}
 
     {% if user.is_authenticated and product.owner == request.user %}
     <div class="product-detail-action">
-        <a href="{% url 'edit_product' product.id %}" class="product-edit-button">
-            <i class="fas fa-edit"></i> Editar Producto
+        <a href="{% url 'edit_product' product.id %}" class="btn-edit-listing"> Editar </a>
         </a>
         <form method="post" action="{% url 'delete_product' product.id %}" class="delete-form">
             {% csrf_token %}
-            <button type="submit" class="product-delete-button"> Eliminar </button>  
+            <button type="submit" class="btn-delete-product"> Eliminar </button>  
         </div>
     {% endif %}
 
