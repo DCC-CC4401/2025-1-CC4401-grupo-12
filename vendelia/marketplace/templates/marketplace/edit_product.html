@@ -7,89 +7,55 @@
 
 {% block content %}
 <div class="product-detail-container">
-    <div class="product-detail-gallery">
-
-        {% if product.photo1 %}
-        <div class="product-detail-image-wrapper">
-            <a href="{{ product.photo1.url }}" class="product-detail-image-link">
-                <img src="{{ product.photo1.url }}" alt="{{ product.product_name }}">
-                <div class="image-actions">
-                    <input type="checkbox" name="photo1-clear" id="photo1-clear">
-                    <label for="photo1-clear">Eliminar</label>
-                </div>
-            </a>
-        </div>
-        {% endif %}
-        
-        {% if product.photo2 %}
-        <div class="product-detail-image-wrapper">
-            <a href="{{ product.photo2.url }}" class="product-detail-image-link">
-                <img src="{{ product.photo2.url }}" alt="{{ product.product_name }}">
-                <div class="image-actions">
-                    <input type="checkbox" name="photo2-clear" id="photo2-clear">
-                    <label for="photo2-clear">Eliminar</label>
-                </div>
-            </a>
-        </div>
-        {% endif %}
-        
-        {% if product.photo3 %}
-        <div class="product-detail-image-wrapper">
-            <a href="{{ product.photo3.url }}" class="product-detail-image-link">
-                <img src="{{ product.photo3.url }}" alt="{{ product.product_name }}">
-                <div class="image-actions">
-                    <input type="checkbox" name="photo3-clear" id="photo3-clear">
-                    <label for="photo3-clear">Eliminar</label>
-                </div>
-            </a>
-        </div>
-        {% endif %}
-    </div>
-
     <div class="product-detail-info-box">
         <form method="post" enctype="multipart/form-data">
             {% csrf_token %}
 
-            <h1 class="product-detail-title">
+            <h3> Nombre </h3>
+            <h1 class="new-product-form">
                 {{ form.product_name }}
             </h1>
 
             <div class="product-detail-price-buy-container">
-                <p class="product-detail-price">
+                <h3> Precio </h3>
+                <p class="new-product-form">
                     ${{ form.price }}
                 </p>
-                <button type="submit" class="product-detail-buy-button">Guardar Cambios</button>
             </div>
 
             <div class="product-category-section">
-                <label for="{{ form.category.id_for_label }}" class="category-label">Categoría:</label>
+                <label for="{{ form.category.id_for_label }}" class="new-product-form">
+                    <h3> Categoría: </h3>
+                </label>
                 {{ form.category }}
             </div>
 
             <hr class="product-detail-info-box-separator" />
 
-            <h2 class="product-detail-section-title">Descripción</h2>
-            <p class="product-detail-description">
+            <h3 class="product-detail-section-title">Descripción</h3>
+            <p class="new-product-form">
                 {{ form.description }}
             </p>
 
-            <div class="image-upload-section">
-                <h3>Nuevas imágenes</h3>
+            <div class="new-product-form">
+                <h3>Imágenes</h3>
                 <div class="image-upload-fields">
                     <div class="upload-field">
                         <label for="{{ form.photo1.id_for_label }}">Imagen 1:</label>
-                        {{ form.photo1 }}
+                        <input type="file" name="{{ form.photo1.name }}" id="{{ form.photo1.id_for_label }}" class="new-product-file-input">
                     </div>
                     <div class="upload-field">
-                        <label for="{{ form.photo2.id_for_label }}">Imagen 2 (opcional):</label>
+                        <label for="{{ form.photo2.id_for_label }}">Imagen 2:</label>
                         {{ form.photo2 }}
                     </div>
                     <div class="upload-field">
-                        <label for="{{ form.photo3.id_for_label }}">Imagen 3 (opcional):</label>
+                        <label for="{{ form.photo3.id_for_label }}">Imagen 3:</label>
                         {{ form.photo3 }}
                     </div>
                 </div>
             </div>
+
+            <button type="submit" class="new-product-submit-btn">Guardar Cambios</button>
         </form>
     </div>
 </div>
