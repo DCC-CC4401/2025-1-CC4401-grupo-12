@@ -6,6 +6,7 @@ import json
 import random
 import io
 from datetime import datetime, timezone
+import unicodedata
 
 
 PROJECT_ROOT = pathlib.Path(__file__).resolve().parent.parent
@@ -17,6 +18,8 @@ PRODUCT_IMAGE_1_PATH = PROJECT_ROOT / 'scripts' / 'product_img1.jpg'
 PRODUCT_IMAGE_2_PATH = PROJECT_ROOT / 'scripts' / 'product_img2.jpg'
 PRODUCT_IMAGE_3_PATH = PROJECT_ROOT / 'scripts' / 'product_img3.jpg'
 PRODUCT_DUMMY_IMAGE_PATH = PROJECT_ROOT / 'marketplace' / 'static' / 'images' / 'product_no_image.jpg'
+USER_NAMES_DATA_PATH = PROJECT_ROOT / 'scripts' / 'users.json'
+USER_CITIES_DATA_PATH = PROJECT_ROOT / 'scripts' / 'cities.json'
 DJANGO_SETTINGS_MODULE = 'vendelia.settings'
 BASE_DIR = PROJECT_ROOT / 'vendelia'
 
@@ -38,6 +41,7 @@ django.setup()
 # Argument parsing
 parser = argparse.ArgumentParser(description='Initializes categories into DB and optionally sample product data.')
 parser.add_argument('-p', '--products', action='store_true', help='Populate DB with sample product data.')
+parser.add_argument('-u', '--users', action='store_true', help='Populate DB with sample user data.')
 args = parser.parse_args()
 
 # Populate categories
@@ -48,6 +52,48 @@ with open(CATEGORIES_DATA_PATH, 'r', encoding='utf-8') as fp:
     for category_name in categories:
         category = Categoria(name=category_name)
         category.save()
+
+# Populate sample users
+if args.users:
+    print("Populating users...")
+    from marketplace.models import User
+
+    with open(USER_NAMES_DATA_PATH, 'r', encoding='utf-8') as fp:
+        user_data = json.load(fp)
+
+    with open(USER_CITIES_DATA_PATH, 'r', encoding='utf-8') as fp:
+        city_data = json.load(fp)
+
+    random.shuffle(user_data["first_names"])
+    random.shuffle(user_data["last_names"])
+
+    def clean_str(s):
+        ss = ''.join(c for c in unicodedata.normalize('NFD', s) if unicodedata.category(c) != 'Mn')
+        ss = ss.lower()
+        return ss
+
+    for i in range(len(user_data["first_names"])):
+        first_name = user_data["first_names"][i]
+        last_name = user_data["last_names"][i]
+
+        # user = User(
+            
+        # )
+
+        User.objects.create_user(
+            username=f'{clean_str(first_name)}_{clean_str(last_name)}',
+            email=f'{clean_str(first_name)}@mail.com',
+            phone_number=str(random.randint(10000000, 99999999)),
+            first_name=first_name,
+            last_name=last_name,
+            city=random.choice(city_data),
+            is_banned=False,
+
+            password='1234'
+        )
+
+        # user.save()
+
 
 # Populate sample product data
 if args.products:
@@ -68,7 +114,7 @@ if args.products:
 
     i = 0
     for data in product_data:
-        admin_user = User.objects.get(username='admin')
+        random_user = User.objects.order_by("?").first()
         n_imgs = random.randint(0, 3)
 
         product = Product(
@@ -79,7 +125,7 @@ if args.products:
             photo2 = File(img2, name=f'image_{i}_2.jpg') if n_imgs >= 2 else None,
             photo3 = File(img3, name=f'image_{i}_3.jpg') if n_imgs >= 3 else None,
             category = Categoria.objects.get(id = random.choice(category_ids)),
-            owner = admin_user,
+            owner = random_user,
             is_sold = False,
             creation_date = datetime.now(timezone.utc),
         )
