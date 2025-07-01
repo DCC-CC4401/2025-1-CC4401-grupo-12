@@ -10,9 +10,9 @@ _**Vendelia** es un mercado web diseñado para conectar a personas comunes que q
 
 ## 📦 Table of Contents / Tabla de contenido
 
-- [🧰 Installation / Instalación](#-installation--instalación)
-- [🛠 Development Tools / Herramientas de desarrollo](#-development-tools--herramientas-de-desarrollo)
-- [🚀 Usage / Uso de la aplicación](#-usage--uso-de-la-aplicación)
+- [Installation](#installation)
+- [Development Tools](#development-tools)
+- [Usage](#usage)
 
 
 ## Installation
@@ -63,7 +63,7 @@ python manage.py migrate
 python manage.py runserver
 ```
 
-### Development tools
+## Development tools
 Inside the `vendelia/scripts` folder reside some scripts than help ease some common routines while working on the application, you can use the following syntax to get help from any script: `python script_file.py --help`.
 
 1. Reset `reset.py`: Deletes the migrations and DB, also can be used to create a test super user.
@@ -74,7 +74,7 @@ Inside the `vendelia/scripts` folder reside some scripts than help ease some com
 Once the server is running, you can open the app at: http://localhost:8000
 
 Main features:
-- User registration and authentication (with email or username)
+- User registration and authentication
 - Product posting and image uploads
-- Local search by product or category
+- Search by product or category
 - Personal user profile and product listings
